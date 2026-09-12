@@ -1,0 +1,11 @@
+# phase 0-1 (light)
+pypdf>=6
+pytesseract>=0.3.13
+pillow
+numpy
+fastapi
+uvicorn[standard]
+python-multipart
+pydantic
+requests
+# phase 2+ (heavy, install when reached): sentence-transformers torch

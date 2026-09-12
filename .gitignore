@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+node_modules/
+data/pdf/
+data/ocr/
+data/*.npy
+data/*.db
+data/*.db-journal
+ui/dist/
+.env
