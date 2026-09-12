@@ -152,18 +152,32 @@ def search(con, q, limit=10, filters=None, k=60):
         fused[r["chunk_id"]] = fused.get(r["chunk_id"], 0) + 1.0 / (k + rank + 1)
     for rank, r in enumerate(vec):
         fused[r["chunk_id"]] = fused.get(r["chunk_id"], 0) + 1.0 / (k + rank + 1)
-    top = sorted(fused.items(), key=lambda kv: -kv[1])[:limit]
-    meta = hydrate(con, [cid for cid, _ in top])
-    out = []
-    for cid, score in top:
+    ranked = sorted(fused.items(), key=lambda kv: -kv[1])[: limit * 5]
+    meta = hydrate(con, [cid for cid, _ in ranked])
+    kw_ids = {r["chunk_id"] for r in kw}
+    vec_ids = {r["chunk_id"] for r in vec}
+    out, seen_pages = [], set()
+    for cid, score in ranked:
         if cid not in meta:
             continue
-        d = meta[cid]
+        d = dict(meta[cid])
+        # The portal republishes some orders under the same number (9 of 308 in the IT department),
+        # so the same page can appear as several passages. Keep only the best-scoring one per
+        # (order number, page); a second scan of the same page is never new information.
+        key = (re.sub(r"\W", "", (d["go_no"] or "")).lower(), d["page"])
+        if key in seen_pages:
+            continue
+        seen_pages.add(key)
         d["score"] = round(score, 5)
-        d["matched_by"] = ("keyword" if any(r["chunk_id"] == cid for r in kw) else "") + \
-                          ("+vector" if any(r["chunk_id"] == cid for r in vec) else "")
-        d["matched_by"] = d["matched_by"].strip("+") or "none"
+        tags = []
+        if cid in kw_ids:
+            tags.append("keyword")
+        if cid in vec_ids:
+            tags.append("vector")
+        d["matched_by"] = "+".join(tags) or "none"
         out.append(d)
+        if len(out) >= limit:
+            break
     return out
 
 
