@@ -19,13 +19,19 @@ import search as S  # noqa: E402
 OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://127.0.0.1:11434")
 OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "qwen2.5:7b-instruct")
 ANTHROPIC_MODEL = os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-5")
-# Relevance gates for refusing to answer. Reciprocal-rank fusion scores cannot be used for this: the top
-# result scores the same whether the question was answerable or nonsense. These two signals can.
-#   cosine   — semantic similarity, catches questions phrased with different words than the order uses
-#   coverage — share of the question's substantive terms present in the passage, the only usable signal
-#              before embeddings are built
-MIN_COSINE = float(os.environ.get("MIN_COSINE", "0.50"))
-MIN_COVERAGE = float(os.environ.get("MIN_COVERAGE", "0.34"))
+# Refusal is decided by the model plus quote verification, NOT by a retrieval threshold.
+#
+# Measured on this corpus with 26 answerable and 4 unanswerable questions: semantic similarity to the best
+# passage ran 0.453-0.697 for answerable questions and 0.478-0.571 for unanswerable ones. The distributions
+# overlap, so no single cutoff works: the best possible one kept 22 of 26 real questions while refusing only
+# 2 of 4 bogus ones. Share of question terms present in the corpus fails the same way (answerable from 0.62,
+# unanswerable up to 1.00), because bureaucratic Hindi shares most of its common vocabulary.
+#
+# So these gates are only a cheap filter to avoid spending a slow local model call on something with no
+# lexical or semantic footing at all. The real decision is made downstream, where the model sees the passages
+# and every quote it produces is checked against them.
+MIN_COSINE = float(os.environ.get("MIN_COSINE", "0.40"))
+MIN_COVERAGE = float(os.environ.get("MIN_COVERAGE", "0.20"))
 # A 7B model on a 6 GB laptop GPU needs well over a minute for a ~3k-token prompt, and much longer
 # if the machine is busy. Generous by default; the interface shows progress rather than blocking silently.
 LLM_TIMEOUT = int(os.environ.get("LLM_TIMEOUT", "600"))
@@ -115,10 +121,10 @@ def verify_quotes(parsed, chunks):
 
 
 def is_relevant(chunks, top_n=3):
-    """Decide whether anything retrieved is worth sending to a model.
+    """Cheap pre-filter: is anything retrieved worth spending a model call on?
 
-    Returns (relevant, reason). Judged on the best few results: a question is answerable if some passage is
-    semantically close (when embeddings exist) or shares enough of the question's substantive terms.
+    Returns (worth_trying, reason). This deliberately errs towards trying: see the note above on why a
+    retrieval threshold cannot decide answerability on this corpus.
     """
     if not chunks:
         return False, "nothing matched the question"

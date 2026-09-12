@@ -148,15 +148,20 @@ def hydrate(con, chunk_ids):
         return {}
     qs = ",".join("?" * len(chunk_ids))
     rows = con.execute(f"""
-        SELECT c.chunk_id, c.goid, c.page, c.ord, c.text, c.n_words,
+        SELECT c.chunk_id, c.goid, c.page, c.ord, c.text, c.n_words, c.kind,
                c.box_x, c.box_y, c.box_w, c.box_h,
                g.go_no, g.go_date, g.go_date_iso, g.subject, g.category, g.section, g.department, g.pdf_url
         FROM chunks c JOIN gos g ON g.goid = c.goid WHERE c.chunk_id IN ({qs})""", chunk_ids).fetchall()
     return {r["chunk_id"]: dict(r) for r in rows}
 
 
-def search(con, q, limit=10, filters=None, k=60):
-    """Reciprocal-rank fusion of keyword and vector results."""
+def search(con, q, limit=10, filters=None, k=60, per_go=2):
+    """Reciprocal-rank fusion of keyword and vector results, diversified across orders.
+
+    A few long policy documents hold a large share of the corpus (one 38-page order alone contributes 236
+    of 4,345 passages), so without a cap they occupy every result slot on broad queries and short one-page
+    orders become unreachable. `per_go` limits how many passages one order may contribute.
+    """
     kw = keyword_search(con, q, limit=50, filters=filters)
     vec = vector_search(con, q, limit=50, filters=filters)
     fused, bm25_by, cos_by = {}, {}, {}
@@ -166,11 +171,11 @@ def search(con, q, limit=10, filters=None, k=60):
     for rank, r in enumerate(vec):
         fused[r["chunk_id"]] = fused.get(r["chunk_id"], 0) + 1.0 / (k + rank + 1)
         cos_by[r["chunk_id"]] = r["cosine"]
-    ranked = sorted(fused.items(), key=lambda kv: -kv[1])[: limit * 5]
+    ranked = sorted(fused.items(), key=lambda kv: -kv[1])[: limit * 10]
     meta = hydrate(con, [cid for cid, _ in ranked])
     kw_ids = {r["chunk_id"] for r in kw}
     vec_ids = {r["chunk_id"] for r in vec}
-    out, seen_pages = [], set()
+    out, seen_pages, per_go_count = [], set(), {}
     for cid, score in ranked:
         if cid not in meta:
             continue
@@ -181,7 +186,11 @@ def search(con, q, limit=10, filters=None, k=60):
         key = (re.sub(r"\W", "", (d["go_no"] or "")).lower(), d["page"])
         if key in seen_pages:
             continue
+        go_key = re.sub(r"\W", "", (d["go_no"] or "")).lower() or str(d["goid"])
+        if per_go and per_go_count.get(go_key, 0) >= per_go:
+            continue
         seen_pages.add(key)
+        per_go_count[go_key] = per_go_count.get(go_key, 0) + 1
         d["score"] = round(score, 5)
         # Reciprocal-rank fusion deliberately ignores how good a match is: the top result always scores
         # the same whether the query was answerable or nonsense. Carry the underlying signals so callers

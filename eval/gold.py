@@ -49,30 +49,46 @@ def build(n=30, seed=7):
 
 
 def run():
+    import answer as A  # relevance gate, so refusals are scored the same way the product applies them
     items = json.loads(GOLD.read_text())
     ready = [i for i in items if i.get("question", "").strip()]
     if not ready:
         sys.exit(f"no questions filled in yet in {GOLD}")
     con = connect()
+    answerable = [i for i in ready if not i.get("unanswerable")]
+    unanswerable = [i for i in ready if i.get("unanswerable")]
     hits1 = hits5 = page5 = 0
     details = []
-    for it in ready:
+    for it in answerable:
         res = S.search(con, it["question"], limit=5)
         gos = [r["goid"] for r in res]
-        h1 = bool(gos) and gos[0] == it["expect_goid"]
-        h5 = it["expect_goid"] in gos
-        p5 = any(r["goid"] == it["expect_goid"] and r["page"] == it["expect_page"] for r in res)
+        # Several orders in this corpus carry the same subject (five near-identical SWAN funding orders,
+        # three right-to-information officer designations). Finding any of them answers the question.
+        accept = set(it.get("accept_goids") or [it["expect_goid"]])
+        h1 = bool(gos) and gos[0] in accept
+        h5 = bool(accept & set(gos))
+        p5 = any(r["goid"] in accept and r["page"] == it["expect_page"] for r in res)
         hits1 += h1; hits5 += h5; page5 += p5
         details.append({"id": it["id"], "question": it["question"], "language": it["language"],
-                        "expect_goid": it["expect_goid"], "got": gos,
+                        "expect_goid": it["expect_goid"], "accepted": sorted(accept)[:6], "got": gos,
                         "hit_at_1": h1, "hit_at_5": h5, "page_hit_at_5": p5})
-    n = len(ready)
+    # Questions with no answer in this collection: the right behaviour is to decline.
+    refused = 0
+    for it in unanswerable:
+        res = S.search(con, it["question"], limit=6)
+        ok, why = A.is_relevant(res)
+        refused += (not ok)
+        details.append({"id": it["id"], "question": it["question"], "language": it["language"],
+                        "unanswerable": True, "declined": not ok, "reason": why})
+    n = len(answerable)
     out = {
         "ran": True, "ran_at": time.strftime("%d %b %Y"), "n": n,
-        "n_hindi": sum(1 for i in ready if i["language"] == "hi"),
-        "n_english": sum(1 for i in ready if i["language"] == "en"),
+        "n_hindi": sum(1 for i in answerable if i["language"] == "hi"),
+        "n_english": sum(1 for i in answerable if i["language"] == "en"),
         "hit_at_1": round(hits1 / n, 3), "hit_at_5": round(hits5 / n, 3),
         "page_hit_at_5": round(page5 / n, 3),
+        "n_unanswerable": len(unanswerable),
+        "declined_correctly": round(refused / len(unanswerable), 3) if unanswerable else None,
         "embeddings_used": S.VEC_FILE.exists(), "details": details,
     }
     (DATA / "eval_results.json").write_text(json.dumps(out, ensure_ascii=False, indent=1))
@@ -80,7 +96,9 @@ def run():
     print(f"correct order ranked first : {out['hit_at_1']:.0%}")
     print(f"correct order in top 5     : {out['hit_at_5']:.0%}")
     print(f"correct page in top 5      : {out['page_hit_at_5']:.0%}")
-    miss = [d for d in details if not d["hit_at_5"]]
+    if out["declined_correctly"] is not None:
+        print(f"declined the {out['n_unanswerable']} unanswerable   : {out['declined_correctly']:.0%}")
+    miss = [d for d in details if not d.get("unanswerable") and not d["hit_at_5"]]
     if miss:
         print(f"\nmissed ({len(miss)}):")
         for d in miss[:8]:

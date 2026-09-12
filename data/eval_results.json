@@ -1,0 +1,552 @@
+{
+ "ran": true,
+ "ran_at": "12 Sep 2026",
+ "n": 26,
+ "n_hindi": 15,
+ "n_english": 11,
+ "hit_at_1": 0.423,
+ "hit_at_5": 0.654,
+ "page_hit_at_5": 0.462,
+ "n_unanswerable": 4,
+ "declined_correctly": 0.0,
+ "embeddings_used": true,
+ "details": [
+  {
+   "id": 1,
+   "question": "ड्रोन प्रशासन के लिए बनी राज्य स्तरीय समिति की अध्यक्षता कौन करता है?",
+   "language": "hi",
+   "expect_goid": 35580,
+   "accepted": [
+    35580
+   ],
+   "got": [
+    35580,
+    35580,
+    35586,
+    10751,
+    35586
+   ],
+   "hit_at_1": true,
+   "hit_at_5": true,
+   "page_hit_at_5": true
+  },
+  {
+   "id": 2,
+   "question": "स्कूलों में चलती प्रयोगशाला वाला कार्यक्रम किस संस्था को सौंपा गया?",
+   "language": "hi",
+   "expect_goid": 35633,
+   "accepted": [
+    35633
+   ],
+   "got": [
+    35633,
+    31965,
+    21931,
+    10641,
+    21932
+   ],
+   "hit_at_1": true,
+   "hit_at_5": true,
+   "page_hit_at_5": true
+  },
+  {
+   "id": 3,
+   "question": "सरकारी परिसंपत्तियों का ब्यौरा रखने वाला पोर्टल कौन बना रहा है?",
+   "language": "hi",
+   "expect_goid": 35570,
+   "accepted": [
+    35570
+   ],
+   "got": [
+    10641,
+    17759,
+    12858,
+    12858,
+    25772
+   ],
+   "hit_at_1": false,
+   "hit_at_5": false,
+   "page_hit_at_5": false
+  },
+  {
+   "id": 4,
+   "question": "चम्पावत जिले में विज्ञान केंद्र खोलने की मंजूरी कब दी गई?",
+   "language": "hi",
+   "expect_goid": 35565,
+   "accepted": [
+    35565
+   ],
+   "got": [
+    35565,
+    37108,
+    35565,
+    3495,
+    36883
+   ],
+   "hit_at_1": true,
+   "hit_at_5": true,
+   "page_hit_at_5": true
+  },
+  {
+   "id": 5,
+   "question": "हल्द्वानी में तारामंडल जैसा पार्क बनाने का प्रस्ताव किसने भेजा?",
+   "language": "hi",
+   "expect_goid": 35567,
+   "accepted": [
+    35567
+   ],
+   "got": [
+    35567,
+    35567,
+    10641,
+    17759,
+    8097
+   ],
+   "hit_at_1": true,
+   "hit_at_5": true,
+   "page_hit_at_5": true
+  },
+  {
+   "id": 6,
+   "question": "साइंस सिटी बनाने के बारे में क्या आदेश निकला?",
+   "language": "hi",
+   "expect_goid": 35592,
+   "accepted": [
+    35592
+   ],
+   "got": [
+    35592,
+    35567,
+    35567,
+    207,
+    5095
+   ],
+   "hit_at_1": true,
+   "hit_at_5": true,
+   "page_hit_at_5": false
+  },
+  {
+   "id": 7,
+   "question": "अंतरिक्ष उपयोग केंद्र को चलाने के लिए कितने पद स्वीकृत हैं?",
+   "language": "hi",
+   "expect_goid": 22058,
+   "accepted": [
+    22058
+   ],
+   "got": [
+    37221,
+    27855,
+    26520,
+    1451,
+    17348
+   ],
+   "hit_at_1": false,
+   "hit_at_5": false,
+   "page_hit_at_5": false
+  },
+  {
+   "id": 8,
+   "question": "नैनीताल की पुरानी वेधशाला के तकनीशियन का समायोजन कहाँ किया गया?",
+   "language": "hi",
+   "expect_goid": 22059,
+   "accepted": [
+    22059
+   ],
+   "got": [
+    22059,
+    22059,
+    35567,
+    3563,
+    35567
+   ],
+   "hit_at_1": true,
+   "hit_at_5": true,
+   "page_hit_at_5": true
+  },
+  {
+   "id": 9,
+   "question": "विज्ञान एवं प्रौद्योगिकी परिषद के कर्मचारियों को सातवाँ वेतनमान देने पर क्या तय हुआ?",
+   "language": "hi",
+   "expect_goid": 36881,
+   "accepted": [
+    36881
+   ],
+   "got": [
+    36881,
+    32445,
+    4928,
+    36881,
+    14796
+   ],
+   "hit_at_1": true,
+   "hit_at_5": true,
+   "page_hit_at_5": true
+  },
+  {
+   "id": 10,
+   "question": "राज्य में प्राकृतिक संसाधनों की जानकारी रखने वाली प्रणाली क्यों बनाई गई?",
+   "language": "hi",
+   "expect_goid": 10751,
+   "accepted": [
+    10751
+   ],
+   "got": [
+    10751,
+    2935,
+    2935,
+    26520,
+    10751
+   ],
+   "hit_at_1": true,
+   "hit_at_5": true,
+   "page_hit_at_5": true
+  },
+  {
+   "id": 11,
+   "question": "सूचना का अधिकार के तहत पहली अपील किस अधिकारी के पास जाएगी?",
+   "language": "hi",
+   "expect_goid": 14379,
+   "accepted": [
+    14379
+   ],
+   "got": [
+    26446,
+    26446,
+    14379,
+    17110,
+    4805
+   ],
+   "hit_at_1": false,
+   "hit_at_5": true,
+   "page_hit_at_5": false
+  },
+  {
+   "id": 12,
+   "question": "मुख्यमंत्री डैशबोर्ड के लिए नोडल अधिकारी किसे बनाया गया?",
+   "language": "hi",
+   "expect_goid": 21914,
+   "accepted": [
+    21914
+   ],
+   "got": [
+    21914,
+    21761,
+    35592,
+    10641,
+    17759
+   ],
+   "hit_at_1": true,
+   "hit_at_5": true,
+   "page_hit_at_5": true
+  },
+  {
+   "id": 13,
+   "question": "यूसैक के भवन के काम की तकनीकी स्वीकृति किस समिति ने दी?",
+   "language": "hi",
+   "expect_goid": 21957,
+   "accepted": [
+    21957
+   ],
+   "got": [
+    33040,
+    31601,
+    33040,
+    13634,
+    31601
+   ],
+   "hit_at_1": false,
+   "hit_at_5": false,
+   "page_hit_at_5": false
+  },
+  {
+   "id": 14,
+   "question": "विभागों के बीच तालमेल के लिए कौन सी समिति अधिसूचित हुई?",
+   "language": "hi",
+   "expect_goid": 35585,
+   "accepted": [
+    35585
+   ],
+   "got": [
+    7120,
+    4531,
+    10751,
+    21932,
+    35586
+   ],
+   "hit_at_1": false,
+   "hit_at_5": false,
+   "page_hit_at_5": false
+  },
+  {
+   "id": 15,
+   "question": "स्वान परियोजना के पीओपी के लिए धनराशि किस आधार पर स्वीकृत की गई?",
+   "language": "hi",
+   "expect_goid": 3488,
+   "accepted": [
+    3484,
+    3485,
+    3486,
+    3487,
+    3488,
+    3489
+   ],
+   "got": [
+    8154,
+    3495,
+    3496,
+    13259,
+    3484
+   ],
+   "hit_at_1": false,
+   "hit_at_5": true,
+   "page_hit_at_5": true
+  },
+  {
+   "id": 16,
+   "question": "Who is authorised to approve purchases of computers and networking equipment?",
+   "language": "en",
+   "expect_goid": 35586,
+   "accepted": [
+    35586
+   ],
+   "got": [
+    35586,
+    12850,
+    7120,
+    15137,
+    7120
+   ],
+   "hit_at_1": true,
+   "hit_at_5": true,
+   "page_hit_at_5": false
+  },
+  {
+   "id": 17,
+   "question": "What was decided about developing the government asset management portal?",
+   "language": "en",
+   "expect_goid": 36884,
+   "accepted": [
+    36884
+   ],
+   "got": [
+    7120,
+    7120,
+    12850,
+    12850,
+    36884
+   ],
+   "hit_at_1": false,
+   "hit_at_5": true,
+   "page_hit_at_5": false
+  },
+  {
+   "id": 18,
+   "question": "Which committee reviews technical proposals for the space application centre building?",
+   "language": "en",
+   "expect_goid": 21957,
+   "accepted": [
+    21957
+   ],
+   "got": [
+    7120,
+    21957,
+    16255,
+    5095,
+    12850
+   ],
+   "hit_at_1": false,
+   "hit_at_5": true,
+   "page_hit_at_5": true
+  },
+  {
+   "id": 19,
+   "question": "How were funds released to the state science and technology council?",
+   "language": "en",
+   "expect_goid": 35831,
+   "accepted": [
+    35831
+   ],
+   "got": [
+    12850,
+    5095,
+    12850,
+    10985,
+    7120
+   ],
+   "hit_at_1": false,
+   "hit_at_5": false,
+   "page_hit_at_5": false
+  },
+  {
+   "id": 20,
+   "question": "What arrangement was made for the state wide area network points of presence?",
+   "language": "en",
+   "expect_goid": 3488,
+   "accepted": [
+    3484,
+    3485,
+    3486,
+    3487,
+    3488,
+    3489
+   ],
+   "got": [
+    12850,
+    10684,
+    12850,
+    10684,
+    2819
+   ],
+   "hit_at_1": false,
+   "hit_at_5": false,
+   "page_hit_at_5": false
+  },
+  {
+   "id": 21,
+   "question": "Who was nominated as the public information officer for the technology agency?",
+   "language": "en",
+   "expect_goid": 14379,
+   "accepted": [
+    14379
+   ],
+   "got": [
+    12850,
+    9434,
+    6924,
+    7120,
+    17110
+   ],
+   "hit_at_1": false,
+   "hit_at_5": false,
+   "page_hit_at_5": false
+  },
+  {
+   "id": 22,
+   "question": "What did the technical committee chaired by the principal secretary decide?",
+   "language": "en",
+   "expect_goid": 21931,
+   "accepted": [
+    21931,
+    21932
+   ],
+   "got": [
+    12850,
+    35585,
+    21932,
+    12850,
+    7120
+   ],
+   "hit_at_1": false,
+   "hit_at_5": true,
+   "page_hit_at_5": false
+  },
+  {
+   "id": 23,
+   "question": "Which programme brings mobile laboratories to state schools?",
+   "language": "en",
+   "expect_goid": 35633,
+   "accepted": [
+    35633
+   ],
+   "got": [
+    12850,
+    12850,
+    29001,
+    35633,
+    21931
+   ],
+   "hit_at_1": false,
+   "hit_at_5": true,
+   "page_hit_at_5": true
+  },
+  {
+   "id": 24,
+   "question": "What is the state policy on promoting drone use?",
+   "language": "en",
+   "expect_goid": 35580,
+   "accepted": [
+    35580
+   ],
+   "got": [
+    35580,
+    12850,
+    12850,
+    35580,
+    7120
+   ],
+   "hit_at_1": true,
+   "hit_at_5": true,
+   "page_hit_at_5": true
+  },
+  {
+   "id": 25,
+   "question": "Was a science centre approved for Champawat district?",
+   "language": "en",
+   "expect_goid": 35565,
+   "accepted": [
+    35565
+   ],
+   "got": [
+    37108,
+    32013,
+    3495,
+    35826,
+    5095
+   ],
+   "hit_at_1": false,
+   "hit_at_5": false,
+   "page_hit_at_5": false
+  },
+  {
+   "id": 26,
+   "question": "What sanction was issued for salaries in the 2017-18 financial year?",
+   "language": "en",
+   "expect_goid": 19292,
+   "accepted": [
+    19292
+   ],
+   "got": [
+    18793,
+    18052,
+    18858,
+    33060,
+    37109
+   ],
+   "hit_at_1": false,
+   "hit_at_5": false,
+   "page_hit_at_5": false
+  },
+  {
+   "id": 27,
+   "question": "वन अग्नि से हुए नुकसान पर मुआवजा कितना मिलता है?",
+   "language": "hi",
+   "unanswerable": true,
+   "declined": false,
+   "reason": "semantic similarity 0.48"
+  },
+  {
+   "id": 28,
+   "question": "What is the age limit for the old age pension scheme?",
+   "language": "en",
+   "unanswerable": true,
+   "declined": false,
+   "reason": "semantic similarity 0.48"
+  },
+  {
+   "id": 29,
+   "question": "चार धाम यात्रा के लिए पंजीकरण कैसे करें?",
+   "language": "hi",
+   "unanswerable": true,
+   "declined": false,
+   "reason": "semantic similarity 0.50"
+  },
+  {
+   "id": 30,
+   "question": "How many hospital beds are there in Dehradun district?",
+   "language": "en",
+   "unanswerable": true,
+   "declined": false,
+   "reason": "semantic similarity 0.52"
+  }
+ ]
+}

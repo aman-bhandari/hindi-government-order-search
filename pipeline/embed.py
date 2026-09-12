@@ -21,6 +21,7 @@ def main():
     ap.add_argument("--batch", type=int, default=8)
     ap.add_argument("--model", default=MODEL_NAME)
     ap.add_argument("--cpu", action="store_true")
+    ap.add_argument("--quiet", action="store_true", help="no progress bar")
     a = ap.parse_args()
 
     import numpy as np
@@ -41,7 +42,7 @@ def main():
         model.half()
     t0 = time.time()
     vecs = model.encode(texts, batch_size=a.batch, normalize_embeddings=True,
-                        show_progress_bar=True, convert_to_numpy=True)
+                        show_progress_bar=not a.quiet, convert_to_numpy=True)
     vecs = vecs.astype("float32")
     np.save(VEC_FILE, vecs)
     VEC_IDS.write_text(json.dumps(ids))

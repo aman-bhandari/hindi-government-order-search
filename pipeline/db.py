@@ -30,7 +30,10 @@ CREATE TABLE IF NOT EXISTS chunks (
   goid INTEGER, page INTEGER, ord INTEGER,
   text TEXT, n_words INTEGER,
   box_x INTEGER, box_y INTEGER, box_w INTEGER, box_h INTEGER,
-  word_ids TEXT
+  word_ids TEXT,
+  -- 'ocr'     text read from the scanned page, fallible, has a bounding box
+  -- 'subject' the order's subject line as recorded on the portal: clean, human-entered, no box
+  kind TEXT DEFAULT 'ocr'
 );
 CREATE INDEX IF NOT EXISTS chunks_goid ON chunks(goid, page);
 CREATE TABLE IF NOT EXISTS refs (

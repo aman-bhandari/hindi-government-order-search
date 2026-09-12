@@ -172,7 +172,7 @@ def main():
                           "INSERT INTO chunks_fts(chunks_fts) VALUES('rebuild');")
         con.commit()
 
-    go_meta = {r["goid"]: r for r in con.execute("SELECT goid, go_no FROM gos")}
+    go_meta = {r["goid"]: r for r in con.execute("SELECT goid, go_no, subject FROM gos")}
     done_gos = {r[0] for r in con.execute("SELECT DISTINCT goid FROM chunks")}
     dirs = sorted((data / "ocr").glob("*/"), key=lambda p: p.name)
     n_go = n_pages = n_chunks = n_refs = 0
@@ -197,8 +197,8 @@ def main():
             con.execute("INSERT OR REPLACE INTO pages (goid,page,text,words,mean_conf) VALUES (?,?,?,?,?)",
                         (goid, page, page_text, len(words), mean_conf))
             for i, p in enumerate(paras):
-                con.execute("""INSERT INTO chunks (goid,page,ord,text,n_words,box_x,box_y,box_w,box_h,word_ids)
-                               VALUES (?,?,?,?,?,?,?,?,?,?)""",
+                con.execute("""INSERT INTO chunks (goid,page,ord,text,n_words,box_x,box_y,box_w,box_h,word_ids,kind)
+                               VALUES (?,?,?,?,?,?,?,?,?,?,'ocr')""",
                             (goid, page, i, p["text"], p["n_words"], *p["box"], json.dumps(p["word_ids"])))
                 n_chunks += 1
             for r in extract_refs(page_text, go_no):
@@ -206,6 +206,17 @@ def main():
                             (goid, page, r["ref_text"], r["ref_year"], None))
                 n_refs += 1
             n_pages += 1
+        # Index the subject line too. Many one-page orders OCR to little more than letterhead: the body is
+        # faint, handwritten or garbled, while the portal's own subject line states plainly what the order is
+        # about. It is clean, human-entered metadata, so it cannot be corrupted by OCR, and without it those
+        # orders are effectively unfindable. Flagged 'subject' so the interface never claims it came from a scan.
+        subj = (go_meta.get(goid, {})["subject"] if goid in go_meta else None) or ""
+        subj = re.sub(r"\s+", " ", subj).strip()
+        if len(subj.split()) >= 3:
+            con.execute("""INSERT INTO chunks (goid,page,ord,text,n_words,box_x,box_y,box_w,box_h,word_ids,kind)
+                           VALUES (?,0,0,?,?,NULL,NULL,NULL,NULL,NULL,'subject')""",
+                        (goid, subj.translate(DEV_DIGITS), len(subj.split())))
+            n_chunks += 1
         n_go += 1
         con.commit()
 
