@@ -179,9 +179,20 @@ def related_gos(con, goid, limit=5):
         FROM gos
         WHERE goid != ? AND ocr_ok = 1
           AND (category = ? OR section = ?)
+          AND COALESCE(go_no,'') != COALESCE(?,'')
         ORDER BY day_gap ASC LIMIT ?""",
-        (g["go_date_iso"], goid, g["category"], g["section"], limit)).fetchall()
-    return [dict(r) for r in rows]
+        (g["go_date_iso"], goid, g["category"], g["section"], g["go_no"], limit * 4)).fetchall()
+    # the portal republishes some orders under one number; show each number once
+    seen, out = set(), []
+    for r in rows:
+        key = re.sub(r"\W", "", (r["go_no"] or "")).lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append(dict(r))
+        if len(out) >= limit:
+            break
+    return out
 
 
 if __name__ == "__main__":
