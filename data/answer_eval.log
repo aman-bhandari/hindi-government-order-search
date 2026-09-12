@@ -1,0 +1,8 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights: 100%|██████████| 391/391 [00:00<00:00, 12729.25it/s]
+[1/30] found=True quotes=1 dropped=0 right_order=False 34.8s
+[2/30] found=True quotes=1 dropped=0 right_order=True 16.0s
+[3/30] found=False quotes=0 dropped=0 right_order=False 13.5s
+[4/30] found=True quotes=1 dropped=0 right_order=True 28.3s
+[5/30] found=False quotes=0 dropped=1 right_order=False 26.8s
+[6/30] found=True quotes=1 dropped=0 right_order=False 126.9s

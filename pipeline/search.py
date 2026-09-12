@@ -9,7 +9,7 @@ cosine similarities are not comparable.
 Embeddings are optional: if the vector file is absent, search degrades to keyword-only rather than failing,
 so the pipeline is usable before the (slow) embedding step has run.
 """
-import json, re, sqlite3, sys
+import json, os, re, sqlite3, sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -90,10 +90,20 @@ def _load_vectors():
 
 
 def _load_model():
+    """Load the query encoder, on CPU by default.
+
+    Indexing 4,345 passages was a one-time GPU job, but at query time only a single short string is encoded,
+    which CPU handles in tens of milliseconds. Keeping it off the GPU matters on a 6 GB laptop card: the
+    answer model already occupies most of it, and when the API also claimed GPU memory for this encoder,
+    vector search stalled indefinitely instead of failing. Set EMBED_DEVICE=cuda to override.
+    """
     global _model
     if _model is None:
         from sentence_transformers import SentenceTransformer
-        _model = SentenceTransformer(MODEL_NAME, device="cuda" if _cuda() else "cpu")
+        device = os.environ.get("EMBED_DEVICE", "cpu")
+        if device == "cuda" and not _cuda():
+            device = "cpu"
+        _model = SentenceTransformer(MODEL_NAME, device=device)
     return _model
 
 

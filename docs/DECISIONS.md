@@ -48,3 +48,8 @@
 - 2026-09-12 Search returns at most two passages per order. Three long policy documents hold 458 of 4,345 passages
   (one 38-page order alone contributes 236), so on broad queries they filled every result slot and short one-page
   orders were unreachable. Measured effect: correct order in the top five rose from 58% to 65%.
+- 2026-09-12 The query encoder runs on CPU by default (EMBED_DEVICE=cuda overrides). Observed failure: with the
+  answer model, the API's encoder and an evaluation run all holding GPU memory, the card sat at 5806 of 6144 MiB
+  and vector search stalled for 60 seconds rather than failing. Indexing all 4,345 passages was a one-time GPU
+  job; a query encodes one short string, which CPU does in tens of milliseconds. The API also warms the encoder
+  at startup so the first search is not the request that pays for loading it.

@@ -19,6 +19,17 @@ import search as S  # noqa: E402
 import answer as A  # noqa: E402
 
 app = FastAPI(title="Uttarakhand GO Knowledge Repository", version="0.1.0")
+
+
+@app.on_event("startup")
+def warm():
+    """Load the query encoder before serving, so the first search is fast rather than a 60-second wait."""
+    if S.VEC_FILE.exists():
+        try:
+            S.vector_search(connect(), "warm up", limit=1)
+            print("query encoder ready")
+        except Exception as e:  # search still works keyword-only
+            print(f"query encoder unavailable, keyword-only search: {type(e).__name__}: {e}")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
 
@@ -107,7 +118,10 @@ def api_crop(chunk_id: int, pad: int = 24, highlight: bool = True):
     c = con.execute("""SELECT c.*, g.go_no, g.go_date FROM chunks c JOIN gos g ON g.goid=c.goid
                        WHERE chunk_id=?""", (chunk_id,)).fetchone()
     if not c:
-        raise HTTPException(404, "unknown chunk")
+        raise HTTPException(404, "unknown passage")
+    if c["kind"] == "subject" or c["box_x"] is None:
+        raise HTTPException(409, "this passage is the order's subject line from the portal, "
+                                 "not text read from a scanned page, so there is nothing to highlight")
     src = DATA / "ocr" / str(c["goid"]) / f"page-{c['page']}.png"
     if not src.exists():
         raise HTTPException(404, "page image not found")

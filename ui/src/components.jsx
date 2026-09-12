@@ -48,6 +48,7 @@ export function Citation({ quote, onOpenGo }) {
 
 export function ResultRow({ r, onOpenGo }) {
   const [proof, setProof] = useState(false)
+  const isSubject = r.kind === 'subject'
   return (
     <li className="rounded-lg border border-paper-edge bg-paper-card p-4">
       <div className="mb-1.5 flex flex-wrap items-center gap-2 text-xs">
@@ -56,18 +57,27 @@ export function ResultRow({ r, onOpenGo }) {
         </button>
         <span className="text-ink-soft">{r.go_date}</span>
         <Badge>{r.category}</Badge>
-        <Badge>page {r.page}</Badge>
+        {isSubject ? <Badge tone="seal">subject line</Badge> : <Badge>page {r.page}</Badge>}
         <Badge tone={r.matched_by.includes('vector') ? 'seal' : 'plain'}>{r.matched_by}</Badge>
       </div>
-      {r.subject && <p className="mb-2 text-xs text-ink-soft">{r.subject}</p>}
+      {!isSubject && r.subject && <p className="mb-2 text-xs text-ink-soft">{r.subject}</p>}
       <p className="text-[15px] leading-relaxed">{r.text}</p>
-      <button onClick={() => setProof(!proof)}
-        className="mt-2 text-xs font-medium text-seal hover:underline">
-        {proof ? 'Hide scan' : 'View on scanned page'}
-      </button>
-      {proof && (
-        <img src={cropUrl(r.chunk_id)} alt={`Scanned excerpt, Government Order ${r.go_no} page ${r.page}`}
-          className="mt-2 max-h-80 rounded border border-paper-edge bg-white" loading="lazy" />
+      {isSubject ? (
+        <p className="mt-2 text-[11px] text-ink-soft">
+          This is the order&rsquo;s subject as recorded on the portal, not text read from the scan.
+          Open the order to read its pages.
+        </p>
+      ) : (
+        <>
+          <button onClick={() => setProof(!proof)}
+            className="mt-2 text-xs font-medium text-seal hover:underline">
+            {proof ? 'Hide scan' : 'View on scanned page'}
+          </button>
+          {proof && (
+            <img src={cropUrl(r.chunk_id)} alt={`Scanned excerpt, Government Order ${r.go_no} page ${r.page}`}
+              className="mt-2 max-h-80 rounded border border-paper-edge bg-white" loading="lazy" />
+          )}
+        </>
       )}
     </li>
   )
