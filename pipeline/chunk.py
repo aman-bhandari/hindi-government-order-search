@@ -16,6 +16,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from db import connect, DATA  # noqa: E402
+from translit import phonetic_text  # noqa: E402
 
 DEV_DIGITS = str.maketrans("०१२३४५६७८९", "0123456789")
 
@@ -169,6 +170,7 @@ def main():
     con = connect()
     if a.rebuild:
         con.executescript("DELETE FROM chunks; DELETE FROM refs; DELETE FROM pages; "
+                          "DELETE FROM chunks_phon; "
                           "INSERT INTO chunks_fts(chunks_fts) VALUES('rebuild');")
         con.commit()
 
@@ -197,9 +199,12 @@ def main():
             con.execute("INSERT OR REPLACE INTO pages (goid,page,text,words,mean_conf) VALUES (?,?,?,?,?)",
                         (goid, page, page_text, len(words), mean_conf))
             for i, p in enumerate(paras):
-                con.execute("""INSERT INTO chunks (goid,page,ord,text,n_words,box_x,box_y,box_w,box_h,word_ids,kind)
-                               VALUES (?,?,?,?,?,?,?,?,?,?,'ocr')""",
-                            (goid, page, i, p["text"], p["n_words"], *p["box"], json.dumps(p["word_ids"])))
+                cur = con.execute(
+                    """INSERT INTO chunks (goid,page,ord,text,n_words,box_x,box_y,box_w,box_h,word_ids,kind)
+                       VALUES (?,?,?,?,?,?,?,?,?,?,'ocr')""",
+                    (goid, page, i, p["text"], p["n_words"], *p["box"], json.dumps(p["word_ids"])))
+                con.execute("INSERT INTO chunks_phon (rowid, phon) VALUES (?,?)",
+                            (cur.lastrowid, phonetic_text(p["text"])))
                 n_chunks += 1
             for r in extract_refs(page_text, go_no):
                 con.execute("INSERT INTO refs (goid,page,ref_text,ref_year,target_goid) VALUES (?,?,?,?,?)",
@@ -213,9 +218,12 @@ def main():
         subj = (go_meta.get(goid, {})["subject"] if goid in go_meta else None) or ""
         subj = re.sub(r"\s+", " ", subj).strip()
         if len(subj.split()) >= 3:
-            con.execute("""INSERT INTO chunks (goid,page,ord,text,n_words,box_x,box_y,box_w,box_h,word_ids,kind)
-                           VALUES (?,0,0,?,?,NULL,NULL,NULL,NULL,NULL,'subject')""",
-                        (goid, subj.translate(DEV_DIGITS), len(subj.split())))
+            cur = con.execute(
+                """INSERT INTO chunks (goid,page,ord,text,n_words,box_x,box_y,box_w,box_h,word_ids,kind)
+                   VALUES (?,0,0,?,?,NULL,NULL,NULL,NULL,NULL,'subject')""",
+                (goid, subj.translate(DEV_DIGITS), len(subj.split())))
+            con.execute("INSERT INTO chunks_phon (rowid, phon) VALUES (?,?)",
+                        (cur.lastrowid, phonetic_text(subj)))
             n_chunks += 1
         n_go += 1
         con.commit()

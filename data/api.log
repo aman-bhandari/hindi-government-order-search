@@ -12,3 +12,4 @@ INFO:     127.0.0.1:43182 - "GET /assets/index-D2iu9TiT.css HTTP/1.1" 200 OK
 INFO:     127.0.0.1:43182 - "GET /api/facets HTTP/1.1" 200 OK
 INFO:     127.0.0.1:43192 - "GET /api/eval HTTP/1.1" 200 OK
 INFO:     127.0.0.1:43172 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44004 - "GET /api/health HTTP/1.1" 200 OK

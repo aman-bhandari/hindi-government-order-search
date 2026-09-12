@@ -42,7 +42,10 @@ def health():
     con = db()
     g = con.execute("SELECT COUNT(*) c, SUM(ocr_ok) o FROM gos").fetchone()
     c = con.execute("SELECT COUNT(*) c FROM chunks").fetchone()
+    depts = con.execute("""SELECT department, COUNT(*) n, SUM(ocr_ok) indexed FROM gos
+                           GROUP BY 1 HAVING indexed > 0 ORDER BY n DESC""").fetchall()
     return {"status": "ok", "gos": g["c"], "gos_indexed": g["o"] or 0, "chunks": c["c"],
+            "departments": [dict(d) for d in depts],
             "embeddings": S.VEC_FILE.exists(),
             "providers": {"ollama": bool(os.environ.get("OLLAMA_URL", "http://127.0.0.1:11434")),
                           "anthropic": bool(os.environ.get("ANTHROPIC_API_KEY"))}}
@@ -53,16 +56,21 @@ def facets():
     con = db()
     cats = con.execute("""SELECT category, COUNT(*) n FROM gos WHERE ocr_ok=1
                           GROUP BY 1 ORDER BY n DESC""").fetchall()
+    depts = con.execute("""SELECT department, COUNT(*) n FROM gos WHERE ocr_ok=1
+                           GROUP BY 1 ORDER BY n DESC""").fetchall()
     yrs = con.execute("""SELECT substr(go_date_iso,1,4) y, COUNT(*) n FROM gos
                          WHERE ocr_ok=1 AND go_date_iso IS NOT NULL GROUP BY 1 ORDER BY y""").fetchall()
-    return {"categories": [dict(r) for r in cats], "years": [dict(r) for r in yrs]}
+    return {"categories": [dict(r) for r in cats], "years": [dict(r) for r in yrs],
+            "departments": [dict(r) for r in depts]}
 
 
 @app.get("/api/search")
 def api_search(q: str, limit: int = 10, category: str | None = None,
-               date_from: str | None = None, date_to: str | None = None, go_no: str | None = None):
+               date_from: str | None = None, date_to: str | None = None, go_no: str | None = None,
+               department: str | None = None):
     con = db()
-    filters = {"category": category, "date_from": date_from, "date_to": date_to, "go_no": go_no}
+    filters = {"category": category, "date_from": date_from, "date_to": date_to, "go_no": go_no,
+               "department": department}
     return {"query": q, "results": S.search(con, q, limit=limit, filters=filters)}
 
 

@@ -85,3 +85,42 @@ refused in all four.
 The cost of that strictness is visible too: of the 9 answerable questions it declined, 6 declined because the
 model's only quote failed verification. Those are answers a looser system would have given, some of them
 correct. The trade was made deliberately in favour of never presenting an unverifiable claim as sourced.
+
+## A third thing that did not work: phonetic matching
+
+Transliterated subject lines are the largest measured cause of retrieval misses, so a phonetic bridge was
+built to close them. At the word level it works well. Devanagari is transliterated to Latin and both sides
+reduced to a consonant skeleton under rules that absorb the usual spelling differences (English soft c and g,
+c/k, v/w, nasal m/n, aspirates, doubled letters). On 20 word pairs drawn from this corpus, 19 match:
+
+| Devanagari | key | English | key |
+|---|---|---|---|
+| पोर्ट्ल | prtl | portal | prtl |
+| सिस्ट्म | stn | system | stn |
+| मैंनेजमैंट | njnt | management | njnt |
+| कम्प्यूटर | knptr | computer | knptr |
+
+Unrelated Hindi and English words do not collide. And on the specific failing case, four of six tokens bridge
+between "उत्तराखंड गर्वमेंट एसेट मैंनेजमैंट सिस्ट्म पोर्ट्ल" and "Government Asset Management System Portal".
+
+Despite that, **using it for retrieval made results worse**, in both forms tried.
+
+As a fused third channel, swept across key length and weight:
+
+| Minimum key length | Weight | Order first | Order in top five |
+|---|---|---|---|
+| — | 0 (off) | **42%** | **65%** |
+| 2 | 0.6 | 38% | 50% |
+| 4 | 0.3 | 31% | 58% |
+| 5 | 0.3 | 31% | 65% |
+| 6 | 0.6 | 31% | 65% |
+
+As targeted query expansion, adding corpus words that sound like the query's rare words: 27% and 62%.
+
+The reason is that the key discards vowels, so most words in a question match many passages. The expansions
+it produces are often genuinely useful, catching OCR misspellings like "सराकर" for "सरकार" and "chaampawat"
+for "champawat", but the noise outweighs them and dilutes the keyword scoring.
+
+The capability is kept, indexed and off by default behind `PHONETIC_WEIGHT`, because on a collection with
+heavier transliteration it may pay. On this one it does not, and shipping a change that lowers the measured
+result would be the wrong call.

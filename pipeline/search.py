@@ -14,6 +14,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from db import connect, DATA  # noqa: E402
+from translit import phonetic_tokens  # noqa: E402
 
 VEC_FILE = DATA / "chunk_vectors.npy"
 VEC_IDS = DATA / "chunk_vector_ids.json"
@@ -66,6 +67,8 @@ def keyword_search(con, q, limit=50, filters=None):
             where.append("g.go_no LIKE ?"); params_pre.append(f"%{filters['go_no']}%")
         if filters.get("goid"):
             where.append("c.goid = ?"); params_pre.append(filters["goid"])
+        if filters.get("department"):
+            where.append("g.department = ?"); params_pre.append(filters["department"])
     sql = f"""
       SELECT c.chunk_id, c.goid, c.page, c.ord, c.text, bm25(chunks_fts) AS bm25
       FROM chunks_fts
@@ -73,6 +76,39 @@ def keyword_search(con, q, limit=50, filters=None):
       JOIN gos g ON g.goid = c.goid
       WHERE {' AND '.join(where)}
       ORDER BY bm25 LIMIT ?"""
+    rows = con.execute(sql, [expr] + params_pre + [limit]).fetchall()
+    return [dict(r) for r in rows]
+
+
+def phonetic_search(con, q, limit=50, filters=None):
+    """Third retrieval channel: match on phonetic keys.
+
+    This is what reaches a subject line that spells English words in Devanagari, which plain keyword search
+    cannot do (different script) and embeddings do unreliably (ad hoc spelling). See pipeline/translit.py.
+    """
+    toks = phonetic_tokens(q)
+    if not toks:
+        return []
+    expr = " OR ".join(f'"{t}"' for t in toks)
+    where, params_pre = ["chunks_phon MATCH ?"], []
+    if filters:
+        for field, col in (("category", "g.category"), ("go_no", "g.go_no"), ("department", "g.department")):
+            if filters.get(field):
+                where.append(f"{col} {'LIKE' if field == 'go_no' else '='} ?")
+                params_pre.append(f"%{filters[field]}%" if field == "go_no" else filters[field])
+        if filters.get("date_from"):
+            where.append("g.go_date_iso >= ?"); params_pre.append(filters["date_from"])
+        if filters.get("date_to"):
+            where.append("g.go_date_iso <= ?"); params_pre.append(filters["date_to"])
+        if filters.get("goid"):
+            where.append("c.goid = ?"); params_pre.append(filters["goid"])
+    sql = f"""
+      SELECT c.chunk_id, bm25(chunks_phon) AS phon_score
+      FROM chunks_phon
+      JOIN chunks c ON c.chunk_id = chunks_phon.rowid
+      JOIN gos g ON g.goid = c.goid
+      WHERE {' AND '.join(where)}
+      ORDER BY phon_score LIMIT ?"""
     rows = con.execute(sql, [expr] + params_pre + [limit]).fetchall()
     return [dict(r) for r in rows]
 
@@ -123,7 +159,7 @@ def vector_search(con, q, limit=50, filters=None):
     qv = _load_model().encode([normalise(q)], normalize_embeddings=True)[0]
     sims = vecs @ qv
     allowed = None
-    if filters and any(filters.get(k) for k in ("category", "date_from", "date_to", "go_no", "goid")):
+    if filters and any(filters.get(k) for k in ("category", "date_from", "date_to", "go_no", "goid", "department")):
         allowed = {r["chunk_id"] for r in keyword_filter_ids(con, filters)}
     order = np.argsort(-sims)
     out = []
@@ -149,6 +185,8 @@ def keyword_filter_ids(con, filters):
         where.append("g.go_no LIKE ?"); params.append(f"%{filters['go_no']}%")
     if filters.get("goid"):
         where.append("c.goid = ?"); params.append(filters["goid"])
+    if filters.get("department"):
+        where.append("g.department = ?"); params.append(filters["department"])
     return con.execute(f"""SELECT c.chunk_id FROM chunks c JOIN gos g ON g.goid=c.goid
                           WHERE {' AND '.join(where)}""", params).fetchall()
 
@@ -165,6 +203,11 @@ def hydrate(con, chunk_ids):
     return {r["chunk_id"]: dict(r) for r in rows}
 
 
+# Phonetic matching is built and measured but OFF by default: fusing it lowered retrieval on this corpus
+# (see docs/RESULTS.md). Set PHONETIC_WEIGHT above 0 to enable it for a collection where it does help.
+PHONETIC_WEIGHT = float(os.environ.get("PHONETIC_WEIGHT", "0"))
+
+
 def search(con, q, limit=10, filters=None, k=60, per_go=2):
     """Reciprocal-rank fusion of keyword and vector results, diversified across orders.
 
@@ -174,6 +217,7 @@ def search(con, q, limit=10, filters=None, k=60, per_go=2):
     """
     kw = keyword_search(con, q, limit=50, filters=filters)
     vec = vector_search(con, q, limit=50, filters=filters)
+    phon = phonetic_search(con, q, limit=50, filters=filters) if PHONETIC_WEIGHT > 0 else []
     fused, bm25_by, cos_by = {}, {}, {}
     for rank, r in enumerate(kw):
         fused[r["chunk_id"]] = fused.get(r["chunk_id"], 0) + 1.0 / (k + rank + 1)
@@ -181,10 +225,13 @@ def search(con, q, limit=10, filters=None, k=60, per_go=2):
     for rank, r in enumerate(vec):
         fused[r["chunk_id"]] = fused.get(r["chunk_id"], 0) + 1.0 / (k + rank + 1)
         cos_by[r["chunk_id"]] = r["cosine"]
+    for rank, r in enumerate(phon):
+        fused[r["chunk_id"]] = fused.get(r["chunk_id"], 0) + PHONETIC_WEIGHT / (k + rank + 1)
     ranked = sorted(fused.items(), key=lambda kv: -kv[1])[: limit * 10]
     meta = hydrate(con, [cid for cid, _ in ranked])
     kw_ids = {r["chunk_id"] for r in kw}
     vec_ids = {r["chunk_id"] for r in vec}
+    phon_ids = {r["chunk_id"] for r in phon}
     out, seen_pages, per_go_count = [], set(), {}
     for cid, score in ranked:
         if cid not in meta:
@@ -213,6 +260,8 @@ def search(con, q, limit=10, filters=None, k=60, per_go=2):
             tags.append("keyword")
         if cid in vec_ids:
             tags.append("vector")
+        if cid in phon_ids:
+            tags.append("phonetic")
         d["matched_by"] = "+".join(tags) or "none"
         out.append(d)
         if len(out) >= limit:

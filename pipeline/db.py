@@ -43,6 +43,11 @@ CREATE INDEX IF NOT EXISTS refs_goid ON refs(goid);
 CREATE VIRTUAL TABLE IF NOT EXISTS chunks_fts USING fts5(
   text, content='chunks', content_rowid='chunk_id', tokenize='unicode61 remove_diacritics 0'
 );
+-- Phonetic keys, so a question in either script can reach a subject line that spells English words in
+-- Devanagari. Standalone rather than external-content because the indexed text is derived, not stored.
+CREATE VIRTUAL TABLE IF NOT EXISTS chunks_phon USING fts5(
+  phon, tokenize='unicode61'
+);
 CREATE TRIGGER IF NOT EXISTS chunks_ai AFTER INSERT ON chunks BEGIN
   INSERT INTO chunks_fts(rowid, text) VALUES (new.chunk_id, new.text);
 END;
@@ -88,10 +93,16 @@ def load_metadata(con, meta_file):
 
 if __name__ == "__main__":
     con = connect()
-    n = load_metadata(con, DATA / "meta" / "dept-17.json")
+    files = sorted((DATA / "meta").glob("dept-*.json"))
+    if not files:
+        raise SystemExit(f"no metadata in {DATA/'meta'} — run the scraper first")
+    total = 0
+    for f in files:
+        n = load_metadata(con, f)
+        print(f"loaded {n:>5} orders from {f.name}")
+        total += n
     row = con.execute("SELECT COUNT(*) c, MIN(go_date_iso) a, MAX(go_date_iso) b FROM gos").fetchone()
-    cats = con.execute("SELECT category, COUNT(*) c FROM gos GROUP BY 1 ORDER BY c DESC").fetchall()
-    print(f"loaded {n} GOs -> {DB_PATH}")
-    print(f"in db: {row['c']} rows, dates {row['a']} .. {row['b']}")
-    for c in cats:
-        print(f"  {c['c']:>4}  {c['category']}")
+    print(f"in db: {row['c']} orders, dates {row['a']} .. {row['b']}  ->  {DB_PATH}")
+    for d in con.execute("""SELECT department, COUNT(*) c, SUM(ocr_ok) o FROM gos
+                            GROUP BY 1 ORDER BY c DESC"""):
+        print(f"  {d['c']:>5} orders ({d['o'] or 0} indexed)  {d['department']}")
