@@ -52,3 +52,22 @@ run the evaluation before rebuilding the index with the second department.
 - Ollama lives at `~/.local/opt/ollama` with a symlink at `~/.local/bin/ollama`. No system packages were
   changed except `tesseract-ocr`, `tesseract-ocr-hin` and `poppler-utils`.
 - Disk in use: about 2.1 GB of page images and PDFs under `data/`, all gitignored and all regenerable.
+
+
+## Update after the second session
+
+Done: Social Welfare fully downloaded (1,058 of 1,075; 17 are absent from the portal). Subject expansion
+tried twice and reverted, both measured worse. Unanswerable question set tripled to twelve after finding
+large run-to-run variance. Topical-fit gate added.
+
+Owed, in order:
+
+1. **Score the topical-fit gate.** `python eval/answer_eval.py --provider ollama` on all 38 questions,
+   roughly 40 minutes on a quiet machine. The last attempt died at 6 of 38 when swap filled.
+2. **OCR Social Welfare**, about 3,100 pages. Stop Ollama first, it holds 5 GB, and use fewer workers than
+   12 on this machine: `python pipeline/ocr.py --engine native --workers 6`.
+3. Rebuild and re-embed across both departments, then re-measure retrieval on the larger collection.
+
+**Memory is the binding constraint on this laptop.** With the answer model loaded, plus the Next.js server
+and two dotnet processes belonging to other work, 11 GB of RAM and 8 GB of swap were exhausted and load
+average reached 146. Run one heavy job at a time.

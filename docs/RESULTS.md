@@ -197,3 +197,34 @@ is closer to the edge of it. Neither showed a benefit, which is why both are off
 first is comfortably outside the noise.
 
 Retrieval numbers do not have this problem. They involve no model and are identical across runs.
+
+
+## Refusing the questions it cannot answer: the real number, and why it misses
+
+Measured on twelve unanswerable questions rather than four: **8 of 12 refused correctly**. The earlier
+figure of 100% came from a four-question sample and did not survive a larger set.
+
+The four it answered are instructive, because in every case quote verification worked perfectly. The quotes
+were real, verbatim, and in the corpus. They were simply about something else:
+
+| Question | What it quoted |
+|---|---|
+| When is disaster relief compensation given? | A clause guaranteeing 99.90% service uptime |
+| Procedure for transferring land ownership? | A note on rationalising land use and conversion charges |
+| Which roads under the rural road programme? | Approach roads to sites in Bageshwar, from an IT order |
+| How to register for Char Dham Yatra? | Generic text about an applicant contacting a centre |
+
+This is a different failure from hallucination, and the existing defences do not touch it. Verification
+proves a quote exists; nothing asked whether it answers the question. Two candidate signals were measured
+and both failed to separate the cases: retrieval similarity (already known to overlap) and
+question-to-answer similarity (0.413 to 0.734 for the wrong answers against 0.457 to 0.902 for the right
+ones), the latter because a model writes answers that echo the question's own words.
+
+The signal that does distinguish them is topical, and it can be read from the clean metadata: the order
+being quoted is about another matter. The model is now asked to judge exactly that against the subject
+lines, and an off-topic answer becomes a refusal. Spot-checked as working on the disaster-relief case while
+leaving a correct answer intact.
+
+**This change is not yet scored.** The measurement run reached 6 of 38 questions before the laptop exhausted
+its 8 GB of swap, with one question taking seven minutes, and was stopped rather than disrupt other work on
+the machine. It should be re-run when the machine is free.
