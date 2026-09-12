@@ -79,8 +79,15 @@ def call_anthropic(system, prompt, model=None, timeout=None):
         return json.loads(r.read())["content"][0]["text"]
 
 
+# Compare quotes on their words alone. OCR of a scanned table produces markup noise ("|[6. |" for a row
+# number), and a model reading that excerpt will tidy it; rejecting such a quote refuses a faithful answer
+# over punctuation. Dropping non-word characters tolerates that, while still requiring the same words in the
+# same order, so a paraphrase cannot pass.
+_WORDISH = re.compile(r"[^\w\u0900-\u097F]+")
+
+
 def normalise_for_match(s):
-    return re.sub(r"\s+", " ", s or "").strip().lower()
+    return _WORDISH.sub(" ", (s or "").lower()).strip()
 
 
 def verify_quotes(parsed, chunks):
@@ -96,7 +103,7 @@ def verify_quotes(parsed, chunks):
         c = chunks[n - 1]
         hay = normalise_for_match(c["text"])
         needle = normalise_for_match(q.get("text", ""))
-        if len(needle) < 8:
+        if len(needle.replace(" ", "")) < 8:
             dropped.append({**q, "reason": "quote too short to verify"}); continue
         if needle in hay:
             kept.append({"chunk_id": c["chunk_id"], "goid": c["goid"], "page": c["page"],

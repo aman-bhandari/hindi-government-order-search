@@ -25,3 +25,7 @@
   "Which river is the longest" and "what is the forest fire compensation" both scored the same as a real query.
   Term overlap separates them cleanly (0% versus 50-67%), and cosine similarity takes over once embeddings exist,
   which is what allows a question phrased in different words than the order uses to still be answered.
+- 2026-09-12 Quote verification compares words only, ignoring punctuation and markup. Observed: OCR of a budget
+  table renders a row number as "|[6. |", and the model reading that excerpt tidied it to "6." — a faithful quote
+  rejected over punctuation. Word-only comparison still requires the same words in the same order, so a paraphrase
+  with changed wording is refused (verified with three test cases).
