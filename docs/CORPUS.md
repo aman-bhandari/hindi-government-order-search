@@ -43,3 +43,11 @@ Metadata (order number, date, department, section, category, file path) comes fr
 service. Page text comes from optical character recognition of the scanned PDFs. The two are never mixed:
 anything that must be exact is metadata, anything that is read from an image is treated as fallible and shown
 alongside the image it came from.
+
+## A property worth knowing about: transliterated subjects
+
+Many subject lines are English written in Devanagari script rather than Hindi. "उत्तराखंड गर्वमेंट एसेट
+मैंनेजमैंट सिस्ट्म पोर्ट्ल" is "Uttarakhand Government Asset Management System Portal" spelled phonetically.
+Neither keyword search nor a multilingual embedding bridges that reliably to a question asked in real Hindi
+("सरकारी परिसंपत्तियों का ब्यौरा रखने वाला पोर्टल"), and it is the largest single cause of retrieval misses
+measured on this corpus. Asking in English, or using the transliterated words, finds those orders.

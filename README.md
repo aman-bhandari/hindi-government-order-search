@@ -54,8 +54,19 @@ The scraper needs Chromium: the portal only supports legacy TLS renegotiation, w
 
 ## Corpus
 
-Information Technology Department orders from [go.uk.gov.in](https://go.uk.gov.in), June 2002 to May 2025.
-The same pipeline works for any of the portal's 60 departments by changing one flag.
+Every Information Technology Department order on [go.uk.gov.in](https://go.uk.gov.in), June 2002 to May 2025.
+
+| | |
+|---|---|
+| Orders | 308 |
+| Pages read | 892 |
+| Passages indexed | 4,345 |
+| Mean OCR word confidence | 81% |
+| Time to OCR the collection | 38 minutes, 12 parallel workers |
+| Time to embed all passages | 34 seconds on a laptop GPU |
+
+The same pipeline covers any of the portal's 60 departments by changing one flag. See `docs/CORPUS.md` for
+what these orders are about, and what they cannot answer.
 
 ## Measured, not claimed
 
