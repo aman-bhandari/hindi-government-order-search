@@ -42,8 +42,9 @@ def health():
     con = db()
     g = con.execute("SELECT COUNT(*) c, SUM(ocr_ok) o FROM gos").fetchone()
     c = con.execute("SELECT COUNT(*) c FROM chunks").fetchone()
-    depts = con.execute("""SELECT department, COUNT(*) n, SUM(ocr_ok) indexed FROM gos
-                           GROUP BY 1 HAVING indexed > 0 ORDER BY n DESC""").fetchall()
+    # "indexed" is a reserved word in SQLite (the INDEXED BY clause), so the alias needs quoting
+    depts = con.execute("""SELECT department, COUNT(*) n, SUM(ocr_ok) AS "indexed" FROM gos
+                           GROUP BY 1 HAVING SUM(ocr_ok) > 0 ORDER BY n DESC""").fetchall()
     return {"status": "ok", "gos": g["c"], "gos_indexed": g["o"] or 0, "chunks": c["c"],
             "departments": [dict(d) for d in depts],
             "embeddings": S.VEC_FILE.exists(),

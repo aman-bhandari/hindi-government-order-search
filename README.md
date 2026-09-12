@@ -54,16 +54,18 @@ The scraper needs Chromium: the portal only supports legacy TLS renegotiation, w
 
 ## Corpus
 
-Every Information Technology Department order on [go.uk.gov.in](https://go.uk.gov.in), June 2002 to May 2025.
+Every Information Technology and Social Welfare Department order on [go.uk.gov.in](https://go.uk.gov.in),
+2001 to 2025. The same pipeline covers the portal's other 59 departments by changing one flag.
 
 | | |
 |---|---|
-| Orders | 308 |
-| Pages read | 892 |
-| Passages indexed | 4,345 |
-| Mean OCR word confidence | 81% |
-| Time to OCR the collection | 38 minutes, 12 parallel workers |
-| Time to embed all passages | 34 seconds on a laptop GPU |
+| Departments | 2 of the portal's 61 |
+| Orders indexed | 1,365 (Social Welfare 1,057, Information Technology 308) |
+| Pages read | 3,943 |
+| Passages indexed | 20,677 |
+| Mean OCR word confidence | 79% |
+| Time to OCR the collection | about 3.5 hours total |
+| Time to embed all passages | 158 seconds on a laptop GPU |
 
 The same pipeline covers any of the portal's 60 departments by changing one flag. See `docs/CORPUS.md` for
 what these orders are about, and what they cannot answer.
@@ -75,8 +77,12 @@ questions written by reading the orders plus 4 with no answer in the collection:
 
 | | |
 |---|---|
-| Correct order ranked first | 42% |
+| Correct order ranked first | 35% |
 | Correct order within five results | 65% |
+| Unanswerable questions correctly declined | 83% |
+
+Top-five accuracy held at 65% when a second department grew the collection 4.75-fold, which is the test of
+whether any of this was fitted to the collection it was built on.
 
 `./run.sh eval` re-runs both the retrieval scoring and the slower answer-grounding check, and the interface
 shows the result behind the accuracy badge. The OCR assessment that decided this whole approach is in
@@ -92,7 +98,10 @@ No order text is sent anywhere unless the Claude API provider is explicitly sele
 
 Stated plainly, because a government tool that oversells itself is worse than one that underperforms honestly.
 
-- **One department.** Extending to the portal's other 59 is running time, not new work.
+- **Two departments of 61.** Extending is running time, not new work: about 3.5 hours of OCR per 1,300 orders.
+- **A local 7B model struggles to pick the right passage from six** once the collection is large. It answered
+  44% of answerable questions on two departments against 58-65% on one. The provider switch exists for this,
+  and the same harness measures a stronger model with `PROVIDER=anthropic ./run.sh eval`.
 - **OCR averages 81% word confidence**, worst page 29%. Digits are misread constantly, which is why nothing
   that must be exact comes from OCR.
 - **Transliterated subjects are the biggest source of misses.** Many subject lines are English spelled
