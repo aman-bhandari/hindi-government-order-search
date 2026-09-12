@@ -14,3 +14,7 @@ Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF
 [12/30] found=False quotes=0 dropped=1 right_order=False 36.3s
 [13/30] found=False quotes=0 dropped=1 right_order=False 16.4s
 [14/30] found=True quotes=1 dropped=0 right_order=False 14.4s
+[15/30] found=True quotes=1 dropped=0 right_order=False 15.3s
+[16/30] found=False quotes=0 dropped=1 right_order=False 8.6s
+[17/30] found=False quotes=0 dropped=1 right_order=False 30.5s
+[18/30] found=True quotes=1 dropped=0 right_order=True 34.7s

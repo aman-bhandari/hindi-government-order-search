@@ -26,9 +26,18 @@ It says not found instead of inventing an answer. Say: "In government, a confide
 than no answer."
 
 **2:20 — Show the accuracy page.**
-Click the accuracy badge: hit rates measured on hand-written questions from these orders.
-Say: "Measured, not claimed."
+Click the accuracy badge. Two tables: whether the right order is found, and whether the answers built on it
+stay grounded. Both measured on questions written by reading these orders, not generated from them.
+Say: "Measured, not claimed. And the number that matters is the second one: not whether it found something,
+but whether what it told you can be traced to a page."
 
 **2:40 — Close on deployability.**
-Say: "This ran with no internet. One department is indexed; the same pipeline covers all sixty by changing
-one flag. Order numbers and dates come from the portal, never from OCR, so citations cannot drift."
+Say: "This ran with no internet, on a laptop. 308 orders, 892 scanned pages, 4,345 passages. The same
+pipeline covers all sixty departments by changing one flag. Order numbers and dates come from the portal,
+never from OCR, so a citation cannot drift even when the scan is poor."
+
+**What to say if asked about the numbers.**
+Be straight about them. Retrieval finds the right order first 42% of the time and within five results 65%.
+The biggest remaining cause of misses is that many subject lines are English spelled phonetically in
+Devanagari, which nothing bridges to the same question asked in Hindi. That is a property of the records,
+it is documented, and the fix is known rather than hidden.
