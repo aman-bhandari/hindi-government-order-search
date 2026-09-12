@@ -1,3 +1,9 @@
 Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
 Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights: 100%|██████████| 391/391 [00:00<00:00, 8701.14it/s]
 [1/30] found=True quotes=1 dropped=0 right_order=True 71.4s
+[2/30] found=False quotes=0 dropped=1 right_order=False 21.3s
+[3/30] found=False quotes=0 dropped=0 right_order=False 10.7s
+[4/30] found=True quotes=1 dropped=0 right_order=True 16.2s
+[5/30] found=True quotes=1 dropped=0 right_order=True 27.6s
+/usr/lib/python3.14/multiprocessing/resource_tracker.py:396: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown: {'/loky-454450-twcl0lt_'}
+  warnings.warn(
