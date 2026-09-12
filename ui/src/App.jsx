@@ -218,9 +218,12 @@ export default function App() {
               <div className="rounded-xl border border-paper-edge bg-paper-card p-5">
                 <p className="font-medium">Not found in the indexed orders</p>
                 <p className="mt-1 text-sm text-ink-soft">{state.answer.answer}</p>
+                {state.answer.reason && (
+                  <p className="mt-2 text-xs text-ink-soft">Why: {state.answer.reason}.</p>
+                )}
                 {state.results?.length > 0 && (
-                  <p className="mt-2 text-xs text-ink-soft">
-                    The closest passages are listed below; none of them supported an answer.
+                  <p className="mt-1 text-xs text-ink-soft">
+                    The closest passages are listed below so you can judge for yourself.
                   </p>
                 )}
               </div>

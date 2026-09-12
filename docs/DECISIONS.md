@@ -19,3 +19,9 @@
 - 2026-09-12 Ollama installed under ~/.local/opt (no sudo, no system change), model qwen2.5:7b-instruct, running on
   the RTX 3050 with CUDA. Default context 4096 tokens on 6 GB VRAM, which is why the answer prompt caps retrieval at
   6 passages.
+- 2026-09-12 Abstention is decided by semantic similarity and term overlap, not by the fused ranking score.
+  Measured: reciprocal-rank fusion gives the top result an identical score (0.01639) whether the question is
+  answerable or nonsense, so the original threshold refused only when there were literally zero matches.
+  "Which river is the longest" and "what is the forest fire compensation" both scored the same as a real query.
+  Term overlap separates them cleanly (0% versus 50-67%), and cosine similarity takes over once embeddings exist,
+  which is what allows a question phrased in different words than the order uses to still be answered.

@@ -19,7 +19,13 @@ import search as S  # noqa: E402
 OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://127.0.0.1:11434")
 OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "qwen2.5:7b-instruct")
 ANTHROPIC_MODEL = os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-5")
-MIN_SCORE = float(os.environ.get("MIN_SCORE", "0.015"))
+# Relevance gates for refusing to answer. Reciprocal-rank fusion scores cannot be used for this: the top
+# result scores the same whether the question was answerable or nonsense. These two signals can.
+#   cosine   — semantic similarity, catches questions phrased with different words than the order uses
+#   coverage — share of the question's substantive terms present in the passage, the only usable signal
+#              before embeddings are built
+MIN_COSINE = float(os.environ.get("MIN_COSINE", "0.50"))
+MIN_COVERAGE = float(os.environ.get("MIN_COVERAGE", "0.34"))
 # A 7B model on a 6 GB laptop GPU needs well over a minute for a ~3k-token prompt, and much longer
 # if the machine is busy. Generous by default; the interface shows progress rather than blocking silently.
 LLM_TIMEOUT = int(os.environ.get("LLM_TIMEOUT", "600"))
@@ -101,11 +107,39 @@ def verify_quotes(parsed, chunks):
     return kept, dropped
 
 
+def is_relevant(chunks, top_n=3):
+    """Decide whether anything retrieved is worth sending to a model.
+
+    Returns (relevant, reason). Judged on the best few results: a question is answerable if some passage is
+    semantically close (when embeddings exist) or shares enough of the question's substantive terms.
+    """
+    if not chunks:
+        return False, "nothing matched the question"
+    head = chunks[:top_n]
+    cos = [c["cosine"] for c in head if c.get("cosine") is not None]
+    cov = [c.get("lexical_coverage", 0.0) for c in head]
+    best_cos = max(cos) if cos else None
+    best_cov = max(cov) if cov else 0.0
+    if best_cos is not None and best_cos >= MIN_COSINE:
+        return True, f"semantic similarity {best_cos:.2f}"
+    if best_cov >= MIN_COVERAGE:
+        return True, f"term overlap {best_cov:.0%}"
+    detail = f"term overlap {best_cov:.0%}"
+    if best_cos is not None:
+        detail += f", semantic similarity {best_cos:.2f}"
+    return False, f"closest passages are not relevant ({detail})"
+
+
+NOT_FOUND = ("The indexed Government Orders do not appear to cover this. "
+             "This collection holds Information Technology Department orders only.")
+
+
 def answer(con, question, provider="ollama", limit=6, filters=None, model=None):
     chunks = S.search(con, question, limit=limit, filters=filters)
-    if not chunks or chunks[0]["score"] < MIN_SCORE:
-        return {"found": False, "answer": "Nothing in the indexed Government Orders matches this question.",
-                "quotes": [], "chunks": chunks, "provider": provider, "reason": "no chunk above score threshold"}
+    relevant, reason = is_relevant(chunks)
+    if not relevant:
+        return {"found": False, "answer": NOT_FOUND, "quotes": [], "dropped_quotes": [],
+                "chunks": chunks, "provider": provider, "reason": reason}
     prompt = build_prompt(question, chunks)
     raw = (call_anthropic if provider == "anthropic" else call_ollama)(SYSTEM, prompt, model)
     try:
@@ -118,8 +152,8 @@ def answer(con, question, provider="ollama", limit=6, filters=None, model=None):
     return {
         "found": found,
         "answer": parsed.get("answer", "").strip() if found else
-                  "The indexed Government Orders do not appear to answer this. "
-                  "Try different wording, or widen the filters.",
+                  "No passage in these orders supported an answer to this question.",
+        "reason": reason if found else "the model produced no quote that survived verification",
         "quotes": kept, "dropped_quotes": dropped, "chunks": chunks,
         "provider": provider, "model": model or (ANTHROPIC_MODEL if provider == "anthropic" else OLLAMA_MODEL),
     }

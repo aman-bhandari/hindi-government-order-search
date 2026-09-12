@@ -37,12 +37,24 @@ def fts_query(q: str) -> str:
     return " OR ".join(f'"{t}"' for t in toks)
 
 
+def _terms(q):
+    return [t for t in re.split(r"[^\w\u0900-\u097F]+", normalise(q).lower()) if len(t) > 2]
+
+
+def _coverage(q, text):
+    """Share of the query's substantive terms that actually appear in this passage."""
+    terms = _terms(q)
+    if not terms:
+        return 0.0
+    low = text.lower()
+    return round(sum(1 for t in terms if t in low) / len(terms), 3)
+
+
 def keyword_search(con, q, limit=50, filters=None):
     expr = fts_query(q)
     if not expr:
         return []
-    where, params = ["chunks_fts MATCH ?"], [expr]
-    params_pre = []
+    where, params_pre = ["chunks_fts MATCH ?"], []
     if filters:
         if filters.get("category"):
             where.append("g.category = ?"); params_pre.append(filters["category"])
@@ -55,12 +67,12 @@ def keyword_search(con, q, limit=50, filters=None):
         if filters.get("goid"):
             where.append("c.goid = ?"); params_pre.append(filters["goid"])
     sql = f"""
-      SELECT c.chunk_id, c.goid, c.page, c.ord, c.text, bm25(chunks_fts) AS score
+      SELECT c.chunk_id, c.goid, c.page, c.ord, c.text, bm25(chunks_fts) AS bm25
       FROM chunks_fts
       JOIN chunks c ON c.chunk_id = chunks_fts.rowid
       JOIN gos g ON g.goid = c.goid
       WHERE {' AND '.join(where)}
-      ORDER BY score LIMIT ?"""
+      ORDER BY bm25 LIMIT ?"""
     rows = con.execute(sql, [expr] + params_pre + [limit]).fetchall()
     return [dict(r) for r in rows]
 
@@ -109,7 +121,7 @@ def vector_search(con, q, limit=50, filters=None):
         cid = ids[int(i)]
         if allowed is not None and cid not in allowed:
             continue
-        out.append({"chunk_id": cid, "score": float(sims[int(i)])})
+        out.append({"chunk_id": cid, "cosine": float(sims[int(i)])})
         if len(out) >= limit:
             break
     return out
@@ -147,11 +159,13 @@ def search(con, q, limit=10, filters=None, k=60):
     """Reciprocal-rank fusion of keyword and vector results."""
     kw = keyword_search(con, q, limit=50, filters=filters)
     vec = vector_search(con, q, limit=50, filters=filters)
-    fused = {}
+    fused, bm25_by, cos_by = {}, {}, {}
     for rank, r in enumerate(kw):
         fused[r["chunk_id"]] = fused.get(r["chunk_id"], 0) + 1.0 / (k + rank + 1)
+        bm25_by[r["chunk_id"]] = r["bm25"]
     for rank, r in enumerate(vec):
         fused[r["chunk_id"]] = fused.get(r["chunk_id"], 0) + 1.0 / (k + rank + 1)
+        cos_by[r["chunk_id"]] = r["cosine"]
     ranked = sorted(fused.items(), key=lambda kv: -kv[1])[: limit * 5]
     meta = hydrate(con, [cid for cid, _ in ranked])
     kw_ids = {r["chunk_id"] for r in kw}
@@ -169,6 +183,12 @@ def search(con, q, limit=10, filters=None, k=60):
             continue
         seen_pages.add(key)
         d["score"] = round(score, 5)
+        # Reciprocal-rank fusion deliberately ignores how good a match is: the top result always scores
+        # the same whether the query was answerable or nonsense. Carry the underlying signals so callers
+        # can decide whether anything here is actually relevant.
+        d["bm25"] = round(bm25_by[cid], 3) if cid in bm25_by else None
+        d["cosine"] = round(cos_by[cid], 4) if cid in cos_by else None
+        d["lexical_coverage"] = _coverage(q, d["text"])
         tags = []
         if cid in kw_ids:
             tags.append("keyword")
