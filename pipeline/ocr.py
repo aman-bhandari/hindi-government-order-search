@@ -40,7 +40,8 @@ def pick_engine(requested):
 def run(engine, workdir: Path, argv):
     """Run a command with workdir as cwd (native) or as /d (docker)."""
     if engine == "native":
-        return subprocess.run(argv, cwd=workdir, capture_output=True, text=True)
+        env = dict(os.environ, OMP_THREAD_LIMIT="1")  # one thread per process; we parallelise by process
+        return subprocess.run(argv, cwd=workdir, capture_output=True, text=True, env=env)
     return subprocess.run(
         ["docker", "run", "--rm", "-v", f"{workdir}:/d", "-w", "/d", DOCKER_IMAGE] + argv,
         capture_output=True, text=True)
@@ -54,12 +55,12 @@ def page_count(pdf: Path) -> int:
         return 0
 
 
-def ocr_go(goid: str, pdf: Path, outdir: Path, engine: str, dpi: int, lang: str, max_pages: int):
+def ocr_go(goid: str, pdf: Path, outdir: Path, engine: str, dpi: int, lang: str, max_pages: int, psm: str = "3"):
     outdir.mkdir(parents=True, exist_ok=True)
     n = page_count(pdf)
     pages = min(n, max_pages) if max_pages else n
     stats = {"goid": goid, "pdf": pdf.name, "pages_total": n, "pages_done": 0, "engine": engine,
-             "dpi": dpi, "lang": lang, "pages": []}
+             "dpi": dpi, "lang": lang, "psm": psm, "pages": []}
     work = outdir  # rasterise and OCR in place
     shutil.copy(pdf, work / "src.pdf")
     for p in range(1, pages + 1):
@@ -75,7 +76,7 @@ def ocr_go(goid: str, pdf: Path, outdir: Path, engine: str, dpi: int, lang: str,
             produced[0].rename(png)
         if not txt.exists() or not tsv.exists():
             for mode, ext in (("txt", "txt"), ("tsv", "tsv")):
-                r = run(engine, work, ["tesseract", png.name, f"page-{p}", "-l", lang, "--psm", "6", mode])
+                r = run(engine, work, ["tesseract", png.name, f"page-{p}", "-l", lang, "--psm", psm, mode])
                 if r.returncode != 0:
                     stats["pages"].append({"page": p, "error": f"tesseract {mode}: {r.stderr[:200]}"}); break
         if txt.exists():
@@ -104,15 +105,26 @@ def ocr_go(goid: str, pdf: Path, outdir: Path, engine: str, dpi: int, lang: str,
     return stats
 
 
+def _worker(task):
+    goid, pdf, outdir, engine, dpi, lang, max_pages, psm = task
+    try:
+        return ocr_go(goid, Path(pdf), Path(outdir), engine, dpi, lang, max_pages, psm)
+    except Exception as e:  # never let one bad PDF kill the batch
+        return {"goid": goid, "pdf": Path(pdf).name, "pages_total": 0, "pages_done": 0,
+                "error": f"{type(e).__name__}: {e}", "pages": []}
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--data", default=str(ROOT / "data"))
     ap.add_argument("--engine", choices=["auto", "native", "docker"], default="auto")
     ap.add_argument("--dpi", type=int, default=300)
     ap.add_argument("--lang", default="hin+eng")
+    ap.add_argument("--psm", default="3", help="tesseract page segmentation: 3=auto (paragraph blocks), 6=single block")
     ap.add_argument("--limit", type=int, default=0, help="number of GOs (0 = all downloaded)")
     ap.add_argument("--max-pages", type=int, default=0, help="cap pages per GO (0 = all)")
     ap.add_argument("--only", default="", help="comma-separated GOIDs")
+    ap.add_argument("--workers", type=int, default=0, help="parallel processes (0 = cpu_count-2)")
     a = ap.parse_args()
 
     data = Path(a.data); pdfs = sorted((data / "pdf").glob("*.pdf"), key=lambda p: int(p.stem))
@@ -121,18 +133,35 @@ def main():
         pdfs = [p for p in pdfs if p.stem in want]
     if a.limit: pdfs = pdfs[:a.limit]
     engine = pick_engine(a.engine)
-    print(f"engine={engine} dpi={a.dpi} lang={a.lang} gos={len(pdfs)}", flush=True)
+    workers = a.workers or max(1, (os.cpu_count() or 4) - 2)
+    if engine == "docker":
+        workers = min(workers, 4)  # container startup dominates beyond this
+    print(f"engine={engine} dpi={a.dpi} lang={a.lang} psm={a.psm} gos={len(pdfs)} workers={workers}", flush=True)
+    tasks = [(p.stem, str(p), str(data / "ocr" / p.stem), engine, a.dpi, a.lang, a.max_pages, a.psm)
+             for p in pdfs]
     t0 = time.time(); allstats = []
-    for i, pdf in enumerate(pdfs, 1):
-        s = ocr_go(pdf.stem, pdf, data / "ocr" / pdf.stem, engine, a.dpi, a.lang, a.max_pages)
+    summary_path = Path(a.data) / "ocr" / "summary.json"
+    if workers == 1:
+        results = map(_worker, tasks)
+    else:
+        from concurrent.futures import ProcessPoolExecutor
+        pool = ProcessPoolExecutor(max_workers=workers)
+        results = pool.map(_worker, tasks)
+    for i, s in enumerate(results, 1):
         allstats.append(s)
         ok = [p for p in s["pages"] if "chars" in p]
-        conf = [p["mean_conf"] for p in ok if p["mean_conf"] is not None]
-        print(f"[{i}/{len(pdfs)}] GO {pdf.stem}: {s['pages_done']}/{s['pages_total']} pages, "
+        conf = [p["mean_conf"] for p in ok if p.get("mean_conf") is not None]
+        note = f" ERROR {s['error']}" if s.get("error") else ""
+        print(f"[{i}/{len(tasks)}] GO {s['goid']}: {s['pages_done']}/{s['pages_total']} pages, "
               f"mean_conf={round(sum(conf)/len(conf),1) if conf else '-'}, "
-              f"chars={sum(p['chars'] for p in ok)}", flush=True)
-    (Path(a.data) / "ocr" / "summary.json").write_text(json.dumps(allstats, ensure_ascii=False, indent=1))
-    print(f"done in {round(time.time()-t0)}s -> {Path(a.data)/'ocr'/'summary.json'}")
+              f"chars={sum(p['chars'] for p in ok)}{note}", flush=True)
+        if i % 25 == 0:
+            summary_path.write_text(json.dumps(allstats, ensure_ascii=False, indent=1))
+    summary_path.write_text(json.dumps(allstats, ensure_ascii=False, indent=1))
+    pages = sum(s["pages_done"] for s in allstats)
+    el = time.time() - t0
+    print(f"done: {len(allstats)} GOs, {pages} pages in {round(el)}s "
+          f"({el/max(pages,1):.1f}s/page wall) -> {summary_path}")
 
 
 if __name__ == "__main__":

@@ -16,6 +16,17 @@ fs.mkdirSync(path.join(OUT, 'meta'), { recursive: true });
 
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
+// GO MIS stores two shapes of FilePath: an absolute legacy URL (283/308 IT rows, /goentry/go_letters/...)
+// and a relative path (/GOFolder/PDF/...). Normalise both, and force https so the in-page fetch stays
+// same-origin (the site is https-only and mixed content would be blocked).
+function pdfUrl(r) {
+  let fp = r.FilePath ? String(r.FilePath).replace(/\\/g, '/').trim() : '';
+  if (!fp) return null;
+  if (/^https?:\/\//i.test(fp)) return fp.replace(/^http:\/\//i, 'https://');
+  if (!fp.startsWith('/')) fp = '/' + fp;
+  return BASE + fp;
+}
+
 (async () => {
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
@@ -32,7 +43,7 @@ const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
   // keep only the fields we need; drop the portal's user/password columns entirely
   const keep = ['GOID', 'GONo', 'GODate1678', 'Subject', 'DepartmentID', 'DepartmentNameE', 'SectionID', 'SectionNameE', 'CategoryID', 'CategoryNameE', 'G0Type', 'OldGORefrence_GOID', 'Amendment', 'AmendmentID', 'FilePath', 'FileName_PDF', 'FileName_DOC', 'File_Path_Word', 'SearchText'];
-  const meta = rows.map(r => { const o = {}; for (const k of keep) o[k] = r[k] ?? null; o.pdf_url = r.FilePath ? BASE + String(r.FilePath).replace(/\\/g, '/') : null; return o; });
+  const meta = rows.map(r => { const o = {}; for (const k of keep) o[k] = r[k] ?? null; o.pdf_url = pdfUrl(r); return o; });
   const metaFile = path.join(OUT, 'meta', `dept-${DEPT}.json`);
   fs.writeFileSync(metaFile, JSON.stringify({ scraped_at: new Date().toISOString(), department_id: DEPT, count: meta.length, rows: meta }, null, 1));
   console.log(`metadata: ${meta.length} rows -> ${metaFile}`);
