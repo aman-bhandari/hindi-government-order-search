@@ -58,7 +58,9 @@ export function ResultRow({ r, onOpenGo }) {
         <span className="text-ink-soft">{r.go_date}</span>
         <Badge>{r.category}</Badge>
         {isSubject ? <Badge tone="seal">subject line</Badge> : <Badge>page {r.page}</Badge>}
-        <Badge tone={r.matched_by.includes('vector') ? 'seal' : 'plain'}>{r.matched_by}</Badge>
+        <Badge tone={r.matched_by === 'via subject' ? 'mark' : r.matched_by.includes('vector') ? 'seal' : 'plain'}>
+          {r.matched_by}
+        </Badge>
       </div>
       {!isSubject && r.subject && <p className="mb-2 text-xs text-ink-soft">{r.subject}</p>}
       <p className="text-[15px] leading-relaxed">{r.text}</p>

@@ -13,7 +13,7 @@ export default function App() {
   const [q, setQ] = useState('')
   const [mode, setMode] = useState('ask')          // 'ask' = grounded answer, 'search' = passages
   const [provider, setProvider] = useState('ollama')
-  const [filters, setFilters] = useState({ category: '', date_from: '', date_to: '' })
+  const [filters, setFilters] = useState({ category: '', date_from: '', date_to: '', department: '' })
   const [state, setState] = useState({ loading: false, error: null, answer: null, results: null })
   const [meta, setMeta] = useState({ health: null, facets: null })
   const [openGo, setOpenGo] = useState(null)
@@ -58,7 +58,11 @@ export default function App() {
           <div className="min-w-0">
             <h1 className="font-serif text-xl leading-tight">शासनादेश खोज</h1>
             <p className="text-xs text-ink-soft">
-              Government Order search · Information Technology Department, Uttarakhand
+              Government Order search ·{' '}
+              {meta.health?.departments?.length
+                ? meta.health.departments.map((d) => d.department.replace(/ Department$/, '')).join(' and ')
+                : 'Uttarakhand'}
+              , Uttarakhand
             </p>
           </div>
           <div className="ml-auto flex flex-wrap items-center gap-1.5 text-xs">
@@ -163,6 +167,18 @@ export default function App() {
           </div>
 
           <div className="mt-3 flex flex-wrap items-center gap-2 text-xs">
+            {meta.facets?.departments?.length > 1 && (
+              <select value={filters.department}
+                onChange={(e) => setFilters({ ...filters, department: e.target.value })}
+                className="rounded border border-paper-edge bg-paper-card px-2 py-1">
+                <option value="">All departments</option>
+                {meta.facets.departments.map((d) => (
+                  <option key={d.department} value={d.department}>
+                    {d.department.replace(/ Department$/, '')} ({d.n})
+                  </option>
+                ))}
+              </select>
+            )}
             <select value={filters.category} onChange={(e) => setFilters({ ...filters, category: e.target.value })}
               className="rounded border border-paper-edge bg-paper-card px-2 py-1">
               <option value="">All categories</option>

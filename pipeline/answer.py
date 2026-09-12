@@ -54,8 +54,10 @@ Return ONLY valid JSON:
 def build_prompt(question, chunks):
     parts = []
     for i, c in enumerate(chunks, 1):
-        parts.append(f"[{i}] Government Order {c['go_no']}, dated {c['go_date']}, page {c['page']}, "
-                     f"category {c['category']}\n{c['text']}")
+        where = "subject line" if c.get("kind") == "subject" else f"page {c['page']}"
+        subj = f"\nThat order is about: {c['subject']}" if c.get("kind") != "subject" and c.get("subject") else ""
+        parts.append(f"[{i}] Government Order {c['go_no']}, dated {c['go_date']}, {where}, "
+                     f"category {c['category']}{subj}\n{c['text']}")
     excerpts = "\n\n".join(parts)
     return f"{excerpts}\n\nQuestion: {question}\n\nJSON:"
 
@@ -148,7 +150,7 @@ NOT_FOUND = ("The indexed Government Orders do not appear to cover this. "
 
 
 def answer(con, question, provider="ollama", limit=6, filters=None, model=None):
-    chunks = S.search(con, question, limit=limit, filters=filters)
+    chunks = S.search(con, question, limit=limit, filters=filters, expand_subjects=True)
     relevant, reason = is_relevant(chunks)
     if not relevant:
         return {"found": False, "answer": NOT_FOUND, "quotes": [], "dropped_quotes": [],

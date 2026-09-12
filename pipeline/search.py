@@ -208,7 +208,42 @@ def hydrate(con, chunk_ids):
 PHONETIC_WEIGHT = float(os.environ.get("PHONETIC_WEIGHT", "0"))
 
 
-def search(con, q, limit=10, filters=None, k=60, per_go=2):
+def expand_subject_hits(con, results, per_subject=2):
+    """Follow a subject-line hit into the body of its order.
+
+    A subject line says what an order is about but rarely contains the answer: "Regarding setting criteria
+    for purchasing ICT equipment" identifies the right order for "who approves computer purchases?" while
+    answering nothing. Measured on this corpus, the right order reached the answerer 69% of the time but was
+    cited only 31%, and the largest single cause was exactly this: the subject matched, the body never
+    arrived. So when a subject passage ranks, its order's opening body passages come with it.
+    """
+    out, seen = [], {r["chunk_id"] for r in results}
+    for r in results:
+        out.append(r)
+        if r.get("kind") != "subject":
+            continue
+        rows = con.execute("""
+            SELECT c.chunk_id, c.goid, c.page, c.ord, c.text, c.n_words, c.kind,
+                   c.box_x, c.box_y, c.box_w, c.box_h,
+                   g.go_no, g.go_date, g.go_date_iso, g.subject, g.category, g.section, g.department, g.pdf_url
+            FROM chunks c JOIN gos g ON g.goid = c.goid
+            WHERE c.goid = ? AND c.kind = 'ocr'
+            ORDER BY c.page, c.ord LIMIT ?""", (r["goid"], per_subject)).fetchall()
+        for row in rows:
+            d = dict(row)
+            if d["chunk_id"] in seen:
+                continue
+            seen.add(d["chunk_id"])
+            d["score"] = r["score"] * 0.9          # ranked just under the subject that pulled it in
+            d["bm25"] = None
+            d["cosine"] = None
+            d["lexical_coverage"] = 0.0     # it was not matched on its own terms
+            d["matched_by"] = "via subject"
+            out.append(d)
+    return out
+
+
+def search(con, q, limit=10, filters=None, k=60, per_go=2, expand_subjects=False):
     """Reciprocal-rank fusion of keyword and vector results, diversified across orders.
 
     A few long policy documents hold a large share of the corpus (one 38-page order alone contributes 236
@@ -266,6 +301,8 @@ def search(con, q, limit=10, filters=None, k=60, per_go=2):
         out.append(d)
         if len(out) >= limit:
             break
+    if expand_subjects and any(r.get("kind") == "subject" for r in out):
+        out = expand_subject_hits(con, out)
     return out
 
 
