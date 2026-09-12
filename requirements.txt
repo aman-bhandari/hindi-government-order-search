@@ -1,4 +1,4 @@
-# phase 0-1 (light)
+# pipeline + api
 pypdf>=6
 pytesseract>=0.3.13
 pillow
@@ -8,4 +8,7 @@ uvicorn[standard]
 python-multipart
 pydantic
 requests
-# phase 2+ (heavy, install when reached): sentence-transformers torch
+
+# retrieval: multilingual embeddings so a Hindi question can match English text and vice versa
+torch
+sentence-transformers
