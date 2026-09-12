@@ -41,14 +41,21 @@ SYSTEM = """You answer questions about Uttarakhand Government Orders for a gover
 Rules, in order of importance:
 1. Use ONLY the numbered excerpts provided. Never use outside knowledge.
 2. Quote the exact words from the excerpts that support your answer. Copy them character for character.
-3. If the excerpts do not contain the answer, say so. Do not guess.
-4. Never state a date, Government Order number or amount unless it appears verbatim in an excerpt.
+3. Check the subject of the order you are quoting. If that order is about a different matter than the
+   question, you have not found an answer, even if some words match. A clause about service uptime does not
+   answer a question about disaster compensation. A note about land use charges does not answer a question
+   about transferring ownership. Say you did not find it.
+4. If the excerpts do not contain the answer, say so. Do not guess and do not stretch.
+5. Never state a date, Government Order number or amount unless it appears verbatim in an excerpt.
    The excerpts come from OCR of scanned pages, so digits inside them may be wrong; prefer wording over numbers.
-5. Answer in the language of the question.
+6. Answer in the language of the question.
 
 Return ONLY valid JSON:
 {"answer": "<2-4 sentences>", "quotes": [{"n": <excerpt number>, "text": "<exact quoted words>"}],
- "found": true|false}"""
+ "same_subject": true|false, "found": true|false}
+
+"same_subject" is your judgement on rule 3: is the order you quoted actually about the matter asked about?
+"""
 
 
 def build_prompt(question, chunks):
@@ -166,13 +173,22 @@ def answer(con, question, provider="ollama", limit=6, filters=None, model=None):
         m = re.search(r"\{.*\}", raw, re.S)
         parsed = json.loads(m.group(0)) if m else {"answer": raw, "quotes": [], "found": True}
     kept, dropped = verify_quotes(parsed, chunks)
-    found = bool(parsed.get("found", True)) and bool(kept)
+    # The model's own topical judgement, made against the orders' clean subject lines rather than their
+    # OCR text. Verification proves a quote is real; this asks whether it is responsive. Measured failure
+    # it targets: a question about disaster relief answered from a clause about 99.90% service uptime.
+    same_subject = parsed.get("same_subject")
+    off_topic = same_subject is False
+    found = bool(parsed.get("found", True)) and bool(kept) and not off_topic
     return {
         "found": found,
         "answer": parsed.get("answer", "").strip() if found else
-                  "No passage in these orders supported an answer to this question.",
-        "reason": reason if found else "the model produced no quote that survived verification",
-        "quotes": kept, "dropped_quotes": dropped, "chunks": chunks,
+                  ("The orders that matched are about a different matter than this question."
+                   if off_topic else "No passage in these orders supported an answer to this question."),
+        "reason": reason if found else
+                  ("the closest orders are about a different subject" if off_topic
+                   else "the model produced no quote that survived verification"),
+        "quotes": kept if found else [], "dropped_quotes": dropped, "chunks": chunks,
+        "off_topic": off_topic,
         "provider": provider, "model": model or (ANTHROPIC_MODEL if provider == "anthropic" else OLLAMA_MODEL),
     }
 

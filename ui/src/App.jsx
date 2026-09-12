@@ -229,8 +229,10 @@ export default function App() {
                 <div className="rounded-xl border border-paper-edge bg-paper-card p-5">
                   <p className="text-[17px] leading-relaxed">{state.answer.answer}</p>
                   <p className="mt-3 text-[11px] text-ink-soft">
-                    Answered by {state.answer.model} from {state.answer.quotes.length} verified quote(s).
-                    Every quote below was checked word for word against the indexed page before being shown.
+                    Answered by {state.answer.model} from {state.answer.quotes.length} verified quote(s), out of
+                    {' '}{meta.health?.departments?.map((d) => d.department.replace(/ Department$/, '')).join(' and ')
+                      || 'the indexed'} orders only. Every quote below was checked word for word against the
+                    indexed page before being shown. Check that the orders cited are about the matter you asked about.
                   </p>
                 </div>
                 <div className="mt-3 space-y-3">

@@ -14,3 +14,36 @@ Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF
 [12/38] found=False quotes=0 dropped=1 right_order=False 55.0s
 [13/38] found=True quotes=1 dropped=0 right_order=False 25.4s
 [14/38] found=False quotes=1 dropped=0 right_order=False 200.8s
+[15/38] found=True quotes=1 dropped=3 right_order=False 303.5s
+[16/38] found=False quotes=0 dropped=1 right_order=False 135.7s
+[17/38] found=True quotes=1 dropped=1 right_order=True 75.4s
+[18/38] found=True quotes=1 dropped=0 right_order=True 30.8s
+[19/38] found=True quotes=1 dropped=0 right_order=False 108.2s
+[20/38] found=True quotes=1 dropped=0 right_order=False 25.9s
+[21/38] found=True quotes=1 dropped=0 right_order=False 32.4s
+[22/38] found=False quotes=0 dropped=1 right_order=False 295.9s
+[23/38] found=False quotes=0 dropped=1 right_order=False 37.2s
+[24/38] found=False quotes=0 dropped=1 right_order=False 132.2s
+[25/38] found=True quotes=1 dropped=0 right_order=False 14.1s
+[26/38] found=True quotes=1 dropped=0 right_order=True 56.1s
+[27/38] found=False quotes=0 dropped=0 right_order=False 261.2s
+[28/38] found=False quotes=0 dropped=0 right_order=False 20.2s
+[29/38] found=True quotes=1 dropped=0 right_order=False 138.2s
+[30/38] found=False quotes=0 dropped=0 right_order=False 13.3s
+[31/38] found=False quotes=1 dropped=0 right_order=False 27.3s
+[32/38] found=True quotes=1 dropped=0 right_order=False 20.0s
+[33/38] found=False quotes=0 dropped=0 right_order=False 16.3s
+[34/38] found=True quotes=1 dropped=0 right_order=False 20.5s
+[35/38] found=True quotes=1 dropped=0 right_order=False 31.4s
+[36/38] found=False quotes=0 dropped=0 right_order=False 15.9s
+[37/38] found=False quotes=0 dropped=1 right_order=False 48.2s
+[38/38] found=False quotes=0 dropped=0 right_order=False 9.9s
+
+of 26 answerable questions
+  answered rather than declined : 58%
+  cited the expected order      : 35%
+  quotes passing verification   : 55% (17 kept, 14 dropped)
+of 12 questions with no answer in the corpus
+  correctly declined            : 67%
+median time per answer          : 42.4s
+total wall time                 : 3318s
