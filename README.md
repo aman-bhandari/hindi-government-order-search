@@ -70,8 +70,17 @@ what these orders are about, and what they cannot answer.
 
 ## Measured, not claimed
 
-`./run.sh eval` scores retrieval against questions written by hand from real orders in the corpus, and the
-interface shows the result. The OCR quality assessment that decided this approach is in `docs/gate.md`.
+Full results, including what did not work, are in `docs/RESULTS.md`. Headline retrieval numbers, against 26
+questions written by reading the orders plus 4 with no answer in the collection:
+
+| | |
+|---|---|
+| Correct order ranked first | 42% |
+| Correct order within five results | 65% |
+
+`./run.sh eval` re-runs both the retrieval scoring and the slower answer-grounding check, and the interface
+shows the result behind the accuracy badge. The OCR assessment that decided this whole approach is in
+`docs/gate.md`; the reasoning behind each design choice is in `docs/ARCHITECTURE.md` and `docs/DECISIONS.md`.
 
 ## Third-party components
 
@@ -81,7 +90,15 @@ No order text is sent anywhere unless the Claude API provider is explicitly sele
 
 ## Limitations
 
-- One department is indexed. Extending to all 60 is a matter of running time, not new work.
-- OCR confidence averages 83%; digits inside scans are frequently misread, which is why nothing depends on them.
-- Budget release orders are mostly tables, which OCR reads poorly. They are indexed but rank low.
-- Answers are extractive by design. It will not summarise across many orders or draft new text.
+Stated plainly, because a government tool that oversells itself is worse than one that underperforms honestly.
+
+- **One department.** Extending to the portal's other 59 is running time, not new work.
+- **OCR averages 81% word confidence**, worst page 29%. Digits are misread constantly, which is why nothing
+  that must be exact comes from OCR.
+- **Transliterated subjects are the biggest source of misses.** Many subject lines are English spelled
+  phonetically in Devanagari, and nothing bridges that to the same question asked in real Hindi.
+- **Budget release orders are mostly tables**, which OCR reads poorly. They are indexed but answer badly.
+- **Extractive by design.** It quotes or declines. It will not summarise across many orders, because a
+  summary cannot be checked against a page, which is the whole point.
+- **A local 7B model takes tens of seconds** per answer on a 6 GB laptop GPU. An API model is faster and
+  better, at the cost of sending passages off the machine.
