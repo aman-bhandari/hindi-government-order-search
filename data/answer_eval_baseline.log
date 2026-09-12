@@ -1,2 +1,16 @@
 Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
 Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights: 100%|██████████| 391/391 [00:00<00:00, 7952.93it/s]
+[1/38] found=True quotes=1 dropped=0 right_order=True 91.8s
+[2/38] found=False quotes=0 dropped=1 right_order=False 32.8s
+[3/38] found=False quotes=0 dropped=0 right_order=False 42.4s
+[4/38] found=True quotes=1 dropped=0 right_order=True 36.7s
+[5/38] found=False quotes=0 dropped=1 right_order=False 101.6s
+[6/38] found=True quotes=2 dropped=0 right_order=True 134.7s
+[7/38] found=True quotes=1 dropped=0 right_order=False 51.7s
+[8/38] found=True quotes=1 dropped=0 right_order=True 117.8s
+[9/38] found=False quotes=0 dropped=1 right_order=False 28.1s
+[10/38] found=True quotes=1 dropped=1 right_order=True 32.8s
+[11/38] found=False quotes=0 dropped=1 right_order=False 496.7s
+[12/38] found=False quotes=0 dropped=1 right_order=False 55.0s
+[13/38] found=True quotes=1 dropped=0 right_order=False 25.4s
+[14/38] found=False quotes=1 dropped=0 right_order=False 200.8s

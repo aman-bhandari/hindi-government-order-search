@@ -70,17 +70,22 @@ GPU). Median 20 seconds per answer. Re-run with `./run.sh eval`.
 | Cited the order the question was written from | 31% |
 | Quotes that survived verbatim verification | 72% (18 kept, 7 dropped) |
 
-| Of the 4 questions with no answer in this collection | |
+| Of the questions with no answer in this collection | |
 |---|---|
-| Correctly declined | **100%** |
+| Correctly declined, first run of four questions | 100% |
+| Correctly declined, second run of the same four | 75% |
 
-The last number is the one that matters most for a government tool, and it is worth being precise about
+Those two runs used identical code. With only four such questions each was worth 25 points, so the set was
+tripled to twelve and re-measured; see the section on trusting these numbers. Treat the refusal rate as high
+but not yet precisely pinned.
+
+This measure is the one that matters most for a government tool, and it is worth being precise about
 where it comes from. It is not produced by a confidence threshold, which was measured and found incapable of
 the job. It comes from two things working together: the model is given only the retrieved passages and told
 to say when they do not answer the question, and every quote it produces is then checked word for word
 against the passage it cited. A question about forest fire compensation, pension eligibility, Char Dham
-registration or hospital beds retrieved plausible-looking administrative prose in all four cases, and was
-refused in all four.
+registration or hospital beds retrieves plausible-looking administrative prose every time, and is refused
+almost always.
 
 The cost of that strictness is visible too: of the 9 answerable questions it declined, 6 declined because the
 model's only quote failed verification. Those are answers a looser system would have given, some of them

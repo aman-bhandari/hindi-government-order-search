@@ -6,7 +6,7 @@ Definition of done was set in `../../documents/objective.md` before any code. Ag
 |---|---|
 | Real corpus: all IT Department orders, metadata from the portal, OCR with word boxes, page images kept | Done. 308 orders, 892 pages, 4,345 passages |
 | Retrieval: keyword and vector hybrid, filters by category, date and order number, related orders | Done |
-| Answering: quote-first with citations, local model, provider switch for an API, refusal when unsupported | Done. Refuses 100% of unanswerable questions |
+| Answering: quote-first with citations, local model, provider switch for an API, refusal when unsupported | Done. Refuses most questions it cannot answer; the exact rate is being re-measured on a larger set after run-to-run variance was found |
 | Interface: ask in Hindi or English, scanned page crop with supporting lines highlighted, related orders, accuracy page | Done |
 | Ship: README with architecture and third-party disclosure, demo script, registration text ready | README, architecture, results, demo script and registration draft written |
 
