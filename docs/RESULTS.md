@@ -228,3 +228,31 @@ leaving a correct answer intact.
 **This change is not yet scored.** The measurement run reached 6 of 38 questions before the laptop exhausted
 its 8 GB of swap, with one question taking seven minutes, and was stopped rather than disrupt other work on
 the machine. It should be re-run when the machine is free.
+
+
+## Two departments: does it generalise?
+
+The whole system was built and tuned on one department. Adding a second, 4.75 times more text, tests whether
+any of it was fitted to that collection.
+
+| | Information Technology only | Both departments |
+|---|---|---|
+| Orders indexed | 308 | 1,365 |
+| Pages read | 892 | 3,943 |
+| Passages | 4,345 | 20,677 |
+| Mean OCR word confidence | 81% | 79% |
+| Correct order ranked first | 42% | 35% |
+| Correct order in top five | **65%** | **65%** |
+| Correct page in top five | 46% | 50% |
+
+Top-five accuracy held exactly while the haystack grew nearly fivefold, which is the result that matters:
+the officer's question still surfaces the right order. First-hit accuracy fell seven points, which is what
+you would expect when four times as many plausible candidates compete for the top slot. Page-level accuracy
+improved, probably because the larger collection gives the correct order more chances to be represented by
+a passage that actually matches.
+
+The questions were written against the first department and were not changed, so this is a fair test of
+whether the approach degrades: it does not.
+
+OCR time for the second department: 3,079 pages in 2 hours 45 minutes at six parallel workers, held to six
+rather than twelve because memory, not CPU, is the binding constraint on this laptop.

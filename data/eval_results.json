@@ -4,9 +4,9 @@
  "n": 26,
  "n_hindi": 15,
  "n_english": 11,
- "hit_at_1": 0.423,
+ "hit_at_1": 0.346,
  "hit_at_5": 0.654,
- "page_hit_at_5": 0.462,
+ "page_hit_at_5": 0.5,
  "n_unanswerable": 12,
  "declined_correctly": 0.0,
  "embeddings_used": true,
@@ -24,7 +24,7 @@
     35580,
     35586,
     10751,
-    35586
+    25200
    ],
    "hit_at_1": true,
    "hit_at_5": true,
@@ -39,13 +39,13 @@
     35633
    ],
    "got": [
+    25200,
+    29001,
+    976,
     35633,
-    31965,
-    21931,
-    10641,
-    21932
+    27246
    ],
-   "hit_at_1": true,
+   "hit_at_1": false,
    "hit_at_5": true,
    "page_hit_at_5": true
   },
@@ -58,11 +58,11 @@
     35570
    ],
    "got": [
+    22981,
     10641,
     17759,
-    12858,
-    12858,
-    25772
+    22981,
+    10684
    ],
    "hit_at_1": false,
    "hit_at_5": false,
@@ -77,13 +77,13 @@
     35565
    ],
    "got": [
-    35565,
     37108,
     35565,
-    3495,
-    36883
+    35565,
+    24031,
+    10985
    ],
-   "hit_at_1": true,
+   "hit_at_1": false,
    "hit_at_5": true,
    "page_hit_at_5": true
   },
@@ -100,7 +100,7 @@
     35567,
     10641,
     17759,
-    8097
+    11984
    ],
    "hit_at_1": true,
    "hit_at_5": true,
@@ -118,7 +118,7 @@
     35592,
     35567,
     35567,
-    207,
+    31805,
     5095
    ],
    "hit_at_1": true,
@@ -136,9 +136,9 @@
    "got": [
     37221,
     27855,
-    26520,
+    6385,
     1451,
-    17348
+    37231
    ],
    "hit_at_1": false,
    "hit_at_5": false,
@@ -155,9 +155,9 @@
    "got": [
     22059,
     22059,
-    35567,
-    3563,
-    35567
+    21048,
+    33098,
+    6385
    ],
    "hit_at_1": true,
    "hit_at_5": true,
@@ -173,10 +173,10 @@
    ],
    "got": [
     36881,
-    32445,
+    14796,
     4928,
-    36881,
-    14796
+    32445,
+    15039
    ],
    "hit_at_1": true,
    "hit_at_5": true,
@@ -214,7 +214,7 @@
     26446,
     14379,
     17110,
-    4805
+    5761
    ],
    "hit_at_1": false,
    "hit_at_5": true,
@@ -230,9 +230,9 @@
    ],
    "got": [
     21914,
-    21761,
     35592,
-    10641,
+    21761,
+    29471,
     17759
    ],
    "hit_at_1": true,
@@ -251,8 +251,8 @@
     33040,
     31601,
     33040,
-    13634,
-    31601
+    31601,
+    13634
    ],
    "hit_at_1": false,
    "hit_at_5": false,
@@ -267,11 +267,11 @@
     35585
    ],
    "got": [
-    7120,
-    4531,
+    27744,
     10751,
-    21932,
-    35586
+    6377,
+    25200,
+    7120
    ],
    "hit_at_1": false,
    "hit_at_5": false,
@@ -292,10 +292,10 @@
    ],
    "got": [
     8154,
-    3495,
-    3496,
     13259,
-    3484
+    3495,
+    11471,
+    3494
    ],
    "hit_at_1": false,
    "hit_at_5": true,
@@ -311,10 +311,10 @@
    ],
    "got": [
     35586,
-    12850,
     7120,
-    15137,
-    7120
+    7010,
+    12850,
+    15137
    ],
    "hit_at_1": true,
    "hit_at_5": true,
@@ -371,7 +371,7 @@
     5095,
     12850,
     10985,
-    7120
+    17705
    ],
    "hit_at_1": false,
    "hit_at_5": false,
@@ -431,14 +431,14 @@
    ],
    "got": [
     12850,
-    35585,
     21932,
     12850,
-    7120
+    7120,
+    21931
    ],
    "hit_at_1": false,
    "hit_at_5": true,
-   "page_hit_at_5": false
+   "page_hit_at_5": true
   },
   {
    "id": 23,
@@ -453,7 +453,7 @@
     12850,
     29001,
     35633,
-    21931
+    21932
    ],
    "hit_at_1": false,
    "hit_at_5": true,
@@ -506,11 +506,11 @@
     19292
    ],
    "got": [
-    18793,
+    37108,
     18052,
-    18858,
-    33060,
-    37109
+    37109,
+    18793,
+    37220
    ],
    "hit_at_1": false,
    "hit_at_5": false,
@@ -522,7 +522,7 @@
    "language": "hi",
    "unanswerable": true,
    "declined": false,
-   "reason": "semantic similarity 0.48"
+   "reason": "semantic similarity 0.54"
   },
   {
    "id": 28,
@@ -530,7 +530,7 @@
    "language": "en",
    "unanswerable": true,
    "declined": false,
-   "reason": "semantic similarity 0.48"
+   "reason": "semantic similarity 0.63"
   },
   {
    "id": 29,
@@ -554,7 +554,7 @@
    "language": "hi",
    "unanswerable": true,
    "declined": false,
-   "reason": "semantic similarity 0.46"
+   "reason": "semantic similarity 0.53"
   },
   {
    "id": 32,
@@ -562,7 +562,7 @@
    "language": "en",
    "unanswerable": true,
    "declined": false,
-   "reason": "semantic similarity 0.42"
+   "reason": "semantic similarity 0.52"
   },
   {
    "id": 33,
@@ -570,7 +570,7 @@
    "language": "hi",
    "unanswerable": true,
    "declined": false,
-   "reason": "semantic similarity 0.52"
+   "reason": "semantic similarity 0.54"
   },
   {
    "id": 34,
@@ -578,7 +578,7 @@
    "language": "en",
    "unanswerable": true,
    "declined": false,
-   "reason": "semantic similarity 0.41"
+   "reason": "semantic similarity 0.46"
   },
   {
    "id": 35,
@@ -586,7 +586,7 @@
    "language": "hi",
    "unanswerable": true,
    "declined": false,
-   "reason": "semantic similarity 0.55"
+   "reason": "semantic similarity 0.57"
   },
   {
    "id": 36,
@@ -594,7 +594,7 @@
    "language": "en",
    "unanswerable": true,
    "declined": false,
-   "reason": "semantic similarity 0.47"
+   "reason": "semantic similarity 0.51"
   },
   {
    "id": 37,
@@ -602,7 +602,7 @@
    "language": "hi",
    "unanswerable": true,
    "declined": false,
-   "reason": "semantic similarity 0.46"
+   "reason": "semantic similarity 0.49"
   },
   {
    "id": 38,
