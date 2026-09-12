@@ -256,3 +256,33 @@ whether the approach degrades: it does not.
 
 OCR time for the second department: 3,079 pages in 2 hours 45 minutes at six parallel workers, held to six
 rather than twelve because memory, not CPU, is the binding constraint on this laptop.
+
+
+## Final answer-side numbers, and one more negative result
+
+Measured on both departments, 38 questions, local model:
+
+| Of the 25 answerable questions scored | One department | Both |
+|---|---|---|
+| Answered rather than declined | 58-65% | 44% |
+| Cited the expected order | 31-35% | 12% |
+| Quotes passing verification | 61-72% | 52% |
+| **Of 12 unanswerable: correctly declined** | 67% | **83%** |
+
+Answering got harder as the collection grew, and a diagnostic costing no model calls says why it is not the
+topical gate: **that gate fired zero times.** It is inert in practice. The model, asked to judge whether the
+order it quoted is about the matter asked, essentially always says yes.
+
+Retrieval still places the right order among the six passages shown 65% of the time, against 69% before. So
+the right evidence is usually present; what degraded is the model's ability to pick it out of six candidates
+when the collection holds nearly five times as many plausible-looking administrative passages. That is a
+7B-model limitation on a 6 GB card, and the provider switch exists precisely for it: the same harness will
+measure a stronger model with `PROVIDER=anthropic ./run.sh eval`.
+
+The refusal improvement to 83% is therefore not attributable to the gate either. It is most consistent with
+a larger corpus offering more clearly-unrelated material, plus the run-to-run variance already documented.
+
+Counting honestly, four ideas were built and measured in the hope of improving answers. None improved them:
+phonetic matching, subject expansion in two forms, and the topical gate. Three made things worse and were
+turned off; the fourth does nothing. What did work was simpler and was found earlier by reading failures:
+indexing subject lines, and capping passages per order.

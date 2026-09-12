@@ -1,2 +1,49 @@
 Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
 Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights: 100%|██████████| 391/391 [00:00<00:00, 6645.03it/s]
+[1/38] found=False quotes=0 dropped=1 right_order=False 58.5s
+[2/38] found=False quotes=0 dropped=0 right_order=False 6.9s
+[3/38] found=False quotes=0 dropped=0 right_order=False 6.8s
+[4/38] found=True quotes=1 dropped=0 right_order=False 25.7s
+[5/38] found=False quotes=0 dropped=1 right_order=False 18.0s
+[6/38] found=True quotes=1 dropped=0 right_order=False 39.7s
+[7/38] found=False quotes=0 dropped=1 right_order=False 10.6s
+[8/38] ERROR AttributeError: 'str' object has no attribute 'get'
+[9/38] found=False quotes=0 dropped=1 right_order=False 31.7s
+[10/38] found=False quotes=0 dropped=1 right_order=False 20.0s
+[11/38] found=True quotes=1 dropped=0 right_order=False 37.8s
+[12/38] found=False quotes=0 dropped=1 right_order=False 23.3s
+[13/38] found=True quotes=1 dropped=0 right_order=False 24.1s
+[14/38] found=True quotes=1 dropped=0 right_order=False 17.3s
+[15/38] found=False quotes=0 dropped=1 right_order=False 22.8s
+[16/38] found=False quotes=0 dropped=0 right_order=False 6.8s
+[17/38] found=True quotes=1 dropped=1 right_order=True 9.7s
+[18/38] found=True quotes=1 dropped=0 right_order=True 8.5s
+[19/38] found=True quotes=1 dropped=0 right_order=False 27.5s
+[20/38] found=True quotes=1 dropped=0 right_order=False 13.8s
+[21/38] found=False quotes=0 dropped=0 right_order=False 10.9s
+[22/38] found=False quotes=0 dropped=1 right_order=False 16.4s
+[23/38] found=True quotes=1 dropped=0 right_order=True 18.7s
+[24/38] found=False quotes=0 dropped=1 right_order=False 21.8s
+[25/38] found=True quotes=1 dropped=0 right_order=False 5.3s
+[26/38] found=False quotes=0 dropped=0 right_order=False 2.5s
+[27/38] found=False quotes=0 dropped=1 right_order=False 37.4s
+[28/38] found=True quotes=1 dropped=0 right_order=False 11.1s
+[29/38] found=False quotes=0 dropped=0 right_order=False 6.2s
+[30/38] found=False quotes=0 dropped=0 right_order=False 3.4s
+[31/38] found=False quotes=0 dropped=0 right_order=False 7.6s
+[32/38] found=True quotes=1 dropped=1 right_order=False 32.0s
+[33/38] found=False quotes=0 dropped=1 right_order=False 33.9s
+[34/38] found=False quotes=0 dropped=1 right_order=False 33.6s
+[35/38] found=False quotes=0 dropped=1 right_order=False 25.5s
+[36/38] found=False quotes=0 dropped=0 right_order=False 3.2s
+[37/38] found=False quotes=0 dropped=0 right_order=False 10.0s
+[38/38] found=False quotes=0 dropped=0 right_order=False 4.8s
+
+of 25 answerable questions
+  answered rather than declined : 44%
+  cited the expected order      : 12%
+  quotes passing verification   : 52% (11 kept, 10 dropped)
+of 12 questions with no answer in the corpus
+  correctly declined            : 83%
+median time per answer          : 17.3s
+total wall time                 : 716s

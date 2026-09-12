@@ -3,32 +3,30 @@
  "ran_at": "12 Sep 2026",
  "provider": "ollama",
  "model": "qwen2.5:7b-instruct",
- "n": 26,
+ "n": 25,
  "n_unanswerable": 12,
- "errors": 0,
- "answered": 0.577,
- "cited_expected_order": 0.346,
- "declined_unanswerable": 0.667,
- "quotes_total": 17,
- "quotes_dropped": 14,
- "quote_verification_rate": 0.548,
- "median_seconds": 42.4,
+ "errors": 1,
+ "answered": 0.44,
+ "cited_expected_order": 0.12,
+ "declined_unanswerable": 0.833,
+ "quotes_total": 11,
+ "quotes_dropped": 10,
+ "quote_verification_rate": 0.524,
+ "median_seconds": 17.3,
  "details": [
   {
    "id": 1,
    "question": "ड्रोन प्रशासन के लिए बनी राज्य स्तरीय समिति की अध्यक्षता कौन करता है?",
    "language": "hi",
    "unanswerable": false,
-   "found": true,
-   "n_quotes": 1,
-   "n_dropped": 0,
-   "cited_expected_order": true,
+   "found": false,
+   "n_quotes": 0,
+   "n_dropped": 1,
+   "cited_expected_order": false,
    "expect_goid": 35580,
-   "cited": [
-    35580
-   ],
-   "seconds": 91.8,
-   "answer": "मुख्य सचिव, उत्तराखण्ड शासन की अध्यक्षता में गठित राज्य स्तरीय समिति की अध्यक्षता करता है।"
+   "cited": [],
+   "seconds": 58.5,
+   "answer": "No passage in these orders supported an answer to this question."
   },
   {
    "id": 2,
@@ -37,12 +35,12 @@
    "unanswerable": false,
    "found": false,
    "n_quotes": 0,
-   "n_dropped": 1,
+   "n_dropped": 0,
    "cited_expected_order": false,
    "expect_goid": 35633,
    "cited": [],
-   "seconds": 32.8,
-   "answer": "No passage in these orders supported an answer to this question."
+   "seconds": 6.9,
+   "answer": "The orders that matched are about a different matter than this question."
   },
   {
    "id": 3,
@@ -55,8 +53,8 @@
    "cited_expected_order": false,
    "expect_goid": 35570,
    "cited": [],
-   "seconds": 42.4,
-   "answer": "No passage in these orders supported an answer to this question."
+   "seconds": 6.8,
+   "answer": "The orders that matched are about a different matter than this question."
   },
   {
    "id": 4,
@@ -66,13 +64,13 @@
    "found": true,
    "n_quotes": 1,
    "n_dropped": 0,
-   "cited_expected_order": true,
+   "cited_expected_order": false,
    "expect_goid": 35565,
    "cited": [
-    35565
+    37108
    ],
-   "seconds": 36.7,
-   "answer": "मंजूरी 04 जनवरी, 2023 को दी गई।"
+   "seconds": 25.7,
+   "answer": "मंजूरी 07-02-2025 को दी गई।"
   },
   {
    "id": 5,
@@ -85,7 +83,7 @@
    "cited_expected_order": false,
    "expect_goid": 35567,
    "cited": [],
-   "seconds": 101.6,
+   "seconds": 18.0,
    "answer": "No passage in these orders supported an answer to this question."
   },
   {
@@ -94,48 +92,34 @@
    "language": "hi",
    "unanswerable": false,
    "found": true,
-   "n_quotes": 2,
+   "n_quotes": 1,
    "n_dropped": 0,
-   "cited_expected_order": true,
+   "cited_expected_order": false,
    "expect_goid": 35592,
    "cited": [
-    5095,
-    35592
+    5095
    ],
-   "seconds": 134.7,
-   "answer": "साइंस सिटी की स्थापना के बारे में आदेश निकला है।"
+   "seconds": 39.7,
+   "answer": "साइंस सिटी की स्थापना के लिए आदेश 563/XXXVIII/09-47/2007, तारीख 04-12-2009 में निकला।"
   },
   {
    "id": 7,
    "question": "अंतरिक्ष उपयोग केंद्र को चलाने के लिए कितने पद स्वीकृत हैं?",
    "language": "hi",
    "unanswerable": false,
-   "found": true,
-   "n_quotes": 1,
-   "n_dropped": 0,
+   "found": false,
+   "n_quotes": 0,
+   "n_dropped": 1,
    "cited_expected_order": false,
    "expect_goid": 22058,
-   "cited": [
-    26520
-   ],
-   "seconds": 51.7,
-   "answer": "कुल 06 अतिरिक्त नवीन पद स्वीकृत करने की स्वीकृति प्रदान की गयी थी।"
+   "cited": [],
+   "seconds": 10.6,
+   "answer": "No passage in these orders supported an answer to this question."
   },
   {
    "id": 8,
-   "question": "नैनीताल की पुरानी वेधशाला के तकनीशियन का समायोजन कहाँ किया गया?",
-   "language": "hi",
-   "unanswerable": false,
-   "found": true,
-   "n_quotes": 1,
-   "n_dropped": 0,
-   "cited_expected_order": true,
-   "expect_goid": 22059,
-   "cited": [
-    22059
-   ],
-   "seconds": 117.8,
-   "answer": "श्री जितेन्द्र कुमार, तकनीशियन, पूर्ववर्ती राजकीय वेधशाला, नैनीताल का समायोजन उत्तराखण्ड राज्य विज्ञान प्रौद्योगिकी परिषद्, देहरा में किया गया।"
+   "error": "AttributeError: 'str' object has no attribute 'get'",
+   "seconds": 21.8
   },
   {
    "id": 9,
@@ -148,7 +132,7 @@
    "cited_expected_order": false,
    "expect_goid": 36881,
    "cited": [],
-   "seconds": 28.1,
+   "seconds": 31.7,
    "answer": "No passage in these orders supported an answer to this question."
   },
   {
@@ -156,30 +140,30 @@
    "question": "राज्य में प्राकृतिक संसाधनों की जानकारी रखने वाली प्रणाली क्यों बनाई गई?",
    "language": "hi",
    "unanswerable": false,
-   "found": true,
-   "n_quotes": 1,
+   "found": false,
+   "n_quotes": 0,
    "n_dropped": 1,
-   "cited_expected_order": true,
+   "cited_expected_order": false,
    "expect_goid": 10751,
-   "cited": [
-    10751
-   ],
-   "seconds": 32.8,
-   "answer": "राज्य प्राकृतिक संसाधन प्रणाली उत्तरांचल के संचालन हेतु एक उच्च स्तरीय समिति का गठन किया गया।"
+   "cited": [],
+   "seconds": 20.0,
+   "answer": "No passage in these orders supported an answer to this question."
   },
   {
    "id": 11,
    "question": "सूचना का अधिकार के तहत पहली अपील किस अधिकारी के पास जाएगी?",
    "language": "hi",
    "unanswerable": false,
-   "found": false,
-   "n_quotes": 0,
-   "n_dropped": 1,
+   "found": true,
+   "n_quotes": 1,
+   "n_dropped": 0,
    "cited_expected_order": false,
    "expect_goid": 14379,
-   "cited": [],
-   "seconds": 496.7,
-   "answer": "No passage in these orders supported an answer to this question."
+   "cited": [
+    26446
+   ],
+   "seconds": 37.8,
+   "answer": "सूचना का अधिकार के तहत पहली अपील अपीलीय अधिकारी के पास जाएगी।"
   },
   {
    "id": 12,
@@ -192,7 +176,7 @@
    "cited_expected_order": false,
    "expect_goid": 21914,
    "cited": [],
-   "seconds": 55.0,
+   "seconds": 23.3,
    "answer": "No passage in these orders supported an answer to this question."
   },
   {
@@ -206,42 +190,40 @@
    "cited_expected_order": false,
    "expect_goid": 21957,
    "cited": [
-    31601
+    33040
    ],
-   "seconds": 25.4,
-   "answer": "यू-सैक के भवन के काम की तकनीकी स्वीकृति की समिति के निदेशक द्वारा दी गई।"
+   "seconds": 24.1,
+   "answer": "यू-सैक के भवन के काम की तकनीकी स्वीकृति टी0ए0सी0 द्वारा दी गई।"
   },
   {
    "id": 14,
    "question": "विभागों के बीच तालमेल के लिए कौन सी समिति अधिसूचित हुई?",
    "language": "hi",
    "unanswerable": false,
-   "found": false,
+   "found": true,
    "n_quotes": 1,
    "n_dropped": 0,
    "cited_expected_order": false,
    "expect_goid": 35585,
    "cited": [
-    7120
+    207
    ],
-   "seconds": 200.8,
-   "answer": "No passage in these orders supported an answer to this question."
+   "seconds": 17.3,
+   "answer": "समिति अध्यक्षता में गठित अन्तरविभागीब समिति द्वारा सूचीबद्ध आपत्तिकर्ताओं को पुनः दर्र प्राप्त कर अनुमोदित की गई।"
   },
   {
    "id": 15,
    "question": "स्वान परियोजना के पीओपी के लिए धनराशि किस आधार पर स्वीकृत की गई?",
    "language": "hi",
    "unanswerable": false,
-   "found": true,
-   "n_quotes": 1,
-   "n_dropped": 3,
-   "cited_expected_order": true,
+   "found": false,
+   "n_quotes": 0,
+   "n_dropped": 1,
+   "cited_expected_order": false,
    "expect_goid": 3488,
-   "cited": [
-    3484
-   ],
-   "seconds": 303.5,
-   "answer": "धनराशि SWAN योजना की PoP के आगणनों के सापेक्ष स्वीकृत की गई।"
+   "cited": [],
+   "seconds": 22.8,
+   "answer": "No passage in these orders supported an answer to this question."
   },
   {
    "id": 16,
@@ -250,11 +232,11 @@
    "unanswerable": false,
    "found": false,
    "n_quotes": 0,
-   "n_dropped": 1,
+   "n_dropped": 0,
    "cited_expected_order": false,
    "expect_goid": 35586,
    "cited": [],
-   "seconds": 135.7,
+   "seconds": 6.8,
    "answer": "No passage in these orders supported an answer to this question."
   },
   {
@@ -270,8 +252,8 @@
    "cited": [
     36884
    ],
-   "seconds": 75.4,
-   "answer": "The development of UKGAMS Portal was decided."
+   "seconds": 9.7,
+   "answer": "Government Order 168959/XXXIV-02/2023/62569/2002, dated 15-11-2023, decided regarding the development of UKGAMS Portal."
   },
   {
    "id": 18,
@@ -286,8 +268,8 @@
    "cited": [
     21957
    ],
-   "seconds": 30.8,
-   "answer": "विभागीय योजना चयन समिति, का गठन किया जाता है"
+   "seconds": 8.5,
+   "answer": "The committee is called विभागीय योजना चयन समिति (Vibhagiy Yojana Chayon Samiti)."
   },
   {
    "id": 19,
@@ -302,8 +284,8 @@
    "cited": [
     10985
    ],
-   "seconds": 108.2,
-   "answer": "Funds were released to the state science and technology council based on the Government Order 2306.2006, where it was stated that Rs. 63.5 crore was approved for the operation and essential works of t"
+   "seconds": 27.5,
+   "answer": "Funds were released to the state science and technology council in the financial year 2006-07 for the operation and essential works of the Science and Technology Board."
   },
   {
    "id": 20,
@@ -318,24 +300,22 @@
    "cited": [
     10684
    ],
-   "seconds": 25.9,
-   "answer": "Points of Presence were established at each district headquarters, and each taluk and block (खण्ड) office."
+   "seconds": 13.8,
+   "answer": "Points of Presence were established in each district headquarters, and in each taluk and block (खण्ड) for the State Wide Area Network (SWAN)."
   },
   {
    "id": 21,
    "question": "Who was nominated as the public information officer for the technology agency?",
    "language": "en",
    "unanswerable": false,
-   "found": true,
-   "n_quotes": 1,
+   "found": false,
+   "n_quotes": 0,
    "n_dropped": 0,
    "cited_expected_order": false,
    "expect_goid": 14379,
-   "cited": [
-    6924
-   ],
-   "seconds": 32.4,
-   "answer": "Shri Amrinder Sinha was nominated as the adjudicating officer for cyber crimes and prevention under the Information Technology Act-2060."
+   "cited": [],
+   "seconds": 10.9,
+   "answer": "The orders that matched are about a different matter than this question."
   },
   {
    "id": 22,
@@ -348,7 +328,7 @@
    "cited_expected_order": false,
    "expect_goid": 21931,
    "cited": [],
-   "seconds": 295.9,
+   "seconds": 16.4,
    "answer": "No passage in these orders supported an answer to this question."
   },
   {
@@ -356,14 +336,16 @@
    "question": "Which programme brings mobile laboratories to state schools?",
    "language": "en",
    "unanswerable": false,
-   "found": false,
-   "n_quotes": 0,
-   "n_dropped": 1,
-   "cited_expected_order": false,
+   "found": true,
+   "n_quotes": 1,
+   "n_dropped": 0,
+   "cited_expected_order": true,
    "expect_goid": 35633,
-   "cited": [],
-   "seconds": 37.2,
-   "answer": "No passage in these orders supported an answer to this question."
+   "cited": [
+    35633
+   ],
+   "seconds": 18.7,
+   "answer": "लैब ऑन व्हील्स कार्यक्रम हेतु रू0 4,81,34,542 का कुल धनराशि निर्गत की गयी है।"
   },
   {
    "id": 24,
@@ -376,7 +358,7 @@
    "cited_expected_order": false,
    "expect_goid": 35580,
    "cited": [],
-   "seconds": 132.2,
+   "seconds": 21.8,
    "answer": "No passage in these orders supported an answer to this question."
   },
   {
@@ -392,7 +374,7 @@
    "cited": [
     37108
    ],
-   "seconds": 14.1,
+   "seconds": 5.3,
    "answer": "Yes, a science center was approved for Champawat district."
   },
   {
@@ -400,16 +382,14 @@
    "question": "What sanction was issued for salaries in the 2017-18 financial year?",
    "language": "en",
    "unanswerable": false,
-   "found": true,
-   "n_quotes": 1,
+   "found": false,
+   "n_quotes": 0,
    "n_dropped": 0,
-   "cited_expected_order": true,
+   "cited_expected_order": false,
    "expect_goid": 19292,
-   "cited": [
-    19292
-   ],
-   "seconds": 56.1,
-   "answer": "वित्तीय वर्ष 2017.18 मे आय व्ययक में वेतन भत्तों के लिए प्राविद्यानित द्यनराशि अवमुक्त किए जाने के सम्बन्द्य मे।"
+   "cited": [],
+   "seconds": 2.5,
+   "answer": "The orders that matched are about a different matter than this question."
   },
   {
    "id": 27,
@@ -418,31 +398,17 @@
    "unanswerable": true,
    "found": false,
    "n_quotes": 0,
-   "n_dropped": 0,
+   "n_dropped": 1,
    "cited_expected_order": false,
    "expect_goid": null,
    "cited": [],
-   "seconds": 261.2,
-   "answer": "No passage in these orders supported an answer to this question."
+   "seconds": 37.4,
+   "answer": "The orders that matched are about a different matter than this question."
   },
   {
    "id": 28,
    "question": "What is the age limit for the old age pension scheme?",
    "language": "en",
-   "unanswerable": true,
-   "found": false,
-   "n_quotes": 0,
-   "n_dropped": 0,
-   "cited_expected_order": false,
-   "expect_goid": null,
-   "cited": [],
-   "seconds": 20.2,
-   "answer": "No passage in these orders supported an answer to this question."
-  },
-  {
-   "id": 29,
-   "question": "चार धाम यात्रा के लिए पंजीकरण कैसे करें?",
-   "language": "hi",
    "unanswerable": true,
    "found": true,
    "n_quotes": 1,
@@ -450,10 +416,24 @@
    "cited_expected_order": false,
    "expect_goid": null,
    "cited": [
-    1800
+    28029
    ],
-   "seconds": 138.2,
-   "answer": "आवेदक केन्द्र पर सम्पर्क कर सकता है। नौकर संचालक आवेदक को आवेदन पत्र उपलब्ध कराएंगे।"
+   "seconds": 11.1,
+   "answer": "The age limit for the old age pension scheme is 58 to 60 years old."
+  },
+  {
+   "id": 29,
+   "question": "चार धाम यात्रा के लिए पंजीकरण कैसे करें?",
+   "language": "hi",
+   "unanswerable": true,
+   "found": false,
+   "n_quotes": 0,
+   "n_dropped": 0,
+   "cited_expected_order": false,
+   "expect_goid": null,
+   "cited": [],
+   "seconds": 6.2,
+   "answer": "The orders that matched are about a different matter than this question."
   },
   {
    "id": 30,
@@ -466,44 +446,12 @@
    "cited_expected_order": false,
    "expect_goid": null,
    "cited": [],
-   "seconds": 13.3,
-   "answer": "No passage in these orders supported an answer to this question."
+   "seconds": 3.4,
+   "answer": "The orders that matched are about a different matter than this question."
   },
   {
    "id": 31,
    "question": "उत्तराखंड में कितने प्राथमिक विद्यालय हैं?",
-   "language": "hi",
-   "unanswerable": true,
-   "found": false,
-   "n_quotes": 1,
-   "n_dropped": 0,
-   "cited_expected_order": false,
-   "expect_goid": null,
-   "cited": [
-    29001
-   ],
-   "seconds": 27.3,
-   "answer": "No passage in these orders supported an answer to this question."
-  },
-  {
-   "id": 32,
-   "question": "What is the procedure for transferring land ownership?",
-   "language": "en",
-   "unanswerable": true,
-   "found": true,
-   "n_quotes": 1,
-   "n_dropped": 0,
-   "cited_expected_order": false,
-   "expect_goid": null,
-   "cited": [
-    10641
-   ],
-   "seconds": 20.0,
-   "answer": "The procedure for transferring land ownership is to rationalize the land use and conversion charges and regime."
-  },
-  {
-   "id": 33,
-   "question": "बिजली का बिल ऑनलाइन कैसे भरें?",
    "language": "hi",
    "unanswerable": true,
    "found": false,
@@ -512,7 +460,37 @@
    "cited_expected_order": false,
    "expect_goid": null,
    "cited": [],
-   "seconds": 16.3,
+   "seconds": 7.6,
+   "answer": "The orders that matched are about a different matter than this question."
+  },
+  {
+   "id": 32,
+   "question": "What is the procedure for transferring land ownership?",
+   "language": "en",
+   "unanswerable": true,
+   "found": true,
+   "n_quotes": 1,
+   "n_dropped": 1,
+   "cited_expected_order": false,
+   "expect_goid": null,
+   "cited": [
+    10277
+   ],
+   "seconds": 32.0,
+   "answer": "The procedure for transferring land ownership involves the following steps: The land is purchased by the Department of Social Welfare under the name of the welfare of the society. The details of the l"
+  },
+  {
+   "id": 33,
+   "question": "बिजली का बिल ऑनलाइन कैसे भरें?",
+   "language": "hi",
+   "unanswerable": true,
+   "found": false,
+   "n_quotes": 0,
+   "n_dropped": 1,
+   "cited_expected_order": false,
+   "expect_goid": null,
+   "cited": [],
+   "seconds": 33.9,
    "answer": "No passage in these orders supported an answer to this question."
   },
   {
@@ -520,32 +498,28 @@
    "question": "Which roads were sanctioned under the rural road programme?",
    "language": "en",
    "unanswerable": true,
-   "found": true,
-   "n_quotes": 1,
-   "n_dropped": 0,
+   "found": false,
+   "n_quotes": 0,
+   "n_dropped": 1,
    "cited_expected_order": false,
    "expect_goid": null,
-   "cited": [
-    3562
-   ],
-   "seconds": 20.5,
-   "answer": "The roads sanctioned under the rural road programme were Approach Roads for above hre2 sites, with a total cost of Rs 6.5 Lacs for Bageshwar district for total 3 locations out of total 5."
+   "cited": [],
+   "seconds": 33.6,
+   "answer": "No passage in these orders supported an answer to this question."
   },
   {
    "id": 35,
    "question": "आपदा राहत कोष से मुआवजा कब मिलता है?",
    "language": "hi",
    "unanswerable": true,
-   "found": true,
-   "n_quotes": 1,
-   "n_dropped": 0,
+   "found": false,
+   "n_quotes": 0,
+   "n_dropped": 1,
    "cited_expected_order": false,
    "expect_goid": null,
-   "cited": [
-    10641
-   ],
-   "seconds": 31.4,
-   "answer": "आपदा राहत कोष से मुआवजा अथवा ऊप्राकृतिक आपदा की घटना में 99.90 प्रतिशत अप-टाईम सुनिश्चित आधारभूल सुविधा प्रबन्धन के लिए मिलता है।"
+   "cited": [],
+   "seconds": 25.5,
+   "answer": "No passage in these orders supported an answer to this question."
   },
   {
    "id": 36,
@@ -558,8 +532,8 @@
    "cited_expected_order": false,
    "expect_goid": null,
    "cited": [],
-   "seconds": 15.9,
-   "answer": "No passage in these orders supported an answer to this question."
+   "seconds": 3.2,
+   "answer": "The orders that matched are about a different matter than this question."
   },
   {
    "id": 37,
@@ -568,12 +542,12 @@
    "unanswerable": true,
    "found": false,
    "n_quotes": 0,
-   "n_dropped": 1,
+   "n_dropped": 0,
    "cited_expected_order": false,
    "expect_goid": null,
    "cited": [],
-   "seconds": 48.2,
-   "answer": "No passage in these orders supported an answer to this question."
+   "seconds": 10.0,
+   "answer": "The orders that matched are about a different matter than this question."
   },
   {
    "id": 38,
@@ -586,8 +560,8 @@
    "cited_expected_order": false,
    "expect_goid": null,
    "cited": [],
-   "seconds": 9.9,
-   "answer": "No passage in these orders supported an answer to this question."
+   "seconds": 4.8,
+   "answer": "The orders that matched are about a different matter than this question."
   }
  ]
 }
