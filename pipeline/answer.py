@@ -150,7 +150,10 @@ NOT_FOUND = ("The indexed Government Orders do not appear to cover this. "
 
 
 def answer(con, question, provider="ollama", limit=6, filters=None, model=None):
-    chunks = S.search(con, question, limit=limit, filters=filters, expand_subjects=True)
+    # Following subject hits into the order body was tried twice and measured worse both times; see
+    # docs/RESULTS.md. Opt in per deployment with EXPAND_SUBJECTS=1.
+    chunks = S.search(con, question, limit=limit, filters=filters,
+                      expand_subjects=os.environ.get("EXPAND_SUBJECTS") == "1")
     relevant, reason = is_relevant(chunks)
     if not relevant:
         return {"found": False, "answer": NOT_FOUND, "quotes": [], "dropped_quotes": [],

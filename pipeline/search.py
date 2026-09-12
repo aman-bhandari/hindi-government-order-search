@@ -208,19 +208,20 @@ def hydrate(con, chunk_ids):
 PHONETIC_WEIGHT = float(os.environ.get("PHONETIC_WEIGHT", "0"))
 
 
-def expand_subject_hits(con, results, per_subject=2):
-    """Follow a subject-line hit into the body of its order.
+def expand_subject_hits(con, results, limit, per_subject=2):
+    """Swap a subject-line hit for the body of the order it identified, keeping the passage budget fixed.
 
-    A subject line says what an order is about but rarely contains the answer: "Regarding setting criteria
-    for purchasing ICT equipment" identifies the right order for "who approves computer purchases?" while
-    answering nothing. Measured on this corpus, the right order reached the answerer 69% of the time but was
-    cited only 31%, and the largest single cause was exactly this: the subject matched, the body never
-    arrived. So when a subject passage ranks, its order's opening body passages come with it.
+    A subject line says what an order is about but rarely contains the answer. The first attempt appended
+    body passages to the subject hit, which measurably hurt: sending 10 passages instead of 6 lowered the
+    share of answers that stayed grounded (72% to 57%) and, worse, made the system answer questions it should
+    have refused (100% to 75%). More context gave the model more garbled OCR to misquote and more plausible
+    text to latch onto. So the body now replaces the subject rather than joining it, and the total never grows.
     """
-    out, seen = [], {r["chunk_id"] for r in results}
+    out, seen = [], set()
     for r in results:
-        out.append(r)
         if r.get("kind") != "subject":
+            if r["chunk_id"] not in seen:
+                seen.add(r["chunk_id"]); out.append(r)
             continue
         rows = con.execute("""
             SELECT c.chunk_id, c.goid, c.page, c.ord, c.text, c.n_words, c.kind,
@@ -229,18 +230,23 @@ def expand_subject_hits(con, results, per_subject=2):
             FROM chunks c JOIN gos g ON g.goid = c.goid
             WHERE c.goid = ? AND c.kind = 'ocr'
             ORDER BY c.page, c.ord LIMIT ?""", (r["goid"], per_subject)).fetchall()
-        for row in rows:
+        if not rows:                      # nothing to swap in; keep the subject itself
+            if r["chunk_id"] not in seen:
+                seen.add(r["chunk_id"]); out.append(r)
+            continue
+        for i, row in enumerate(rows):
             d = dict(row)
             if d["chunk_id"] in seen:
                 continue
             seen.add(d["chunk_id"])
-            d["score"] = r["score"] * 0.9          # ranked just under the subject that pulled it in
+            d["score"] = r["score"] - i * 1e-6
             d["bm25"] = None
-            d["cosine"] = None
-            d["lexical_coverage"] = 0.0     # it was not matched on its own terms
+            d["cosine"] = r.get("cosine")
+            d["lexical_coverage"] = r.get("lexical_coverage", 0.0)
             d["matched_by"] = "via subject"
             out.append(d)
-    return out
+    out.sort(key=lambda d: -d["score"])
+    return out[:limit]
 
 
 def search(con, q, limit=10, filters=None, k=60, per_go=2, expand_subjects=False):
@@ -302,7 +308,7 @@ def search(con, q, limit=10, filters=None, k=60, per_go=2, expand_subjects=False
         if len(out) >= limit:
             break
     if expand_subjects and any(r.get("kind") == "subject" for r in out):
-        out = expand_subject_hits(con, out)
+        out = expand_subject_hits(con, out, limit)
     return out
 
 

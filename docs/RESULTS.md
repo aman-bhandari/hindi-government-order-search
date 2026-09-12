@@ -124,3 +124,47 @@ for "champawat", but the noise outweighs them and dilutes the keyword scoring.
 The capability is kept, indexed and off by default behind `PHONETIC_WEIGHT`, because on a collection with
 heavier transliteration it may pay. On this one it does not, and shipping a change that lowers the measured
 result would be the wrong call.
+
+
+## Following subject hits into the order body: two attempts
+
+The diagnosis was solid. The right order reached the answerer 69% of the time but was cited only 31%, and
+the largest single cause was that a subject line matched while the order's body never arrived. "Regarding
+setting criteria for purchasing ICT equipment" identifies the right order for "who approves computer
+purchases?" while answering nothing.
+
+**First attempt: append the body to the subject hit.** This raised the passages sent to the model from 6 to
+10, and measurably hurt:
+
+| | Baseline | Append body |
+|---|---|---|
+| Answered rather than declined | 65% | 58% |
+| Cited the expected order | 31% | 31% |
+| Quotes passing verification | 72% | 57% |
+| Declined the unanswerable | 100% | **75%** |
+
+The last row is the one that mattered. More context gave the model more garbled OCR to misquote, and more
+plausible-looking administrative prose to latch onto when it should have refused. A change that trades a
+perfect refusal record for nothing is not a trade worth making.
+
+**Second attempt: swap the body in for the subject, keeping the budget at six passages.** Worse again, and
+worse than the first attempt:
+
+| | Baseline | Append body | Swap body in |
+|---|---|---|---|
+| Answered rather than declined | **65%** | 58% | 46% |
+| Cited the expected order | **31%** | 31% | 23% |
+| Quotes passing verification | **72%** | 57% | 47% |
+| Declined the unanswerable | **100%** | 75% | 75% |
+
+The second result explains the first, and the explanation is worth keeping. Subject lines are typed metadata,
+not OCR. In a collection where page text averages 81% word confidence, they are the only passages a model can
+quote and have the quote survive verification reliably. Removing them to make room for body text removed the
+most quotable evidence in the corpus, and quote verification fell furthest of all.
+
+So the diagnosis was right and the remedy was wrong. The subject line is doing more work than identifying an
+order: it is carrying the grounding. Both variants are kept behind `EXPAND_SUBJECTS`, default off.
+
+A better attack on the same problem, untried: keep the subject passage and also send the body, but shrink
+what each passage contributes so the budget does not grow. That was not attempted because the budget is
+already tight at a 4,096-token context on a 6 GB card.

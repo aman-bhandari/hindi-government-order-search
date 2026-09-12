@@ -52,7 +52,7 @@ function pdfUrl(r) {
   const todo = (LIMIT > 0 ? meta.slice(0, LIMIT) : meta).filter(m => m.pdf_url);
   const manifestFile = path.join(OUT, 'meta', `manifest-${DEPT}.json`);
   const manifest = fs.existsSync(manifestFile) ? JSON.parse(fs.readFileSync(manifestFile, 'utf8')) : {};
-  let ok = 0, skipped = 0, failed = 0;
+  let ok = 0, skipped = 0, failed = 0, missing = 0;
   for (const m of todo) {
     const dest = path.join(OUT, 'pdf', `${m.GOID}.pdf`);
     if (fs.existsSync(dest) && fs.statSync(dest).size > 1000) { skipped++; continue; }
@@ -61,6 +61,9 @@ function pdfUrl(r) {
       try {
         const b64 = await page.evaluate(async (url) => {
           const r = await fetch(url);
+          // 404 means the portal's index references a file it does not hold. Around 5% of one department's
+          // orders are like this. Marked permanent so we do not retry a file that will never appear.
+          if (r.status === 404) throw new Error('PERMANENT 404');
           if (!r.ok) throw new Error('HTTP ' + r.status);
           const blob = await r.blob();
           return await new Promise((res, rej) => { const fr = new FileReader(); fr.onload = () => res(String(fr.result).split(',')[1]); fr.onerror = rej; fr.readAsDataURL(blob); });
@@ -72,14 +75,20 @@ function pdfUrl(r) {
         ok++; done = true;
         console.log(`ok   ${m.GOID}  ${(buf.length / 1024).toFixed(0)} KB  ${m.GODate1678}  ${String(m.Subject).slice(0, 60)}`);
       } catch (e) {
+        if (String(e.message).includes('PERMANENT 404')) {
+          missing++;
+          manifest[m.GOID] = { error: 'not on the portal (404)', url: m.pdf_url };
+          console.log(`gone ${m.GOID}  (portal has no file for this order)`);
+          break;
+        }
         console.log(`retry ${attempt} ${m.GOID}: ${e.message}`);
         await sleep(1500 * attempt);
       }
     }
-    if (!done) { failed++; manifest[m.GOID] = { error: 'failed after 3 attempts', url: m.pdf_url }; }
+    if (!done && !manifest[m.GOID]) { failed++; manifest[m.GOID] = { error: 'failed after 3 attempts', url: m.pdf_url }; }
     await sleep(400); // be polite to a government server
   }
   fs.writeFileSync(manifestFile, JSON.stringify(manifest, null, 1));
-  console.log(`pdfs: ok=${ok} skipped=${skipped} failed=${failed} -> ${manifestFile}`);
+  console.log(`pdfs: ok=${ok} skipped=${skipped} missing=${missing} failed=${failed} -> ${manifestFile}`);
   await browser.close();
 })().catch(e => { console.error('FATAL', e); process.exit(1); });

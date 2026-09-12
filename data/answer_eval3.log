@@ -1,0 +1,41 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights: 100%|██████████| 391/391 [00:00<00:00, 7790.99it/s]
+[1/30] found=True quotes=1 dropped=0 right_order=True 49.2s
+[2/30] found=False quotes=0 dropped=1 right_order=False 37.6s
+[3/30] found=False quotes=0 dropped=0 right_order=False 29.0s
+[4/30] found=True quotes=1 dropped=0 right_order=True 34.3s
+[5/30] found=False quotes=0 dropped=1 right_order=False 24.1s
+[6/30] found=False quotes=0 dropped=1 right_order=False 16.6s
+[7/30] found=True quotes=1 dropped=0 right_order=False 42.3s
+[8/30] found=False quotes=0 dropped=1 right_order=False 47.9s
+[9/30] found=False quotes=0 dropped=1 right_order=False 34.0s
+[10/30] found=True quotes=1 dropped=1 right_order=True 27.3s
+[11/30] found=False quotes=2 dropped=0 right_order=False 44.4s
+[12/30] found=False quotes=0 dropped=1 right_order=False 32.1s
+[13/30] found=False quotes=0 dropped=3 right_order=False 171.1s
+[14/30] found=False quotes=1 dropped=0 right_order=False 41.9s
+[15/30] found=True quotes=1 dropped=3 right_order=False 39.0s
+[16/30] found=False quotes=1 dropped=1 right_order=False 27.1s
+[17/30] found=True quotes=1 dropped=1 right_order=True 48.9s
+[18/30] found=True quotes=1 dropped=0 right_order=True 19.8s
+[19/30] found=True quotes=1 dropped=0 right_order=False 27.3s
+[20/30] found=True quotes=1 dropped=0 right_order=False 28.2s
+[21/30] found=True quotes=1 dropped=0 right_order=False 19.2s
+[22/30] found=True quotes=1 dropped=0 right_order=False 30.8s
+[23/30] found=False quotes=0 dropped=1 right_order=False 13.4s
+[24/30] found=True quotes=1 dropped=0 right_order=True 25.2s
+[25/30] found=False quotes=0 dropped=2 right_order=False 22.3s
+[26/30] found=False quotes=0 dropped=0 right_order=False 10.5s
+[27/30] found=False quotes=0 dropped=0 right_order=False 14.7s
+[28/30] found=False quotes=0 dropped=0 right_order=False 8.1s
+[29/30] found=True quotes=1 dropped=0 right_order=False 32.2s
+[30/30] found=False quotes=0 dropped=0 right_order=False 12.5s
+
+of 26 answerable questions
+  answered rather than declined : 46%
+  cited the expected order      : 23%
+  quotes passing verification   : 47% (16 kept, 18 dropped)
+of 4 questions with no answer in the corpus
+  correctly declined            : 75%
+median time per answer          : 29.0s
+total wall time                 : 1011s
