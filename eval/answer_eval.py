@@ -39,11 +39,12 @@ def main():
             print(f"[{i}/{len(items)}] ERROR {err}", flush=True)
             continue
         cited = {q["goid"] for q in r["quotes"]}
+        expected = set(it.get("accept_goids") or ([it["expect_goid"]] if it.get("expect_goid") else []))
         rows.append({
             "id": it["id"], "question": it["question"], "language": it["language"],
             "unanswerable": bool(it.get("unanswerable")),
             "found": r["found"], "n_quotes": len(r["quotes"]), "n_dropped": len(r.get("dropped_quotes", [])),
-            "cited_expected_order": it["expect_goid"] in cited,
+            "cited_expected_order": bool(expected & cited),
             "expect_goid": it["expect_goid"], "cited": sorted(cited), "seconds": secs,
             "answer": r["answer"][:200],
         })

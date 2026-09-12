@@ -168,3 +168,27 @@ order: it is carrying the grounding. Both variants are kept behind `EXPAND_SUBJE
 A better attack on the same problem, untried: keep the subject passage and also send the body, but shrink
 what each passage contributes so the budget does not grow. That was not attempted because the budget is
 already tight at a 4,096-token context on a 6 GB card.
+
+
+## How much to trust these numbers
+
+Running the identical baseline configuration twice gave noticeably different answer-side results:
+
+| | Run 1 | Run 2 |
+|---|---|---|
+| Answered rather than declined | 65% | 65% |
+| Cited the expected order | 31% | 35% |
+| Quotes passing verification | 72% | 61% |
+| Declined the unanswerable | 100% | 75% |
+
+The refusal column moved 25 points because there were only four unanswerable questions, so each one was
+worth 25 points. The quote column moved because there are around 30 quotes in total, so a few either way
+swings it several points. A local model at temperature zero is also not perfectly reproducible in practice.
+
+Two things follow. The unanswerable set was tripled to twelve, making each question worth 8 points instead
+of 25. And the comparison between variants should be read with that spread in mind: the swap-body result
+(46% answered, 47% of quotes verified) sits clearly below the baseline range, while the append-body result
+is closer to the edge of it. Neither showed a benefit, which is why both are off by default, but only the
+first is comfortably outside the noise.
+
+Retrieval numbers do not have this problem. They involve no model and are identical across runs.

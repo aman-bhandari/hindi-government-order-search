@@ -7,7 +7,7 @@
  "hit_at_1": 0.423,
  "hit_at_5": 0.654,
  "page_hit_at_5": 0.462,
- "n_unanswerable": 4,
+ "n_unanswerable": 12,
  "declined_correctly": 0.0,
  "embeddings_used": true,
  "details": [
@@ -547,6 +547,70 @@
    "unanswerable": true,
    "declined": false,
    "reason": "semantic similarity 0.52"
+  },
+  {
+   "id": 31,
+   "question": "उत्तराखंड में कितने प्राथमिक विद्यालय हैं?",
+   "language": "hi",
+   "unanswerable": true,
+   "declined": false,
+   "reason": "semantic similarity 0.46"
+  },
+  {
+   "id": 32,
+   "question": "What is the procedure for transferring land ownership?",
+   "language": "en",
+   "unanswerable": true,
+   "declined": false,
+   "reason": "semantic similarity 0.42"
+  },
+  {
+   "id": 33,
+   "question": "बिजली का बिल ऑनलाइन कैसे भरें?",
+   "language": "hi",
+   "unanswerable": true,
+   "declined": false,
+   "reason": "semantic similarity 0.52"
+  },
+  {
+   "id": 34,
+   "question": "Which roads were sanctioned under the rural road programme?",
+   "language": "en",
+   "unanswerable": true,
+   "declined": false,
+   "reason": "semantic similarity 0.41"
+  },
+  {
+   "id": 35,
+   "question": "आपदा राहत कोष से मुआवजा कब मिलता है?",
+   "language": "hi",
+   "unanswerable": true,
+   "declined": false,
+   "reason": "semantic similarity 0.55"
+  },
+  {
+   "id": 36,
+   "question": "What are the rules for granting a liquor licence?",
+   "language": "en",
+   "unanswerable": true,
+   "declined": false,
+   "reason": "semantic similarity 0.47"
+  },
+  {
+   "id": 37,
+   "question": "राज्य में डॉक्टरों के कितने पद रिक्त हैं?",
+   "language": "hi",
+   "unanswerable": true,
+   "declined": false,
+   "reason": "semantic similarity 0.46"
+  },
+  {
+   "id": 38,
+   "question": "How do I register a complaint against a police officer?",
+   "language": "en",
+   "unanswerable": true,
+   "declined": false,
+   "reason": "semantic similarity 0.61"
   }
  ]
 }

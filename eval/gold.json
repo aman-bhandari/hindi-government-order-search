@@ -441,5 +441,93 @@
   "go_no": null,
   "go_date": null,
   "category": null
+ },
+ {
+  "id": 31,
+  "question": "उत्तराखंड में कितने प्राथमिक विद्यालय हैं?",
+  "language": "hi",
+  "expect_goid": null,
+  "expect_page": null,
+  "unanswerable": true,
+  "go_no": null,
+  "go_date": null,
+  "category": null
+ },
+ {
+  "id": 32,
+  "question": "What is the procedure for transferring land ownership?",
+  "language": "en",
+  "expect_goid": null,
+  "expect_page": null,
+  "unanswerable": true,
+  "go_no": null,
+  "go_date": null,
+  "category": null
+ },
+ {
+  "id": 33,
+  "question": "बिजली का बिल ऑनलाइन कैसे भरें?",
+  "language": "hi",
+  "expect_goid": null,
+  "expect_page": null,
+  "unanswerable": true,
+  "go_no": null,
+  "go_date": null,
+  "category": null
+ },
+ {
+  "id": 34,
+  "question": "Which roads were sanctioned under the rural road programme?",
+  "language": "en",
+  "expect_goid": null,
+  "expect_page": null,
+  "unanswerable": true,
+  "go_no": null,
+  "go_date": null,
+  "category": null
+ },
+ {
+  "id": 35,
+  "question": "आपदा राहत कोष से मुआवजा कब मिलता है?",
+  "language": "hi",
+  "expect_goid": null,
+  "expect_page": null,
+  "unanswerable": true,
+  "go_no": null,
+  "go_date": null,
+  "category": null
+ },
+ {
+  "id": 36,
+  "question": "What are the rules for granting a liquor licence?",
+  "language": "en",
+  "expect_goid": null,
+  "expect_page": null,
+  "unanswerable": true,
+  "go_no": null,
+  "go_date": null,
+  "category": null
+ },
+ {
+  "id": 37,
+  "question": "राज्य में डॉक्टरों के कितने पद रिक्त हैं?",
+  "language": "hi",
+  "expect_goid": null,
+  "expect_page": null,
+  "unanswerable": true,
+  "go_no": null,
+  "go_date": null,
+  "category": null
+ },
+ {
+  "id": 38,
+  "question": "How do I register a complaint against a police officer?",
+  "language": "en",
+  "expect_goid": null,
+  "expect_page": null,
+  "unanswerable": true,
+  "go_no": null,
+  "go_date": null,
+  "category": null
  }
 ]

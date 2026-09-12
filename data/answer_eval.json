@@ -6,13 +6,13 @@
  "n": 26,
  "n_unanswerable": 4,
  "errors": 0,
- "answered": 0.462,
- "cited_expected_order": 0.231,
+ "answered": 0.654,
+ "cited_expected_order": 0.346,
  "declined_unanswerable": 0.75,
- "quotes_total": 16,
- "quotes_dropped": 18,
- "quote_verification_rate": 0.471,
- "median_seconds": 29.0,
+ "quotes_total": 19,
+ "quotes_dropped": 12,
+ "quote_verification_rate": 0.613,
+ "median_seconds": 33.6,
  "details": [
   {
    "id": 1,
@@ -27,7 +27,7 @@
    "cited": [
     35580
    ],
-   "seconds": 49.2,
+   "seconds": 48.8,
    "answer": "मुख्य सचिव, उत्तराखण्ड शासन की अध्यक्षता में गठित राज्य स्तरीय समिति की अध्यक्षता करता है।"
   },
   {
@@ -41,7 +41,7 @@
    "cited_expected_order": false,
    "expect_goid": 35633,
    "cited": [],
-   "seconds": 37.6,
+   "seconds": 38.2,
    "answer": "No passage in these orders supported an answer to this question."
   },
   {
@@ -55,7 +55,7 @@
    "cited_expected_order": false,
    "expect_goid": 35570,
    "cited": [],
-   "seconds": 29.0,
+   "seconds": 28.6,
    "answer": "No passage in these orders supported an answer to this question."
   },
   {
@@ -71,7 +71,7 @@
    "cited": [
     35565
    ],
-   "seconds": 34.3,
+   "seconds": 39.3,
    "answer": "मंजूरी 04 जनवरी, 2023 को दी गई।"
   },
   {
@@ -85,7 +85,7 @@
    "cited_expected_order": false,
    "expect_goid": 35567,
    "cited": [],
-   "seconds": 24.1,
+   "seconds": 110.8,
    "answer": "No passage in these orders supported an answer to this question."
   },
   {
@@ -93,14 +93,17 @@
    "question": "साइंस सिटी बनाने के बारे में क्या आदेश निकला?",
    "language": "hi",
    "unanswerable": false,
-   "found": false,
-   "n_quotes": 0,
-   "n_dropped": 1,
-   "cited_expected_order": false,
+   "found": true,
+   "n_quotes": 2,
+   "n_dropped": 0,
+   "cited_expected_order": true,
    "expect_goid": 35592,
-   "cited": [],
-   "seconds": 16.6,
-   "answer": "No passage in these orders supported an answer to this question."
+   "cited": [
+    5095,
+    35592
+   ],
+   "seconds": 64.5,
+   "answer": "साइंस सिटी की स्थापना के बारे में आदेश निकला है।"
   },
   {
    "id": 7,
@@ -115,22 +118,24 @@
    "cited": [
     26520
    ],
-   "seconds": 42.3,
-   "answer": "6 अतिरिक्त नवीन पद स्वीकृत करने के लिए"
+   "seconds": 33.6,
+   "answer": "कुल 06 अतिरिक्त नवीन पद स्वीकृत करने की स्वीकृति प्रदान की गयी थी।"
   },
   {
    "id": 8,
    "question": "नैनीताल की पुरानी वेधशाला के तकनीशियन का समायोजन कहाँ किया गया?",
    "language": "hi",
    "unanswerable": false,
-   "found": false,
-   "n_quotes": 0,
-   "n_dropped": 1,
-   "cited_expected_order": false,
+   "found": true,
+   "n_quotes": 1,
+   "n_dropped": 0,
+   "cited_expected_order": true,
    "expect_goid": 22059,
-   "cited": [],
-   "seconds": 47.9,
-   "answer": "No passage in these orders supported an answer to this question."
+   "cited": [
+    22059
+   ],
+   "seconds": 31.0,
+   "answer": "श्री जितेन्द्र कुमार, तकनीशियन, पूर्ववर्ती राजकीय वेधशाला, नैनीताल का समायोजन उत्तराखण्ड राज्य विज्ञान प्रौद्योगिकी परिषद्, देहरा में किया गया।"
   },
   {
    "id": 9,
@@ -143,7 +148,7 @@
    "cited_expected_order": false,
    "expect_goid": 36881,
    "cited": [],
-   "seconds": 34.0,
+   "seconds": 42.1,
    "answer": "No passage in these orders supported an answer to this question."
   },
   {
@@ -159,7 +164,7 @@
    "cited": [
     10751
    ],
-   "seconds": 27.3,
+   "seconds": 34.8,
    "answer": "राज्य प्राकृतिक संसाधन प्रणाली उत्तरांचल के संचालन हेतु एक उच्च स्तरीय समिति का गठन किया गया।"
   },
   {
@@ -167,16 +172,16 @@
    "question": "सूचना का अधिकार के तहत पहली अपील किस अधिकारी के पास जाएगी?",
    "language": "hi",
    "unanswerable": false,
-   "found": false,
-   "n_quotes": 2,
+   "found": true,
+   "n_quotes": 1,
    "n_dropped": 0,
    "cited_expected_order": false,
    "expect_goid": 14379,
    "cited": [
     26446
    ],
-   "seconds": 44.4,
-   "answer": "No passage in these orders supported an answer to this question."
+   "seconds": 57.8,
+   "answer": "सूचना का अधिकार के तहत पहली अपील अपीलीय अधिकारी, लोक सूचना अधिकारी के पास जाएगी।"
   },
   {
    "id": 12,
@@ -189,7 +194,7 @@
    "cited_expected_order": false,
    "expect_goid": 21914,
    "cited": [],
-   "seconds": 32.1,
+   "seconds": 35.5,
    "answer": "No passage in these orders supported an answer to this question."
   },
   {
@@ -197,14 +202,16 @@
    "question": "यूसैक के भवन के काम की तकनीकी स्वीकृति किस समिति ने दी?",
    "language": "hi",
    "unanswerable": false,
-   "found": false,
-   "n_quotes": 0,
-   "n_dropped": 3,
+   "found": true,
+   "n_quotes": 1,
+   "n_dropped": 0,
    "cited_expected_order": false,
    "expect_goid": 21957,
-   "cited": [],
-   "seconds": 171.1,
-   "answer": "No passage in these orders supported an answer to this question."
+   "cited": [
+    31601
+   ],
+   "seconds": 20.5,
+   "answer": "यू-सैक के भवन के काम की तकनीकी स्वीकृति की समिति के निदेशक द्वारा दी गई।"
   },
   {
    "id": 14,
@@ -219,7 +226,7 @@
    "cited": [
     7120
    ],
-   "seconds": 41.9,
+   "seconds": 30.5,
    "answer": "No passage in these orders supported an answer to this question."
   },
   {
@@ -235,7 +242,7 @@
    "cited": [
     3484
    ],
-   "seconds": 39.0,
+   "seconds": 40.5,
    "answer": "धनराशि SWAN योजना की PoP के आगणनों के सापेक्ष स्वीकृत की गई।"
   },
   {
@@ -244,14 +251,12 @@
    "language": "en",
    "unanswerable": false,
    "found": false,
-   "n_quotes": 1,
+   "n_quotes": 0,
    "n_dropped": 1,
    "cited_expected_order": false,
    "expect_goid": 35586,
-   "cited": [
-    15137
-   ],
-   "seconds": 27.1,
+   "cited": [],
+   "seconds": 20.4,
    "answer": "No passage in these orders supported an answer to this question."
   },
   {
@@ -267,8 +272,8 @@
    "cited": [
     36884
    ],
-   "seconds": 48.9,
-   "answer": "राज्य तकनीकी समिति द्वारा प्रदान किये गये अनुमोदन तथा वित्त व्यय समिति की परिधि से बाहर की योजनाओं, परियोजनाओं के प्रस्ताव के लिए निर्धारण किया गया है।"
+   "seconds": 26.4,
+   "answer": "The development of UKGAMS Portal was decided."
   },
   {
    "id": 18,
@@ -283,7 +288,7 @@
    "cited": [
     21957
    ],
-   "seconds": 19.8,
+   "seconds": 20.3,
    "answer": "विभागीय योजना चयन समिति, का गठन किया जाता है"
   },
   {
@@ -297,10 +302,10 @@
    "cited_expected_order": false,
    "expect_goid": 35831,
    "cited": [
-    5095
+    10985
    ],
-   "seconds": 27.3,
-   "answer": "Funds were released to the state science and technology council based on the Government Order 563/XXXVIII/09-47/2007, dated 04-12-2009, which allocated Rs 1 crore for the construction of Science City."
+   "seconds": 77.5,
+   "answer": "Funds were released to the state science and technology council based on the Government Order 2306.2006, where it was stated that Rs. 63.5 crore was approved for the operation and essential works of t"
   },
   {
    "id": 20,
@@ -315,8 +320,8 @@
    "cited": [
     10684
    ],
-   "seconds": 28.2,
-   "answer": "Points of Presence (PoP) were established in each district headquarters, taluqas, and blocks for the State Wide Area Network (SWAN)."
+   "seconds": 32.5,
+   "answer": "Points of Presence were established at each district headquarters, and each taluk and block (खण्ड) office."
   },
   {
    "id": 21,
@@ -329,26 +334,24 @@
    "cited_expected_order": false,
    "expect_goid": 14379,
    "cited": [
-    9434
+    6924
    ],
-   "seconds": 19.2,
-   "answer": "Dr. Rakesh Goel S.I.O. National Informatics was nominated as the Chief Information Officer for CERT-In."
+   "seconds": 19.3,
+   "answer": "Shri Amrinder Sinha was nominated as the adjudicating officer for cyber crimes and prevention under the Information Technology Act-2060."
   },
   {
    "id": 22,
    "question": "What did the technical committee chaired by the principal secretary decide?",
    "language": "en",
    "unanswerable": false,
-   "found": true,
-   "n_quotes": 1,
-   "n_dropped": 0,
+   "found": false,
+   "n_quotes": 0,
+   "n_dropped": 1,
    "cited_expected_order": false,
    "expect_goid": 21931,
-   "cited": [
-    21932
-   ],
-   "seconds": 30.8,
-   "answer": "Technical committee chaired by the principal secretary decided on the technical specifications for mobile tablets to be provided to students of state universities free of cost."
+   "cited": [],
+   "seconds": 28.1,
+   "answer": "No passage in these orders supported an answer to this question."
   },
   {
    "id": 23,
@@ -361,7 +364,7 @@
    "cited_expected_order": false,
    "expect_goid": 35633,
    "cited": [],
-   "seconds": 13.4,
+   "seconds": 25.4,
    "answer": "No passage in these orders supported an answer to this question."
   },
   {
@@ -377,36 +380,40 @@
    "cited": [
     35580
    ],
-   "seconds": 25.2,
-   "answer": "The state has established a Drone State level empowered committee to promote drone use."
+   "seconds": 43.9,
+   "answer": "The state policy on promoting drone use is through the formation of a State-level empowered committee. The order states that the government of Uttarakhand has accepted the formation of a 'Drone Govern"
   },
   {
    "id": 25,
    "question": "Was a science centre approved for Champawat district?",
    "language": "en",
    "unanswerable": false,
-   "found": false,
-   "n_quotes": 0,
-   "n_dropped": 2,
+   "found": true,
+   "n_quotes": 1,
+   "n_dropped": 0,
    "cited_expected_order": false,
    "expect_goid": 35565,
-   "cited": [],
-   "seconds": 22.3,
-   "answer": "No passage in these orders supported an answer to this question."
+   "cited": [
+    37108
+   ],
+   "seconds": 36.2,
+   "answer": "Yes, a science center was approved for Champawat district."
   },
   {
    "id": 26,
    "question": "What sanction was issued for salaries in the 2017-18 financial year?",
    "language": "en",
    "unanswerable": false,
-   "found": false,
-   "n_quotes": 0,
+   "found": true,
+   "n_quotes": 1,
    "n_dropped": 0,
-   "cited_expected_order": false,
+   "cited_expected_order": true,
    "expect_goid": 19292,
-   "cited": [],
-   "seconds": 10.5,
-   "answer": "No passage in these orders supported an answer to this question."
+   "cited": [
+    19292
+   ],
+   "seconds": 62.1,
+   "answer": "वित्तीय वर्ष 2017.18 मे आय व्ययक में वेतन भत्तों के लिए प्राविद्यानित द्यनराशि अवमुक्त किए जाने के सम्बन्द्य मे।"
   },
   {
    "id": 27,
@@ -419,7 +426,7 @@
    "cited_expected_order": false,
    "expect_goid": null,
    "cited": [],
-   "seconds": 14.7,
+   "seconds": 30.4,
    "answer": "No passage in these orders supported an answer to this question."
   },
   {
@@ -433,7 +440,7 @@
    "cited_expected_order": false,
    "expect_goid": null,
    "cited": [],
-   "seconds": 8.1,
+   "seconds": 11.2,
    "answer": "No passage in these orders supported an answer to this question."
   },
   {
@@ -449,7 +456,7 @@
    "cited": [
     1800
    ],
-   "seconds": 32.2,
+   "seconds": 33.5,
    "answer": "आवेदक केन्द्र पर सम्पर्क कर सकता है। नौकर संचालक आवेदक को आवेदन पत्र उपलब्ध कराएंगे।"
   },
   {
@@ -463,7 +470,7 @@
    "cited_expected_order": false,
    "expect_goid": null,
    "cited": [],
-   "seconds": 12.5,
+   "seconds": 13.0,
    "answer": "No passage in these orders supported an answer to this question."
   }
  ]
