@@ -13,3 +13,9 @@
   ("777||7772(2)/2076/30(72)/2078"). Core "related GOs" will instead use embedding similarity plus shared
   section/category/date proximity, which does not depend on digit accuracy. Extracted references are kept in the
   `refs` table and may be shown as an unverified hint, never as a link.
+- 2026-09-12 Search collapses passages sharing (order number, page). The portal republishes 9 of 308 IT department
+  orders under the same number, sometimes as a poorer scan; without collapsing, one query returned 4 results that
+  were only 2 distinct pages.
+- 2026-09-12 Ollama installed under ~/.local/opt (no sudo, no system change), model qwen2.5:7b-instruct, running on
+  the RTX 3050 with CUDA. Default context 4096 tokens on 6 GB VRAM, which is why the answer prompt caps retrieval at
+  6 passages.
