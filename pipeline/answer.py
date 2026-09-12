@@ -20,6 +20,9 @@ OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://127.0.0.1:11434")
 OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "qwen2.5:7b-instruct")
 ANTHROPIC_MODEL = os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-5")
 MIN_SCORE = float(os.environ.get("MIN_SCORE", "0.015"))
+# A 7B model on a 6 GB laptop GPU needs well over a minute for a ~3k-token prompt, and much longer
+# if the machine is busy. Generous by default; the interface shows progress rather than blocking silently.
+LLM_TIMEOUT = int(os.environ.get("LLM_TIMEOUT", "600"))
 
 SYSTEM = """You answer questions about Uttarakhand Government Orders for a government officer.
 
@@ -45,18 +48,18 @@ def build_prompt(question, chunks):
     return f"{excerpts}\n\nQuestion: {question}\n\nJSON:"
 
 
-def call_ollama(system, prompt, model=None, timeout=180):
+def call_ollama(system, prompt, model=None, timeout=None):
     body = json.dumps({
         "model": model or OLLAMA_MODEL, "system": system, "prompt": prompt,
         "stream": False, "format": "json", "options": {"temperature": 0, "num_ctx": 8192},
     }).encode()
     req = urllib.request.Request(f"{OLLAMA_URL}/api/generate", data=body,
                                  headers={"Content-Type": "application/json"})
-    with urllib.request.urlopen(req, timeout=timeout) as r:
+    with urllib.request.urlopen(req, timeout=timeout or LLM_TIMEOUT) as r:
         return json.loads(r.read())["response"]
 
 
-def call_anthropic(system, prompt, model=None, timeout=180):
+def call_anthropic(system, prompt, model=None, timeout=None):
     key = os.environ.get("ANTHROPIC_API_KEY")
     if not key:
         raise RuntimeError("ANTHROPIC_API_KEY not set")
@@ -66,7 +69,7 @@ def call_anthropic(system, prompt, model=None, timeout=180):
     }).encode()
     req = urllib.request.Request("https://api.anthropic.com/v1/messages", data=body, headers={
         "Content-Type": "application/json", "x-api-key": key, "anthropic-version": "2023-06-01"})
-    with urllib.request.urlopen(req, timeout=timeout) as r:
+    with urllib.request.urlopen(req, timeout=timeout or LLM_TIMEOUT) as r:
         return json.loads(r.read())["content"][0]["text"]
 
 

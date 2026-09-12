@@ -126,10 +126,18 @@ def api_crop(chunk_id: int, pad: int = 24, highlight: bool = True):
 
 @app.get("/api/eval")
 def api_eval():
-    p = DATA / "eval_results.json"
-    if not p.exists():
-        return {"ran": False}
-    return json.loads(p.read_text())
+    """Retrieval accuracy and answer grounding, as last measured."""
+    out = {"ran": False}
+    r = DATA / "eval_results.json"
+    if r.exists():
+        out = json.loads(r.read_text())
+        out.pop("details", None)
+    a = DATA / "answer_eval.json"
+    if a.exists():
+        ans = json.loads(a.read_text())
+        ans.pop("details", None)
+        out["answers"] = ans
+    return out
 
 
 # static UI (built by `npm run build` in ui/)

@@ -86,18 +86,38 @@ export default function App() {
               Measured on {evalData.n} questions written from real orders in this corpus
               ({evalData.n_hindi} Hindi, {evalData.n_english} English), last run {evalData.ran_at}.
             </p>
-            <table className="w-full max-w-md">
-              <tbody>
-                {[['Correct order ranked first', evalData.hit_at_1],
-                  ['Correct order in top 5', evalData.hit_at_5],
-                  ['Correct page in top 5', evalData.page_hit_at_5]].map(([k, v]) => (
-                  <tr key={k} className="border-b border-paper-edge last:border-0">
-                    <td className="py-1 pr-4">{k}</td>
-                    <td className="py-1 font-semibold">{Math.round(v * 100)}%</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <div className="grid gap-6 sm:grid-cols-2">
+              <table className="w-full">
+                <caption className="pb-1 text-left font-semibold">Finding the right order</caption>
+                <tbody>
+                  {[['Correct order ranked first', evalData.hit_at_1],
+                    ['Correct order in top 5', evalData.hit_at_5],
+                    ['Correct page in top 5', evalData.page_hit_at_5]].map(([k, v]) => (
+                    <tr key={k} className="border-b border-paper-edge last:border-0">
+                      <td className="py-1 pr-4">{k}</td>
+                      <td className="py-1 font-semibold">{Math.round(v * 100)}%</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              {evalData.answers && (
+                <table className="w-full">
+                  <caption className="pb-1 text-left font-semibold">
+                    Answers staying grounded ({evalData.answers.model})
+                  </caption>
+                  <tbody>
+                    {[['Questions answered rather than declined', evalData.answers.answered],
+                      ['Answers citing the expected order', evalData.answers.cited_expected_order],
+                      ['Quotes that passed verification', evalData.answers.quote_verification_rate]].map(([k, v]) => (
+                      <tr key={k} className="border-b border-paper-edge last:border-0">
+                        <td className="py-1 pr-4">{k}</td>
+                        <td className="py-1 font-semibold">{Math.round(v * 100)}%</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
           </div>
         </div>
       )}
