@@ -58,3 +58,30 @@ best passage; unanswerable ones scored 0.478 to 0.571. The distributions overlap
 single cutoff kept 22 of 26 real questions while refusing only 2 of 4 bogus ones. A corpus-vocabulary test
 failed the same way, because administrative Hindi shares its common words whatever the subject. Refusal is
 therefore decided by the model reading the passages, with every quote verified against them.
+
+## Answering from what was found
+
+The same 30 questions, each sent through the full pipeline with the local model (Qwen2.5 7B, on the laptop
+GPU). Median 20 seconds per answer. Re-run with `./run.sh eval`.
+
+| Of the 26 questions answerable from this collection | |
+|---|---|
+| Answered rather than declined | 65% |
+| Cited the order the question was written from | 31% |
+| Quotes that survived verbatim verification | 72% (18 kept, 7 dropped) |
+
+| Of the 4 questions with no answer in this collection | |
+|---|---|
+| Correctly declined | **100%** |
+
+The last number is the one that matters most for a government tool, and it is worth being precise about
+where it comes from. It is not produced by a confidence threshold, which was measured and found incapable of
+the job. It comes from two things working together: the model is given only the retrieved passages and told
+to say when they do not answer the question, and every quote it produces is then checked word for word
+against the passage it cited. A question about forest fire compensation, pension eligibility, Char Dham
+registration or hospital beds retrieved plausible-looking administrative prose in all four cases, and was
+refused in all four.
+
+The cost of that strictness is visible too: of the 9 answerable questions it declined, 6 declined because the
+model's only quote failed verification. Those are answers a looser system would have given, some of them
+correct. The trade was made deliberately in favour of never presenting an unverifiable claim as sourced.

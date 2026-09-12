@@ -41,6 +41,7 @@ def main():
         cited = {q["goid"] for q in r["quotes"]}
         rows.append({
             "id": it["id"], "question": it["question"], "language": it["language"],
+            "unanswerable": bool(it.get("unanswerable")),
             "found": r["found"], "n_quotes": len(r["quotes"]), "n_dropped": len(r.get("dropped_quotes", [])),
             "cited_expected_order": it["expect_goid"] in cited,
             "expect_goid": it["expect_goid"], "cited": sorted(cited), "seconds": secs,
@@ -51,27 +52,36 @@ def main():
               flush=True)
 
     ok = [r for r in rows if "error" not in r]
-    n = len(ok) or 1
+    # Answerable and unanswerable questions measure opposite things and must never be averaged together:
+    # answering is success for one group and failure for the other.
+    ansable = [r for r in ok if not r.get("unanswerable")]
+    unans = [r for r in ok if r.get("unanswerable")]
+    na = len(ansable) or 1
+    quotes = sum(r["n_quotes"] for r in ansable)
+    dropped = sum(r["n_dropped"] for r in ansable)
     out = {
         "ran": True, "ran_at": time.strftime("%d %b %Y"), "provider": a.provider,
         "model": a.model or (A.OLLAMA_MODEL if a.provider == "ollama" else A.ANTHROPIC_MODEL),
-        "n": len(ok), "errors": len(rows) - len(ok),
-        "answered": round(sum(r["found"] for r in ok) / n, 3),
-        "cited_expected_order": round(sum(r["cited_expected_order"] for r in ok) / n, 3),
-        "quotes_total": sum(r["n_quotes"] for r in ok),
-        "quotes_dropped": sum(r["n_dropped"] for r in ok),
+        "n": len(ansable), "n_unanswerable": len(unans), "errors": len(rows) - len(ok),
+        "answered": round(sum(r["found"] for r in ansable) / na, 3),
+        "cited_expected_order": round(sum(r["cited_expected_order"] for r in ansable) / na, 3),
+        "declined_unanswerable": round(sum(1 for r in unans if not r["found"]) / len(unans), 3) if unans else None,
+        "quotes_total": quotes, "quotes_dropped": dropped,
+        "quote_verification_rate": round(quotes / max(quotes + dropped, 1), 3),
         "median_seconds": sorted(r["seconds"] for r in ok)[len(ok) // 2] if ok else None,
         "details": rows,
     }
-    out["quote_verification_rate"] = round(
-        out["quotes_total"] / max(out["quotes_total"] + out["quotes_dropped"], 1), 3)
     (DATA / "answer_eval.json").write_text(json.dumps(out, ensure_ascii=False, indent=1))
-    print(f"\nquestions answered           : {out['answered']:.0%}")
-    print(f"cited the expected order     : {out['cited_expected_order']:.0%}")
-    print(f"quotes that passed verifying : {out['quote_verification_rate']:.0%} "
-          f"({out['quotes_total']} kept, {out['quotes_dropped']} dropped)")
-    print(f"median time per answer       : {out['median_seconds']}s")
-    print(f"total wall time              : {round(time.time()-t0)}s")
+    print(f"\nof {out['n']} answerable questions")
+    print(f"  answered rather than declined : {out['answered']:.0%}")
+    print(f"  cited the expected order      : {out['cited_expected_order']:.0%}")
+    print(f"  quotes passing verification   : {out['quote_verification_rate']:.0%} "
+          f"({quotes} kept, {dropped} dropped)")
+    if out["declined_unanswerable"] is not None:
+        print(f"of {out['n_unanswerable']} questions with no answer in the corpus")
+        print(f"  correctly declined            : {out['declined_unanswerable']:.0%}")
+    print(f"median time per answer          : {out['median_seconds']}s")
+    print(f"total wall time                 : {round(time.time()-t0)}s")
 
 
 if __name__ == "__main__":

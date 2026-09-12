@@ -1,0 +1,474 @@
+{
+ "ran": true,
+ "ran_at": "12 Sep 2026",
+ "provider": "ollama",
+ "model": "qwen2.5:7b-instruct",
+ "n": 26,
+ "n_unanswerable": 4,
+ "errors": 0,
+ "answered": 0.654,
+ "cited_expected_order": 0.308,
+ "declined_unanswerable": 1.0,
+ "quotes_total": 18,
+ "quotes_dropped": 7,
+ "quote_verification_rate": 0.72,
+ "median_seconds": 20.3,
+ "details": [
+  {
+   "id": 1,
+   "question": "ड्रोन प्रशासन के लिए बनी राज्य स्तरीय समिति की अध्यक्षता कौन करता है?",
+   "language": "hi",
+   "found": true,
+   "n_quotes": 1,
+   "n_dropped": 0,
+   "cited_expected_order": false,
+   "expect_goid": 35580,
+   "cited": [
+    35586
+   ],
+   "seconds": 34.8,
+   "answer": "मुख्य सचिव, उत्तराखण्ड शासन की अध्यक्षता में गठित राज्य स्तरीय समिति की अध्यक्षता करता है।",
+   "unanswerable": false
+  },
+  {
+   "id": 2,
+   "question": "स्कूलों में चलती प्रयोगशाला वाला कार्यक्रम किस संस्था को सौंपा गया?",
+   "language": "hi",
+   "found": true,
+   "n_quotes": 1,
+   "n_dropped": 0,
+   "cited_expected_order": true,
+   "expect_goid": 35633,
+   "cited": [
+    35633
+   ],
+   "seconds": 16.0,
+   "answer": "स्कूलों में चलती प्रयोगशाला वाला कार्यक्रम अगस्त्या फाउण्डेशन, बेंगलुरू को सौंपा गया है।",
+   "unanswerable": false
+  },
+  {
+   "id": 3,
+   "question": "सरकारी परिसंपत्तियों का ब्यौरा रखने वाला पोर्टल कौन बना रहा है?",
+   "language": "hi",
+   "found": false,
+   "n_quotes": 0,
+   "n_dropped": 0,
+   "cited_expected_order": false,
+   "expect_goid": 35570,
+   "cited": [],
+   "seconds": 13.5,
+   "answer": "No passage in these orders supported an answer to this question.",
+   "unanswerable": false
+  },
+  {
+   "id": 4,
+   "question": "चम्पावत जिले में विज्ञान केंद्र खोलने की मंजूरी कब दी गई?",
+   "language": "hi",
+   "found": true,
+   "n_quotes": 1,
+   "n_dropped": 0,
+   "cited_expected_order": true,
+   "expect_goid": 35565,
+   "cited": [
+    35565
+   ],
+   "seconds": 28.3,
+   "answer": "मंजूरी 04 जनवरी, 2023 को दी गई।",
+   "unanswerable": false
+  },
+  {
+   "id": 5,
+   "question": "हल्द्वानी में तारामंडल जैसा पार्क बनाने का प्रस्ताव किसने भेजा?",
+   "language": "hi",
+   "found": false,
+   "n_quotes": 0,
+   "n_dropped": 1,
+   "cited_expected_order": false,
+   "expect_goid": 35567,
+   "cited": [],
+   "seconds": 26.8,
+   "answer": "No passage in these orders supported an answer to this question.",
+   "unanswerable": false
+  },
+  {
+   "id": 6,
+   "question": "साइंस सिटी बनाने के बारे में क्या आदेश निकला?",
+   "language": "hi",
+   "found": true,
+   "n_quotes": 1,
+   "n_dropped": 0,
+   "cited_expected_order": false,
+   "expect_goid": 35592,
+   "cited": [
+    5095
+   ],
+   "seconds": 126.9,
+   "answer": "साइंस सिटी की स्थापना के बारे में आदेश निकले हुए गवर्नमेंट ऑर्डर 563/XXXVIII/09-47/2007, दिनांक 04-12-2009 में दिया गया है।",
+   "unanswerable": false
+  },
+  {
+   "id": 7,
+   "question": "अंतरिक्ष उपयोग केंद्र को चलाने के लिए कितने पद स्वीकृत हैं?",
+   "language": "hi",
+   "found": true,
+   "n_quotes": 1,
+   "n_dropped": 0,
+   "cited_expected_order": false,
+   "expect_goid": 22058,
+   "cited": [
+    26520
+   ],
+   "seconds": 302.2,
+   "answer": "अंतरिक्ष उपयोग केंद्र को चलाने के लिए स्वीकृत पदों की संख्या 06 हैं।",
+   "unanswerable": false
+  },
+  {
+   "id": 8,
+   "question": "नैनीताल की पुरानी वेधशाला के तकनीशियन का समायोजन कहाँ किया गया?",
+   "language": "hi",
+   "found": true,
+   "n_quotes": 1,
+   "n_dropped": 0,
+   "cited_expected_order": true,
+   "expect_goid": 22059,
+   "cited": [
+    22059
+   ],
+   "seconds": 45.2,
+   "answer": "श्री जितेन्द्र कुमार, तकनीशियन, पूर्ववर्ती राजकीय वेधशाला, नैनीताल को अधिसंख्यक राज्य कार्मिक के अन्तर्गत संचालित स्वायत्यशासी संस्था के समायोजन किया गया।",
+   "unanswerable": false
+  },
+  {
+   "id": 9,
+   "question": "विज्ञान एवं प्रौद्योगिकी परिषद के कर्मचारियों को सातवाँ वेतनमान देने पर क्या तय हुआ?",
+   "language": "hi",
+   "found": true,
+   "n_quotes": 1,
+   "n_dropped": 0,
+   "cited_expected_order": true,
+   "expect_goid": 36881,
+   "cited": [
+    36881
+   ],
+   "seconds": 21.3,
+   "answer": "कार्मिकों को सातवें वेतनमान के लाभों के नकदीकरण का लाभ आदेश निर्गत होने के आगामी माह से प्रभावी होगा।",
+   "unanswerable": false
+  },
+  {
+   "id": 10,
+   "question": "राज्य में प्राकृतिक संसाधनों की जानकारी रखने वाली प्रणाली क्यों बनाई गई?",
+   "language": "hi",
+   "found": true,
+   "n_quotes": 1,
+   "n_dropped": 0,
+   "cited_expected_order": true,
+   "expect_goid": 10751,
+   "cited": [
+    10751
+   ],
+   "seconds": 18.6,
+   "answer": "राज्य प्राकृतिक संसाधन प्रणाली उत्तरांचल के संचालन हेतु बनाई गई।",
+   "unanswerable": false
+  },
+  {
+   "id": 11,
+   "question": "सूचना का अधिकार के तहत पहली अपील किस अधिकारी के पास जाएगी?",
+   "language": "hi",
+   "found": false,
+   "n_quotes": 1,
+   "n_dropped": 0,
+   "cited_expected_order": false,
+   "expect_goid": 14379,
+   "cited": [
+    26446
+   ],
+   "seconds": 31.7,
+   "answer": "No passage in these orders supported an answer to this question.",
+   "unanswerable": false
+  },
+  {
+   "id": 12,
+   "question": "मुख्यमंत्री डैशबोर्ड के लिए नोडल अधिकारी किसे बनाया गया?",
+   "language": "hi",
+   "found": false,
+   "n_quotes": 0,
+   "n_dropped": 1,
+   "cited_expected_order": false,
+   "expect_goid": 21914,
+   "cited": [],
+   "seconds": 36.3,
+   "answer": "No passage in these orders supported an answer to this question.",
+   "unanswerable": false
+  },
+  {
+   "id": 13,
+   "question": "यूसैक के भवन के काम की तकनीकी स्वीकृति किस समिति ने दी?",
+   "language": "hi",
+   "found": false,
+   "n_quotes": 0,
+   "n_dropped": 1,
+   "cited_expected_order": false,
+   "expect_goid": 21957,
+   "cited": [],
+   "seconds": 16.4,
+   "answer": "No passage in these orders supported an answer to this question.",
+   "unanswerable": false
+  },
+  {
+   "id": 14,
+   "question": "विभागों के बीच तालमेल के लिए कौन सी समिति अधिसूचित हुई?",
+   "language": "hi",
+   "found": true,
+   "n_quotes": 1,
+   "n_dropped": 0,
+   "cited_expected_order": false,
+   "expect_goid": 35585,
+   "cited": [
+    7120
+   ],
+   "seconds": 14.4,
+   "answer": "सभी विभागों से अपेक्षा की जाती है कि किसी भी तरह की Application Development/Content Management Activity/Web Designing Activity आदि के लिए तालमेल होगा।",
+   "unanswerable": false
+  },
+  {
+   "id": 15,
+   "question": "स्वान परियोजना के पीओपी के लिए धनराशि किस आधार पर स्वीकृत की गई?",
+   "language": "hi",
+   "found": true,
+   "n_quotes": 1,
+   "n_dropped": 0,
+   "cited_expected_order": false,
+   "expect_goid": 3488,
+   "cited": [
+    8154
+   ],
+   "seconds": 15.3,
+   "answer": "स्वान परियोजना की PoP के आगणनों के सापेक्ष धनराशि की स्वीकृति की गई।",
+   "unanswerable": false
+  },
+  {
+   "id": 16,
+   "question": "Who is authorised to approve purchases of computers and networking equipment?",
+   "language": "en",
+   "found": false,
+   "n_quotes": 0,
+   "n_dropped": 1,
+   "cited_expected_order": false,
+   "expect_goid": 35586,
+   "cited": [],
+   "seconds": 8.6,
+   "answer": "No passage in these orders supported an answer to this question.",
+   "unanswerable": false
+  },
+  {
+   "id": 17,
+   "question": "What was decided about developing the government asset management portal?",
+   "language": "en",
+   "found": false,
+   "n_quotes": 0,
+   "n_dropped": 1,
+   "cited_expected_order": false,
+   "expect_goid": 36884,
+   "cited": [],
+   "seconds": 30.5,
+   "answer": "No passage in these orders supported an answer to this question.",
+   "unanswerable": false
+  },
+  {
+   "id": 18,
+   "question": "Which committee reviews technical proposals for the space application centre building?",
+   "language": "en",
+   "found": true,
+   "n_quotes": 1,
+   "n_dropped": 0,
+   "cited_expected_order": true,
+   "expect_goid": 21957,
+   "cited": [
+    21957
+   ],
+   "seconds": 34.7,
+   "answer": "विभागीय योजना चयन समिति, का गठन किया जाता है",
+   "unanswerable": false
+  },
+  {
+   "id": 19,
+   "question": "How were funds released to the state science and technology council?",
+   "language": "en",
+   "found": true,
+   "n_quotes": 1,
+   "n_dropped": 0,
+   "cited_expected_order": false,
+   "expect_goid": 35831,
+   "cited": [
+    5095
+   ],
+   "seconds": 64.8,
+   "answer": "Funds were released to the state science and technology council through the budget process as per the Government Order 563/XXXVIII/09-47/2007 dated 04-12-2009.",
+   "unanswerable": false
+  },
+  {
+   "id": 20,
+   "question": "What arrangement was made for the state wide area network points of presence?",
+   "language": "en",
+   "found": true,
+   "n_quotes": 1,
+   "n_dropped": 0,
+   "cited_expected_order": false,
+   "expect_goid": 3488,
+   "cited": [
+    12850
+   ],
+   "seconds": 11.7,
+   "answer": "Points of presence were to be established at each district headquarters, each taluk, and each block (thana) under the State Wide Area Network (SWAN).",
+   "unanswerable": false
+  },
+  {
+   "id": 21,
+   "question": "Who was nominated as the public information officer for the technology agency?",
+   "language": "en",
+   "found": true,
+   "n_quotes": 1,
+   "n_dropped": 0,
+   "cited_expected_order": false,
+   "expect_goid": 14379,
+   "cited": [
+    35592
+   ],
+   "seconds": 23.0,
+   "answer": "श्री गिरीश चन्द्र गुणवन्त was nominated as the public information officer for the technology agency.",
+   "unanswerable": false
+  },
+  {
+   "id": 22,
+   "question": "What did the technical committee chaired by the principal secretary decide?",
+   "language": "en",
+   "found": false,
+   "n_quotes": 0,
+   "n_dropped": 1,
+   "cited_expected_order": false,
+   "expect_goid": 21931,
+   "cited": [],
+   "seconds": 13.6,
+   "answer": "No passage in these orders supported an answer to this question.",
+   "unanswerable": false
+  },
+  {
+   "id": 23,
+   "question": "Which programme brings mobile laboratories to state schools?",
+   "language": "en",
+   "found": true,
+   "n_quotes": 1,
+   "n_dropped": 0,
+   "cited_expected_order": true,
+   "expect_goid": 35633,
+   "cited": [
+    35633
+   ],
+   "seconds": 15.3,
+   "answer": "Lab on wheels programme brings mobile laboratories to state schools.",
+   "unanswerable": false
+  },
+  {
+   "id": 24,
+   "question": "What is the state policy on promoting drone use?",
+   "language": "en",
+   "found": false,
+   "n_quotes": 0,
+   "n_dropped": 1,
+   "cited_expected_order": false,
+   "expect_goid": 35580,
+   "cited": [],
+   "seconds": 26.0,
+   "answer": "No passage in these orders supported an answer to this question.",
+   "unanswerable": false
+  },
+  {
+   "id": 25,
+   "question": "Was a science centre approved for Champawat district?",
+   "language": "en",
+   "found": true,
+   "n_quotes": 1,
+   "n_dropped": 0,
+   "cited_expected_order": false,
+   "expect_goid": 35565,
+   "cited": [
+    37108
+   ],
+   "seconds": 11.7,
+   "answer": "Yes, a science center was approved for Champawat district.",
+   "unanswerable": false
+  },
+  {
+   "id": 26,
+   "question": "What sanction was issued for salaries in the 2017-18 financial year?",
+   "language": "en",
+   "found": true,
+   "n_quotes": 1,
+   "n_dropped": 0,
+   "cited_expected_order": true,
+   "expect_goid": 19292,
+   "cited": [
+    19292
+   ],
+   "seconds": 20.3,
+   "answer": "वित्तीय वर्ष 2017-18 मे आय व्ययक में वेतन भत्तों के लिए प्राविद्यानित द्यनराशि अवमुक्त किए जाने के सम्बन्द्य मे।",
+   "unanswerable": false
+  },
+  {
+   "id": 27,
+   "question": "वन अग्नि से हुए नुकसान पर मुआवजा कितना मिलता है?",
+   "language": "hi",
+   "found": false,
+   "n_quotes": 0,
+   "n_dropped": 0,
+   "cited_expected_order": false,
+   "expect_goid": null,
+   "cited": [],
+   "seconds": 10.8,
+   "answer": "No passage in these orders supported an answer to this question.",
+   "unanswerable": true
+  },
+  {
+   "id": 28,
+   "question": "What is the age limit for the old age pension scheme?",
+   "language": "en",
+   "found": false,
+   "n_quotes": 0,
+   "n_dropped": 0,
+   "cited_expected_order": false,
+   "expect_goid": null,
+   "cited": [],
+   "seconds": 5.8,
+   "answer": "No passage in these orders supported an answer to this question.",
+   "unanswerable": true
+  },
+  {
+   "id": 29,
+   "question": "चार धाम यात्रा के लिए पंजीकरण कैसे करें?",
+   "language": "hi",
+   "found": false,
+   "n_quotes": 0,
+   "n_dropped": 1,
+   "cited_expected_order": false,
+   "expect_goid": null,
+   "cited": [],
+   "seconds": 19.1,
+   "answer": "No passage in these orders supported an answer to this question.",
+   "unanswerable": true
+  },
+  {
+   "id": 30,
+   "question": "How many hospital beds are there in Dehradun district?",
+   "language": "en",
+   "found": false,
+   "n_quotes": 0,
+   "n_dropped": 0,
+   "cited_expected_order": false,
+   "expect_goid": null,
+   "cited": [],
+   "seconds": 9.1,
+   "answer": "No passage in these orders supported an answer to this question.",
+   "unanswerable": true
+  }
+ ]
+}

@@ -82,9 +82,15 @@ export default function App() {
       {showEval && evalData?.ran && (
         <div className="border-b border-paper-edge bg-paper">
           <div className="mx-auto max-w-5xl px-4 py-3 text-xs">
-            <p className="mb-2 text-ink-soft">
-              Measured on {evalData.n} questions written from real orders in this corpus
-              ({evalData.n_hindi} Hindi, {evalData.n_english} English), last run {evalData.ran_at}.
+            <p className="mb-2 max-w-3xl text-ink-soft">
+              Measured on {evalData.n} questions written by reading real orders in this collection
+              ({evalData.n_hindi} Hindi, {evalData.n_english} English), plus {evalData.n_unanswerable} with no
+              answer here. Last run {evalData.ran_at}.
+              {evalData.declined_correctly === 0 && evalData.answers?.declined_unanswerable === 1 && (
+                <> Note the contrast on the unanswerable ones: the retrieval score alone declined none of
+                them, while the full pipeline declined all of them. That is why refusal is decided by the
+                model with every quote verified, not by a similarity threshold.</>
+              )}
             </p>
             <div className="grid gap-6 sm:grid-cols-2">
               <table className="w-full">
@@ -92,7 +98,8 @@ export default function App() {
                 <tbody>
                   {[['Correct order ranked first', evalData.hit_at_1],
                     ['Correct order in top 5', evalData.hit_at_5],
-                    ['Correct page in top 5', evalData.page_hit_at_5]].map(([k, v]) => (
+                    ['Correct page in top 5', evalData.page_hit_at_5],
+                    ['Unanswerable refused by score alone', evalData.declined_correctly]].map(([k, v]) => (
                     <tr key={k} className="border-b border-paper-edge last:border-0">
                       <td className="py-1 pr-4">{k}</td>
                       <td className="py-1 font-semibold">{Math.round(v * 100)}%</td>
@@ -106,12 +113,14 @@ export default function App() {
                     Answers staying grounded ({evalData.answers.model})
                   </caption>
                   <tbody>
-                    {[['Questions answered rather than declined', evalData.answers.answered],
-                      ['Answers citing the expected order', evalData.answers.cited_expected_order],
-                      ['Quotes that passed verification', evalData.answers.quote_verification_rate]].map(([k, v]) => (
+                    {[['Answered rather than declined', evalData.answers.answered],
+                      ['Cited the expected order', evalData.answers.cited_expected_order],
+                      ['Quotes that passed verification', evalData.answers.quote_verification_rate],
+                      [`Declined the ${evalData.answers.n_unanswerable} questions with no answer here`,
+                       evalData.answers.declined_unanswerable]].map(([k, v]) => (
                       <tr key={k} className="border-b border-paper-edge last:border-0">
                         <td className="py-1 pr-4">{k}</td>
-                        <td className="py-1 font-semibold">{Math.round(v * 100)}%</td>
+                        <td className="py-1 font-semibold">{v == null ? '—' : Math.round(v * 100) + '%'}</td>
                       </tr>
                     ))}
                   </tbody>
