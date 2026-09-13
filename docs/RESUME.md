@@ -71,3 +71,31 @@ Owed, in order:
 **Memory is the binding constraint on this laptop.** With the answer model loaded, plus the Next.js server
 and two dotnet processes belonging to other work, 11 GB of RAM and 8 GB of swap were exhausted and load
 average reached 146. Run one heavy job at a time.
+
+
+## Update after the third session (13 September 2026)
+
+The system is finished and both departments are indexed. Nothing is mid-flight.
+
+| | |
+|---|---|
+| Departments indexed | Social Welfare (1,057) and Information Technology (308) |
+| Pages read, passages | 3,943 and 20,677 |
+| Correct order in top five | 65%, unchanged after the collection grew 4.75-fold |
+| Unanswerable questions declined | 83% |
+
+To bring it back up:
+
+```bash
+cd ~/workshop/ukis-p001
+./run.sh serve                 # http://127.0.0.1:8000, browsing and search work without a model
+~/.local/bin/ollama serve &    # only needed for "Answer with citations"; holds about 5 GB
+```
+
+Nothing is owed. If you want to go further, the honest ranking of what would pay:
+
+1. **Try a stronger answer model.** The measured weakness is a 7B model picking the right passage from six
+   once the collection is large. `PROVIDER=anthropic ./run.sh eval` scores it with the same harness.
+2. **Add more departments.** About 3.5 hours of OCR per 1,300 orders; stop Ollama first and use six workers,
+   because memory is the binding constraint on this laptop.
+3. Leave retrieval alone. Four ideas were built and measured against it; none improved on what is there.
