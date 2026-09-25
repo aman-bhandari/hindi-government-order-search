@@ -1,113 +1,111 @@
-# शासनादेश खोज — Government Order Knowledge Repository
+# Government Order Knowledge Repository (शासनादेश खोज)
 
-**UKIS 2026 · Problem P-001 · Information Technology Development Agency, Uttarakhand**
+UKIS 2026, problem P-001 (Information Technology Development Agency, Uttarakhand).
 
-Ask a question in Hindi or English about Uttarakhand Government Orders and get an answer built only from
-quoted text, with each quote shown highlighted on the original scanned page.
+Search and question answering over scanned Hindi Government Orders from go.uk.gov.in. A question in Hindi or
+English returns quoted passages with order number, date and page, and shows the quoted lines highlighted on the
+scanned page. Runs on one machine; no cloud service required.
 
-The orders are scanned Hindi letters going back to 2002. They are searchable on the official portal only by
-department, category, date or order number — you must already know which order you want. This makes the
-contents searchable, and keeps every claim traceable to an image of the page it came from.
+## What is in this repository
 
-## What makes the answers trustworthy
-
-| Problem with AI over scanned records | What this does |
+| Path | Contents |
 |---|---|
-| A model can fabricate a plausible order number or date | Order number, date, department and category come from the portal's own metadata, never from OCR |
-| A model can paraphrase a quote until it says something the page does not | Every quote is checked word for word against the indexed passage after generation; quotes that fail are dropped |
-| OCR of a scanned page is never perfect | The officer sees the scan itself, cropped to the exact lines quoted, and can verify in a glance |
-| A model will answer even when it should not | If no passage supports an answer, it says so instead of guessing |
-| Digits in scans are misread constantly | Nothing depends on OCR digits: related orders come from section, category and date, not from cited numbers |
+| `scraper/scrape.js` | Downloads order metadata and PDFs from the portal (Playwright + Chromium; the portal only speaks legacy TLS) |
+| `pipeline/ocr.py` | Renders pages at 300 dpi, Tesseract hin+eng, keeps word boxes |
+| `pipeline/db.py`, `chunk.py`, `embed.py` | SQLite store with FTS5, paragraph passages, bge-m3 vectors |
+| `pipeline/search.py` | Keyword + vector search fused by reciprocal rank; filters by category, date, order number |
+| `pipeline/answer.py` | Answer from retrieved passages via Ollama or the Anthropic API; quotes verified against the passage; "not found" when unsupported |
+| `api/main.py` | FastAPI: search, ask, page image, evidence crop, eval results; serves `ui/dist` |
+| `ui/` | React + Vite interface, Hindi and English |
+| `eval/` | Gold question set, retrieval scorer, answer-grounding scorer |
+| `data/meta/` | Portal metadata for both departments (committed) |
+| `docs/` | STATUS, RESULTS, ARCHITECTURE, DECISIONS, CORPUS, DEMO, REGISTRATION-DRAFT, OBJECTIVE, PLAN, gate |
+| `docker/ocr.Dockerfile` | Tesseract + Poppler image for hosts without them |
 
-## Running it
+## Status (25 September 2026)
 
-Everything runs on one machine. No cloud service is required, including for the answer model.
+| Item | State |
+|---|---|
+| Corpus | 2 of 61 departments: Social Welfare 1,057 orders, Information Technology 308; 3,943 pages; 20,677 passages |
+| Search | Done: Hindi or English query, filters, related orders |
+| Answers | Done: local Qwen2.5-7B via Ollama or Anthropic API; quotes verified; refusal when unsupported |
+| Interface | Done: ask, results, scanned-page crop with highlighted lines, accuracy page |
+| Evaluation | Done: 26 answerable + 12 unanswerable questions, `./run.sh eval` |
+| Unit tests | None; the evaluation harness is the check |
+| Demo video, hosted demo, registration | Not done |
+
+Acceptance table: `docs/STATUS.md`. Design decisions: `docs/DECISIONS.md`.
+
+## Results
+
+| Measure | Value |
+|---|---|
+| Correct order within top 5 | 65% |
+| Correct order ranked first | 35% |
+| Unanswerable questions refused | 83% |
+| Answerable questions answered, local 7B model, two departments | 44% |
+| Mean OCR word confidence | 79% |
+| OCR time, both departments | about 3.5 h |
+| Embedding time | 158 s on a laptop GPU |
+
+Top-5 stayed at 65% when the corpus grew from one department to two. Four retrieval ideas (phonetic matching,
+subject expansion twice, topical gate) were built and measured; none improved results. Details: `docs/RESULTS.md`.
+
+## Run
+
+Tested on Ubuntu (WSL2), 16 GB RAM, RTX 3050 6 GB. The GPU is optional.
+
+| Requirement | Note |
+|---|---|
+| Python 3.12+ | tested 3.14 |
+| Node 20+ | tested 24; interface and scraper |
+| tesseract-ocr, tesseract-ocr-hin, poppler-utils | or `docker build -t ukis-ocr-spike -f docker/ocr.Dockerfile .` |
+| Playwright Chromium | scraper only |
+| Ollama with `qwen2.5:7b-instruct` (5 GB), or `ANTHROPIC_API_KEY` | answers only; search works without |
+| Disk | quick start under 1 GB; full corpus about 12 GB |
+| Internet | portal scrape; bge-m3 download (about 2 GB) on first build |
+
+Quick start, 20 orders, about 10 minutes:
 
 ```bash
-./run.sh build     # scrape, OCR, chunk, embed. Long, resumable.
-./run.sh serve     # API on http://127.0.0.1:8000
-./run.sh ui        # UI on http://127.0.0.1:5173
+python3 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt
+npm install && npx playwright install chromium
+sudo apt install -y tesseract-ocr tesseract-ocr-hin poppler-utils
+LIMIT=20 ./run.sh build
+./run.sh ui
+./run.sh serve            # http://127.0.0.1:8000
 ```
 
-Prerequisites: Python 3.12+, Node 20+, and either a native OCR install
-(`sudo apt install -y tesseract-ocr tesseract-ocr-hin poppler-utils`) or Docker.
-For local answers, install [Ollama](https://ollama.com) and `ollama pull qwen2.5:7b-instruct`.
-To use Claude instead, set `ANTHROPIC_API_KEY` and pick "Claude API" in the interface.
+Full corpus:
 
-## How it works
-
-```
-GO MIS portal ──► scraper/scrape.js ──► PDFs + metadata
-                                          │
-                    pipeline/ocr.py ──────┤  300 dpi render, Tesseract hin+eng,
-                                          │  word boxes kept for highlighting
-                  pipeline/chunk.py ──────┤  paragraph passages, tight bounding boxes
-                  pipeline/embed.py ──────┤  bge-m3 multilingual vectors
-                                          ▼
-                 pipeline/search.py ──►  FTS5 keyword + vectors, fused by reciprocal rank
-                 pipeline/answer.py ──►  local or API model, quotes verified before display
-                      api/main.py ──────►  search, answer, page images, highlighted crops
-                            ui/ ────────►  ask, cite, prove
+```bash
+DEPT=17  ./run.sh build   # Information Technology, about 1 h
+DEPT=203 ./run.sh build   # Social Welfare, about 3.5 h
+./run.sh eval             # retrieval 2 min; answers 20-40 min with the local model
 ```
 
-The scraper needs Chromium: the portal only supports legacy TLS renegotiation, which command-line tools refuse.
+Every stage resumes. On 16 GB run one heavy job at a time and stop Ollama before OCR. `WORKERS=6` caps OCR
+processes. Generated, not committed: `data/pdf/`, `data/ocr/`, `data/gos.db`, `data/chunk_vectors.npy`.
 
-## Corpus
+## Design rules
 
-Every Information Technology and Social Welfare Department order on [go.uk.gov.in](https://go.uk.gov.in),
-2001 to 2025. The same pipeline covers the portal's other 59 departments by changing one flag.
-
-| | |
-|---|---|
-| Departments | 2 of the portal's 61 |
-| Orders indexed | 1,365 (Social Welfare 1,057, Information Technology 308) |
-| Pages read | 3,943 |
-| Passages indexed | 20,677 |
-| Mean OCR word confidence | 79% |
-| Time to OCR the collection | about 3.5 hours total |
-| Time to embed all passages | 158 seconds on a laptop GPU |
-
-The same pipeline covers any of the portal's 60 departments by changing one flag. See `docs/CORPUS.md` for
-what these orders are about, and what they cannot answer.
-
-## Measured, not claimed
-
-Full results, including what did not work, are in `docs/RESULTS.md`. Headline retrieval numbers, against 26
-questions written by reading the orders plus 4 with no answer in the collection:
-
-| | |
-|---|---|
-| Correct order ranked first | 35% |
-| Correct order within five results | 65% |
-| Unanswerable questions correctly declined | 83% |
-
-Top-five accuracy held at 65% when a second department grew the collection 4.75-fold, which is the test of
-whether any of this was fitted to the collection it was built on.
-
-`./run.sh eval` re-runs both the retrieval scoring and the slower answer-grounding check, and the interface
-shows the result behind the accuracy badge. The OCR assessment that decided this whole approach is in
-`docs/gate.md`; the reasoning behind each design choice is in `docs/ARCHITECTURE.md` and `docs/DECISIONS.md`.
+- Order number, date, department and category come from portal metadata, never from OCR.
+- Each quote is checked word for word against the indexed passage; failing quotes are dropped.
+- The scanned page crop is shown for every quote.
+- No supporting passage: the answer is "not found".
+- Related orders come from section, category and date, not from OCR digits.
+- Extractive only: it quotes or refuses; no summaries across orders.
 
 ## Third-party components
 
-Tesseract OCR (Apache 2.0), Poppler (GPL, invoked as a binary), FastAPI, SQLite FTS5, sentence-transformers
-with BAAI/bge-m3 (MIT), React, Vite, Tailwind, Playwright. Optional: Ollama with Qwen2.5, or the Anthropic API.
-No order text is sent anywhere unless the Claude API provider is explicitly selected.
+Tesseract OCR (Apache-2.0), Poppler (GPL, run as a binary), FastAPI, SQLite FTS5, sentence-transformers with
+BAAI/bge-m3 (MIT), React, Vite, Tailwind, Playwright. Optional: Ollama with Qwen2.5, Anthropic API. Order text
+leaves the machine only when the Anthropic provider is selected.
 
-## Limitations
+## Limits
 
-Stated plainly, because a government tool that oversells itself is worse than one that underperforms honestly.
-
-- **Two departments of 61.** Extending is running time, not new work: about 3.5 hours of OCR per 1,300 orders.
-- **A local 7B model struggles to pick the right passage from six** once the collection is large. It answered
-  44% of answerable questions on two departments against 58-65% on one. The provider switch exists for this,
-  and the same harness measures a stronger model with `PROVIDER=anthropic ./run.sh eval`.
-- **OCR averages 81% word confidence**, worst page 29%. Digits are misread constantly, which is why nothing
-  that must be exact comes from OCR.
-- **Transliterated subjects are the biggest source of misses.** Many subject lines are English spelled
-  phonetically in Devanagari, and nothing bridges that to the same question asked in real Hindi.
-- **Budget release orders are mostly tables**, which OCR reads poorly. They are indexed but answer badly.
-- **Extractive by design.** It quotes or declines. It will not summarise across many orders, because a
-  summary cannot be checked against a page, which is the whole point.
-- **A local 7B model takes tens of seconds** per answer on a 6 GB laptop GPU. An API model is faster and
-  better, at the cost of sending passages off the machine.
+- 2 of 61 departments; about 3.5 h of OCR per 1,300 orders to add one.
+- Local 7B model: 44% of answerable questions on two departments (58-65% on one); tens of seconds per answer on a 6 GB GPU.
+- OCR word confidence 79% mean, 29% on the worst page; digits are often misread.
+- Subject lines written as English in Devanagari script are the main cause of retrieval misses.
+- Table-heavy budget orders OCR poorly.

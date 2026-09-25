@@ -1,6 +1,6 @@
 # UKIS 2026 registration text — DRAFT, not submitted
 
-Nothing is submitted until Aman says so. Form: https://www.axocom.in/UKISHackathon/register/solution?problem=P-001
+Nothing is submitted yet; the team decides. Form: https://www.axocom.in/UKISHackathon/register/solution?problem=P-001
 Fields: problem (P-001), solution title, description, prototype URL (optional, must start https://),
 name, email, phone/WhatsApp, consent checkbox.
 

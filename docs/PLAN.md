@@ -1,4 +1,4 @@
-# P-001 execution plan — every step under one hour (draft for approval, 12 Sep 2026)
+# P-001 execution plan — every step under one hour (12 Sep 2026)
 
 Repo: this repository. Python 3.14 venv for pipeline + API; Node 24 for scraper and UI.
 Stack (pragmatic, all local): Playwright (Chromium, needed for go.uk.gov.in legacy TLS) -> pdftoppm + Tesseract
@@ -10,9 +10,9 @@ No vector DB: ~10k chunks fit in memory; keeps setup to zero servers.
 | Step | Do | Output | Est |
 |---|---|---|---|
 | 0.1 | git init, venv, requirements (pypdf, pytesseract, sentence-transformers, fastapi, uvicorn, numpy), package.json (playwright) | repo skeleton, README stub | 30 min |
-| 0.2 | OCR engine: EITHER Aman runs `sudo apt install tesseract-ocr tesseract-ocr-hin poppler-utils` OR we reuse the Docker image built today | `tesseract --list-langs` shows hin | 15 min |
+| 0.2 | OCR engine: either `sudo apt install tesseract-ocr tesseract-ocr-hin poppler-utils` or the Docker image | `tesseract --list-langs` shows hin | 15 min |
 | 0.3 | Playwright scraper: POST SearchGO for IT Dept, save `data/meta.json` (308 rows), download first 20 PDFs to `data/pdf/` | 20 PDFs + metadata | 45 min |
-| 0.4 | OCR the 20: 300 dpi pages -> text + TSV boxes -> `data/ocr/<GOID>/page-N.{txt,tsv,png}`; quality report (chars/page, Devanagari ratio, 5 eyeballed pages) | **GATE report** for Aman | 45 min |
+| 0.4 | OCR the 20: 300 dpi pages -> text + TSV boxes -> `data/ocr/<GOID>/page-N.{txt,tsv,png}`; quality report (chars/page, Devanagari ratio, 5 eyeballed pages) | **GATE report** | 45 min |
 
 ## Phase 1 — Full corpus (4 steps)
 | 1.1 | Download remaining 288 PDFs with retries and a manifest | data/pdf complete | 30 min |
@@ -28,10 +28,10 @@ No vector DB: ~10k chunks fit in memory; keeps setup to zero servers.
 | 2.4 | Gold set: 30 questions with expected GOID/page written from real GOs (15 Hindi, 15 English); `eval.py` hit@1/hit@5 | baseline numbers | 60 min (2 x 30) |
 
 ## Phase 3 — Answering (4 steps)
-| 3.1 | Aman installs Ollama and pulls qwen2.5:7b-instruct (and gemma3:4b as backup) | `ollama run` works | 20 min |
+| 3.1 | Install Ollama and pull qwen2.5:7b-instruct (and gemma3:4b as backup) | `ollama run` works | 20 min |
 | 3.2 | Quote-first prompt: model must return JSON {answer, quotes:[{chunk_id, text}], confidence}; cite only retrieved chunks | answer() | 45 min |
 | 3.3 | Provider switch: `LLM_PROVIDER=ollama|anthropic`; same JSON contract | switchable | 30 min |
-| 3.4 | Abstention: if top score below threshold or quotes not grounded -> "not found in IT Dept GOs" | honest failure path | 30 min |
+| 3.4 | Abstention: if top score below threshold or quotes not grounded -> "not found in IT Dept GOs" | failure path | 30 min |
 
 ## Phase 4 — UI (6 steps)
 | 4.1 | FastAPI: /search, /answer, /go/{id}, /page/{id}/{n}.png, /crop (boxes -> highlighted PNG) | API | 45 min |
@@ -44,14 +44,14 @@ No vector DB: ~10k chunks fit in memory; keeps setup to zero servers.
 ## Phase 5 — Ship (4 steps)
 | 5.1 | README: problem, architecture diagram, how to run offline, third-party components disclosed (T&C 6.2) | README | 30 min |
 | 5.2 | Demo script + 3-minute screen recording (Hindi query, English query, not-found, related GOs, accuracy page) | video | 45 min |
-| 5.3 | Registration text: title, description (approach, differentiators, limits), prototype URL if any — **registered only when Aman says go** | draft | 30 min |
+| 5.3 | Registration text: title, description (approach, differentiators, limits), prototype URL if any — **not submitted** | draft | 30 min |
 | 5.4 | Optional: free-tier hosting of a read-only demo (stretch) | URL | stretch |
 
 Core total: 26 steps, roughly 20-24 working hours plus unattended OCR time.
 Stretch (only after 5.3): add Finance + Social Welfare departments; Hindi-language answers; reranker; officer feedback
 loop; role-based access.
 
-## Decisions needed from Aman before step 0.1
-1. OCR engine install: native apt (one sudo command, fastest) or Docker image (no sudo, slower per page)?
-2. UI stack: Vite React + Tailwind (proposed) or something you prefer in Cursor (Next.js, plain HTML)?
+## Decisions taken before step 0.1
+1. OCR engine: native apt install; Docker image as the fallback.
+2. UI stack: Vite React + Tailwind.
 3. Repo location and name: ukis-p001.

@@ -1,7 +1,7 @@
 # Results
 
 Everything here was measured on this laptop against the real corpus. Where a number is poor it is stated as
-it is, because a government tool that overstates itself is worse than one that underperforms honestly.
+it is.
 
 ## The corpus
 
@@ -282,7 +282,7 @@ measure a stronger model with `PROVIDER=anthropic ./run.sh eval`.
 The refusal improvement to 83% is therefore not attributable to the gate either. It is most consistent with
 a larger corpus offering more clearly-unrelated material, plus the run-to-run variance already documented.
 
-Counting honestly, four ideas were built and measured in the hope of improving answers. None improved them:
+Four ideas were built and measured in the hope of improving answers. None improved them:
 phonetic matching, subject expansion in two forms, and the topical gate. Three made things worse and were
 turned off; the fourth does nothing. What did work was simpler and was found earlier by reading failures:
 indexing subject lines, and capping passages per order.

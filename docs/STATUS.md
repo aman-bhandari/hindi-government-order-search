@@ -10,12 +10,12 @@ Definition of done was set in `docs/OBJECTIVE.md` (plan: `docs/PLAN.md`) before 
 | Interface: ask in Hindi or English, scanned page crop with supporting lines highlighted, related orders, accuracy page | Done |
 | Ship: README with architecture and third-party disclosure, demo script, registration text ready | README, architecture, results, demo script and registration draft written |
 
-## What is left for Aman
+## What is left
 
 1. **Record the three-minute demo video.** Script is in `docs/DEMO.md`. This needs a screen recording, which
    is the one step that cannot be automated here.
-2. **Decide whether to register**, and when. Draft text is in `docs/REGISTRATION-DRAFT.md`. No hackathon stage
-   dates have been published anywhere; the WhatsApp community is the only announcement channel.
+2. **Decide whether to register**, and when. Draft text is in `docs/REGISTRATION-DRAFT.md`. The hackathon runs
+   15 Sep to 14 Dec 2026.
 3. **Optional: host a read-only demo** so the registration form's prototype URL can be filled. The rules also
    accept source code or a video instead.
 
@@ -37,4 +37,4 @@ In rough order of value per hour:
 cd ukis-p001
 ./run.sh serve       # http://127.0.0.1:8000  (interface is served from the same port)
 ```
-Ollama must be running for local answers: `~/.local/bin/ollama serve`.
+Ollama must be running for local answers: `ollama serve`.

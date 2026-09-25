@@ -150,7 +150,7 @@ export default function App() {
               <select value={provider} onChange={(e) => setProvider(e.target.value)}
                 className="rounded-lg border border-paper-edge bg-paper-card px-2 py-1.5 text-sm">
                 <option value="ollama">Local model (offline)</option>
-                <option value="anthropic">Claude API</option>
+                <option value="anthropic">Anthropic API</option>
               </select>
             )}
           </div>
@@ -216,7 +216,7 @@ export default function App() {
             <p className="mt-1 text-ink-soft">{state.error}</p>
             {state.error.includes('provider') && (
               <p className="mt-1 text-xs text-ink-soft">
-                The local model may not be running. Start it with <code>ollama serve</code>, or switch to the Claude API.
+                The local model may not be running. Start it with <code>ollama serve</code>, or switch to the Anthropic API.
               </p>
             )}
           </div>

@@ -15,7 +15,6 @@ cd "$(dirname "$0")"
 # Playwright scripts run with the repo's own node_modules; a global launcher is used only as a fallback.
 pw() {
   if [ -d node_modules/playwright ]; then node "$@"
-  elif [ -x "$HOME/.claude/browser/run.sh" ]; then "$HOME/.claude/browser/run.sh" "$@"
   else echo "Playwright is not installed here. Run:  npm install && npx playwright install chromium"; exit 1; fi
 }
 

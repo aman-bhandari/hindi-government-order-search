@@ -28,7 +28,7 @@ than no answer."
 **2:20 — Show the accuracy page.**
 Click the accuracy badge. Two tables: whether the right order is found, and whether the answers built on it
 stay grounded. Both measured on questions written by reading these orders, not generated from them.
-Say: "Measured, not claimed. And the number that matters is the second one: not whether it found something,
+Say: "The number that matters is the second one: not whether it found something,
 but whether what it told you can be traced to a page."
 
 **2:40 — Close on deployability.**

@@ -1,16 +1,13 @@
-# Project objective (approved by Aman, 12 Sep 2026)
+# Project objective (12 Sep 2026)
 
-**Build the best possible solution for UKIS 2026 problem P-001 (AI-Powered Government Knowledge Repository) on
-this laptop.** Confirmed by Aman 12 Sep 2026: "first build then we'll discuss entry" — so registration is NOT
-part of the objective and is not to be raised again until he opens it. The Devbhoomi AI Summit is context only,
-no action. Fallback/next problem: P-003 (core already approved).
+Build the best possible solution for UKIS 2026 problem P-001 (AI-Powered Government Knowledge Repository) on one
+laptop. Registration is not part of the objective. Fallback/next problem: P-003.
 
-Approved improvements after core completion (12 Sep 2026): (1) index a second department, (2) fix the
+Improvements agreed after core completion (12 Sep 2026): (1) index a second department, (2) fix the
 transliteration misses, (3) improve answer accuracy.
 
-Constraints: solo (Aman is lead and only member); Claude Code Max + Cursor Pro are build tools; runtime LLM local
-(Ollama) with an API-key switch; no paid services assumed; sessions are unpredictable so every plan step is under
-one hour; core scope only until it is demoable end to end; no registration until Aman says so; no subagents.
+Constraints: solo entry; runtime LLM local (Ollama) with an API-key switch; no paid services assumed; every plan
+step under one hour; core scope only until it is demoable end to end.
 
 Core (definition of done):
 1. Real corpus: all 308 IT Department GOs from go.uk.gov.in, metadata from the portal API, PDFs OCR'd (Hindi+English)
