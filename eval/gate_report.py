@@ -53,5 +53,5 @@ print(f"pages below 70% confidence: {low_pages} | GOs with <20 words (OCR failur
 print(f"predominantly Devanagari GOs: {hindi_docs}/{n} | GOs with an internal GO reference found: "
       f"{sum(1 for r in rows if r['go_refs_found'] > 0)}/{n}")
 print(f"mean seconds per page: {round(sum(r['secs_per_page'] for r in rows)/n,1)} "
-      f"-> full 308-GO corpus estimate: see gate.md")
+      f"-> full 308-GO corpus estimate: see docs/RESULTS.md")
 (DATA / "ocr" / "gate_rows.json").write_text(json.dumps(rows, ensure_ascii=False, indent=1))
