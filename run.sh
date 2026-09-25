@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Government Order Knowledge Repository (UKIS 2026 P-001) — one entry point for everything.
+# Government Order Knowledge Repository — one entry point for everything.
 #   ./run.sh serve            API + interface on http://127.0.0.1:8000 (needs ui/dist: run ./run.sh ui once)
 #   ./run.sh build            scrape -> OCR -> chunk -> embed. Long; safe to re-run, every stage resumes.
 #                             LIMIT=20 ./run.sh build     quick start: 20 orders of one department, about 10 minutes

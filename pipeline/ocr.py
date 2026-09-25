@@ -14,7 +14,7 @@ import argparse, json, os, re, shutil, subprocess, sys, time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-DOCKER_IMAGE = "ukis-ocr-spike"
+DOCKER_IMAGE = "go-ocr"
 DEVANAGARI = re.compile(r"[ऀ-ॿ]")
 
 

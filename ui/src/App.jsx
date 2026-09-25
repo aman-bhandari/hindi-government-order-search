@@ -281,7 +281,7 @@ export default function App() {
       {openGo && <GoPanel data={openGo} onClose={() => setOpenGo(null)} onOpenGo={openGoPanel} />}
 
       <footer className="border-t border-paper-edge px-4 py-6 text-center text-xs text-ink-soft">
-        Built for UKIS 2026, problem P-001. Orders and metadata come from the official
+        Independent prototype, not a Government of Uttarakhand system. Orders and metadata come from the official
         GO MIS portal (go.uk.gov.in). Text is extracted by OCR from scanned pages and may contain errors;
         order numbers and dates are taken from the portal, not from OCR.
       </footer>

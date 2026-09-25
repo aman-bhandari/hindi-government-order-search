@@ -1,6 +1,6 @@
 # Government Order Knowledge Repository (शासनादेश खोज)
 
-UKIS 2026, problem P-001 (Information Technology Development Agency, Uttarakhand).
+Problem: the Uttarakhand Government Order portal (go.uk.gov.in, Information Technology Development Agency) lets officers search scanned Hindi orders only by department, category, date or order number, not by what the orders say.
 
 Search and question answering over scanned Hindi Government Orders from go.uk.gov.in. A question in Hindi or
 English returns quoted passages with order number, date and page, and shows the quoted lines highlighted on the
@@ -19,7 +19,7 @@ scanned page. Runs on one machine; no cloud service required.
 | `ui/` | React + Vite interface, Hindi and English |
 | `eval/` | Gold question set, retrieval scorer, answer-grounding scorer |
 | `data/meta/` | Portal metadata for both departments (committed) |
-| `docs/` | STATUS, RESULTS, ARCHITECTURE, DECISIONS, CORPUS, DEMO, REGISTRATION-DRAFT, OBJECTIVE, PLAN, gate |
+| `docs/` | STATUS, RESULTS, ARCHITECTURE, DECISIONS, CORPUS, DEMO |
 | `docker/ocr.Dockerfile` | Tesseract + Poppler image for hosts without them |
 
 ## Status (25 September 2026)
@@ -32,7 +32,7 @@ scanned page. Runs on one machine; no cloud service required.
 | Interface | Done: ask, results, scanned-page crop with highlighted lines, accuracy page |
 | Evaluation | Done: 26 answerable + 12 unanswerable questions, `./run.sh eval` |
 | Unit tests | None; the evaluation harness is the check |
-| Demo video, hosted demo, registration | Not done |
+| Demo video, hosted demo | Not done |
 
 Acceptance table: `docs/STATUS.md`. Design decisions: `docs/DECISIONS.md`.
 
@@ -59,7 +59,7 @@ Tested on Ubuntu (WSL2), 16 GB RAM, RTX 3050 6 GB. The GPU is optional.
 |---|---|
 | Python 3.12+ | tested 3.14 |
 | Node 20+ | tested 24; interface and scraper |
-| tesseract-ocr, tesseract-ocr-hin, poppler-utils | or `docker build -t ukis-ocr-spike -f docker/ocr.Dockerfile .` |
+| tesseract-ocr, tesseract-ocr-hin, poppler-utils | or `docker build -t go-ocr -f docker/ocr.Dockerfile .` |
 | Playwright Chromium | scraper only |
 | Ollama with `qwen2.5:7b-instruct` (5 GB), or `ANTHROPIC_API_KEY` | answers only; search works without |
 | Disk | quick start under 1 GB; full corpus about 12 GB |
