@@ -16,13 +16,13 @@ Stopped 12 September 2026. Nothing was lost: every long job is resumable and re-
 ## Restart in this order
 
 ```bash
-cd ~/workshop/ukis-p001
+cd ukis-p001
 
 # 1. the local answer model (needed for answering, not for search)
 ~/.local/bin/ollama serve &
 
 # 2. finish the Social Welfare download, then OCR it. Both skip completed work.
-~/.claude/browser/run.sh scraper/scrape.js --dept 203        # resumes at 867 of 1,075
+DEPT=203 ./run.sh scrape        # resumes at 867 of 1,075
 python pipeline/ocr.py --engine native --workers 12          # ~2 h for about 3,200 pages
 python pipeline/db.py && python pipeline/chunk.py            # rebuild index over both departments
 python pipeline/embed.py --quiet
@@ -87,7 +87,7 @@ The system is finished and both departments are indexed. Nothing is mid-flight.
 To bring it back up:
 
 ```bash
-cd ~/workshop/ukis-p001
+cd ukis-p001
 ./run.sh serve                 # http://127.0.0.1:8000, browsing and search work without a model
 ~/.local/bin/ollama serve &    # only needed for "Answer with citations"; holds about 5 GB
 ```

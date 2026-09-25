@@ -1,6 +1,6 @@
 # Status: core complete
 
-Definition of done was set in `../../documents/objective.md` before any code. Against it:
+Definition of done was set in `docs/OBJECTIVE.md` (plan: `docs/PLAN.md`) before any code. Against it:
 
 | Core requirement | State |
 |---|---|
@@ -34,7 +34,7 @@ In rough order of value per hour:
 ## Running it right now
 
 ```bash
-cd ~/workshop/ukis-p001
+cd ukis-p001
 ./run.sh serve       # http://127.0.0.1:8000  (interface is served from the same port)
 ```
 Ollama must be running for local answers: `~/.local/bin/ollama serve`.

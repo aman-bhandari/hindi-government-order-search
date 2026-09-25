@@ -1,5 +1,5 @@
 // Scrape Uttarakhand GO MIS (go.uk.gov.in) for one department.
-// Usage: ~/.claude/browser/run.sh scraper/scrape.js [--dept 17] [--limit 20] [--out data]
+// Usage: ./run.sh scrape   (or: node scraper/scrape.js) [--dept 17] [--limit 20] [--out data]
 // Chromium is required: the portal only supports legacy TLS renegotiation (curl/Node fetch fail).
 const { chromium } = require('playwright');
 const fs = require('fs');

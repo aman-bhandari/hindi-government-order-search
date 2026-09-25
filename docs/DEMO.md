@@ -1,6 +1,6 @@
 # Demo script (3 minutes)
 
-Setup: `./run.sh serve` and `./run.sh ui`, browser at the UI, Ollama running. No internet needed.
+Setup: `./run.sh ui` once, then `./run.sh serve`; browser at http://127.0.0.1:8000; Ollama running. No internet needed.
 
 **0:00 — The problem, in one screen.**
 Open the official portal (go.uk.gov.in), pick Information Technology Department, press search: 308 orders,

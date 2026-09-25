@@ -1,0 +1,7 @@
+{
+  "name": "ukis-p001-tools",
+  "private": true,
+  "description": "Playwright for the portal scraper (scraper/scrape.js): go.uk.gov.in only speaks legacy TLS, which curl and Python refuse. The web UI itself lives in ui/.",
+  "scripts": { "scrape": "node scraper/scrape.js" },
+  "devDependencies": { "playwright": "^1.62.1" }
+}
